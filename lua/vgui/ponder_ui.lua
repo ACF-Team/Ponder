@@ -27,7 +27,7 @@ function PANEL:Init()
     self.Icon = vgui.Create("ModelImage", self)
     self.Icon:SetMouseInputEnabled(false)
     self.Icon:SetKeyboardInputEnabled(false)
-    self.Icon:SetPos(padding, padding)
+    self.Icon:SetPos(-5000, padding)
 
     local close = self:Add "DButton"
     close:SetSize(64, 64)
