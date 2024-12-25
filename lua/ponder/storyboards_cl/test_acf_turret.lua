@@ -1,0 +1,66 @@
+local storyboard = Ponder.API.NewStoryboard("ACF-3", "Turrets", "Parenting to Turrets")
+storyboard:WithSpawnIcon("models/acf/core/t_ring.mdl")
+
+local chapter1 = storyboard:Chapter()
+chapter1:AddInstruction("PlaceModel", {
+    Name  = "TurretRing",
+    Model = "models/acf/core/t_ring.mdl",
+    Position = Vector(0, 0, 10),
+    ComeFrom = Vector(0, 0, 32)
+})
+chapter1:AddInstruction("Delay", {Length = 0.5})
+chapter1:AddInstruction("PlaceModel", {
+    Name  = "TurretTrun",
+    Model = "models/acf/core/t_trun.mdl",
+    Position = Vector(0, 0, 48),
+    ComeFrom = Vector(0, 0, 32),
+    ParentTo = "TurretRing"
+})
+
+chapter1:AddInstruction("Delay", {Length = 0.75})
+
+chapter1:AddInstruction("ShowText", {
+    Name = "expHRing",
+    Text = "Horizontal turret rings turn your turret from side to side...",
+    Time = 0,
+    Position = Vector(0, 0, 10)
+})
+
+chapter1:AddInstruction("Delay", {Length = 0.75})
+chapter1:AddInstruction("TransformModel", {Target = "TurretRing", Rotation = Angle(0, 45, 0), Length = 0.5})
+chapter1:AddInstruction("Delay", {Length = 0.6})
+chapter1:AddInstruction("TransformModel", {Target = "TurretRing", Rotation = Angle(0, -45, 0), Length = 0.75})
+chapter1:AddInstruction("Delay", {Length = 0.85})
+chapter1:AddInstruction("TransformModel", {Target = "TurretRing", Rotation = Angle(0, 0, 0), Length = 0.75})
+chapter1:AddInstruction("Delay", {Length = 0.65})
+chapter1:AddInstruction("HideText", {Name = "expHRing", Length = 0.4})
+chapter1:AddInstruction("Delay", {Length = 0.3})
+
+chapter1:AddInstruction("ShowText", {
+    Name = "expVRing",
+    Text = "... and vertical turret rings rotate up and down",
+    Time = 0,
+    Position = Vector(0, 0, 48)
+})
+
+chapter1:AddInstruction("Delay", {Length = 0.75})
+chapter1:AddInstruction("TransformModel", {Target = "TurretTrun", Rotation = Angle(45, 0, 0), Length = 0.5})
+chapter1:AddInstruction("Delay", {Length = 0.6})
+chapter1:AddInstruction("TransformModel", {Target = "TurretTrun", Rotation = Angle(-45, 0, 0), Length = 0.75})
+chapter1:AddInstruction("Delay", {Length = 0.85})
+chapter1:AddInstruction("TransformModel", {Target = "TurretTrun", Rotation = Angle(0, 0, 0), Length = 0.75})
+chapter1:AddInstruction("Delay", {Length = 0.65})
+chapter1:AddInstruction("HideText", {Name = "expVRing", Length = 0.4})
+chapter1:AddInstruction("Delay", {Length = 0.3})
+
+local chapter2 = storyboard:Chapter()
+chapter2:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 1.6, Target = Vector(70, 0, 36), Angle = 30, Distance = 1700, Height = 250})
+chapter2:AddInstruction("Delay", {Length = 0.3})
+chapter2:AddInstruction("PlaceModel", {
+    Name  = "Gun",
+    Model = "models/tankgun_new/tankgun_100mm.mdl",
+    Position = Vector(30, 0, 48),
+    ComeFrom = Vector(500, 0, 0),
+    Length = 1.3,
+    ParentTo = "TurretTrun"
+})
