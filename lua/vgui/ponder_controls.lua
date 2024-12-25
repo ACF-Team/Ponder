@@ -59,7 +59,7 @@ function PANEL:Paint(w, h)
     draw.SimpleText("    Storyboard Length:     " .. self.UI.Storyboard.Length .. " seconds", "DebugFixed", 8, 8 + (y * 16), color_white); y = y + 1
     draw.SimpleText("    Current Chapter:       " .. self.UI.Playback.Chapter .. "/" .. #self.UI.Storyboard.Chapters, "DebugFixed", 8, 8 + (y * 16), color_white); y = y + 1
     draw.SimpleText("        Chapter Time:      " .. self.UI.Playback:GetChapterSeconds() .. " seconds", "DebugFixed", 8, 8 + (y * 16), color_white); y = y + 1
-    draw.SimpleText("        Chapter Length:    " .. self.UI.Playback:GetChapter().Length .. " seconds", "DebugFixed", 8, 8 + (y * 16), color_white); y = y + 1
+    draw.SimpleText("        Chapter Length:    " .. self.UI.Playback:GetChapterLength() .. " seconds", "DebugFixed", 8, 8 + (y * 16), color_white); y = y + 1
 end
 
 function PANEL:LinkTo(ui)
