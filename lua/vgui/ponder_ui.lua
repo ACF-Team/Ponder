@@ -61,6 +61,8 @@ function PANEL:LoadStoryboard(uuid)
         self.Environment:Free()
     end
 
+    self.Storyboard:Preload()
+
     self.Environment = Ponder.Environment()
 
     self.Playback = Ponder.Playback(self.Storyboard, self.Environment)

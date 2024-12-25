@@ -9,6 +9,10 @@ instruction.Time       = 0
 instruction.Length     = .5
 instruction.LocalPos   = true
 
+function instruction:Preload()
+    util.PrecacheModel(self.Model)
+end
+
 function instruction:First(playback)
     local env = playback.Environment
     env:NewModel(self.Model, self.Name)

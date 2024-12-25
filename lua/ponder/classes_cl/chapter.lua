@@ -22,6 +22,10 @@ function Ponder.Chapter:AddInstruction(instruction_type, instruction_params)
         self.Time = self.Time + instructionObj.Length
     end
 
+    if instructionObj.OnBuild then
+        instructionObj:OnBuild()
+    end
+
     return instructionObj
 end
 

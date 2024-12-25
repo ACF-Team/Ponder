@@ -31,6 +31,16 @@ function Ponder.Storyboard:WithSpawnIcon(icon)
     self.Icon = icon
 end
 
+function Ponder.Storyboard:Preload()
+    for _, chapter in ipairs(self.Chapters) do
+        for _, instruction in ipairs(chapter.Instructions) do
+            if instruction.Preload then
+                instruction:Preload()
+            end
+        end
+    end
+end
+
 function Ponder.Storyboard:ToString()
     return "Ponder Storyboard [" .. self:GenerateUUID() .. "]"
 end
