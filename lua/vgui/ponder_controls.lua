@@ -48,7 +48,7 @@ function PANEL:Init()
 end
 
 function PANEL:Paint(w, h)
-    if false then return end
+    if not Ponder.Debug then return end
     local y = 4
     draw.SimpleText("Debugging Strings", "DebugFixed", 8, 8 + (y * 16), color_white); y = y + 2
 
