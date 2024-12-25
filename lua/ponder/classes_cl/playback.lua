@@ -59,6 +59,8 @@ function Ponder.Playback:Update()
 
     -- Check if we reached the end of the chapter
     local curChapter = self:GetChapter()
+    if not curChapter then return end
+
     if self.Time >= curChapter:GetEndTime() then
         -- Call all finalizers on running instructions
         for instrIndex in pairs(self.RunningInstructionIndices) do
@@ -119,12 +121,19 @@ end
 
 function Ponder.Playback:GetChapterProgress()
     local chapter = self:GetChapter()
+    if not chapter then return 0 end
     return math.Remap(self.Time, chapter.StartTime, chapter.StartTime + chapter.Length, 0, 1)
 end
 
 function Ponder.Playback:GetChapterSeconds()
     local chapter = self:GetChapter()
+    if not chapter then return 0 end
     return math.Remap(self.Time, chapter.StartTime, chapter.StartTime + chapter.Length, 0, chapter.Length)
+end
+
+function Ponder.Playback:GetChapterLength()
+    local chapter = self:GetChapter()
+    return chapter and chapter.Length or 0
 end
 
 function Ponder.Playback:GetChapter() return self.Storyboard.Chapters[self.Chapter] end
