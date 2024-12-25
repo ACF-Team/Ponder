@@ -1,1 +1,1 @@
-function ponder.IsStringNilOrEmpty(s) return s == nil or #string.Trim(s) == 0 end
+function Ponder.IsStringNilOrEmpty(s) return s == nil or #string.Trim(s) == 0 end
