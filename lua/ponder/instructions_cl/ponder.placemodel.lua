@@ -15,7 +15,15 @@ end
 
 function instruction:First(playback)
     local env = playback.Environment
-    env:NewModel(self.Model, self.Name)
+    local mdl = env:NewModel(self.Model, self.Name)
+    if self.ParentTo then
+        local parent = env:GetNamedModel(self.ParentTo)
+        if IsValid(parent) then
+            mdl:SetParent(parent)
+        else
+            Ponder.Print("Can't parent; parent target not found")
+        end
+    end
 end
 
 function instruction:Render(playback)
@@ -36,4 +44,28 @@ function instruction:Render(playback)
         object:SetPos(self.Position + LerpVector(progress, self.ComeFrom, vector_origin))
         object:SetAngles(self.Angles + LerpAngle(progress, self.RotateFrom, angle_zero))
     end
+end
+
+local TransformModel = Ponder.API.NewInstruction("TransformModel")
+TransformModel.Length = 1
+
+function TransformModel:First(playback)
+    local env = playback.Environment
+    local mdl = env:GetNamedModel(self.Target)
+    if not IsValid(mdl) then return end
+
+    mdl.PONDER_LAST_POS = mdl:GetPos()
+    mdl.PONDER_LAST_ANG = mdl:GetAngles()
+
+    mdl.PONDER_TARG_POS = self.Position
+    mdl.PONDER_TARG_ANG = self.Rotation
+end
+
+function TransformModel:Render(playback)
+    local env = playback.Environment
+    local progress = self.Easing and self.Easing(playback:GetInstructionProgress(self)) or playback:GetInstructionProgress(self)
+    local object = env:GetNamedModel(self.Target)
+
+    if object.PONDER_TARG_POS then object:SetPos(LerpVector(progress, object.PONDER_LAST_POS, object.PONDER_TARG_POS)) end
+    if object.PONDER_TARG_ANG then object:SetAngles(LerpAngle(progress, object.PONDER_LAST_ANG, object.PONDER_TARG_ANG)) end
 end
