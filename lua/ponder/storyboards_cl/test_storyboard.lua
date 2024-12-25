@@ -42,6 +42,8 @@ chapter1:AddInstruction("ShowText", {
 chapter1:AddInstruction("Delay", {Time = 0, Length = 3})
 
 local chapter2 = storyboard:Chapter()
+chapter2:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 1.6, Target = Vector(-35, 0, 36), Angle = 150, Distance = 500, Height = 250})
+chapter2:AddInstruction("Delay", {Time = 0, Length = 2})
 chapter2:AddInstruction("HideText", {Name = "hintBreenDied"})
 
 chapter2:AddInstruction("ShowText", {

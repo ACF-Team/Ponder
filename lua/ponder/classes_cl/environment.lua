@@ -47,6 +47,19 @@ function Ponder.Environment:__new()
     grid:SetPos(Vector(0, 0, -5.9))
 end
 
+function Ponder.Environment:GetCameraPosAng()
+    return self.CameraPosition, self.CameraAngles
+end
+
+function Ponder.Environment:LookParamsToPosAng(camDist, rotation, height, lookAt)
+    local rads = math.rad(rotation)
+    local s, c = math.sin(rads) * camDist, math.cos(rads) * camDist
+    local campos = Vector(s, c, height)
+    local camang = (lookAt - campos):Angle()
+
+    return campos, camang
+end
+
 function Ponder.Environment:SetLookParams(camDist, rotation, height, lookAt)
     local rads = math.rad(rotation)
     local s, c = math.sin(rads) * camDist, math.cos(rads) * camDist
@@ -100,6 +113,7 @@ function Ponder.Environment:SetCameraAngles(aAng)
 end
 
 function Ponder.Environment:SetLookAt(vLookat)
+    self.LastLookat = vLookat
     self.CameraAngles = (vLookat - self.CameraPosition):Angle()
 end
 
