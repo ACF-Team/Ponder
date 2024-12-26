@@ -153,13 +153,13 @@ function Ponder.Environment:Render(x, y, w, h)
         v:DrawModel()
     end
 
-    if self.OnRender3D then self:OnRender3D() end
+    if self.Render3D then self:Render3D() end
 
     cam.End()
     for _, v in ipairs(self.NamedTextObjects.List) do
         v:Render()
     end
-    if self.OnRender2D then self:OnRender2D() end
+    if self.Render2D then self:Render2D() end
 
     -- surface.SetDrawColor(255,255,255,255)
     -- surface.DrawOutlinedRect(rX, rY, w, h, 2)
