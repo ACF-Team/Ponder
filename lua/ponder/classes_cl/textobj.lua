@@ -20,7 +20,12 @@ function Ponder.TextObject:ResolvePos2D()
         self.Pos2D.x = self.Position[1]
         self.Pos2D.y = self.Position[2]
     else
-        local resolved = self.Position:ToScreen()
+        local resolved
+        if IsValid(self.Parent) then
+            resolved = self.Parent:LocalToWorld(self.Position):ToScreen()
+        else
+            resolved = self.Position:ToScreen()
+        end
         self.Pos2D.x = resolved.x
         self.Pos2D.y = resolved.y
     end
