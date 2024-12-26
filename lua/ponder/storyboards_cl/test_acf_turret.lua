@@ -12,7 +12,7 @@ chapter1:AddInstruction("Delay", {Length = 0.5})
 chapter1:AddInstruction("PlaceModel", {
     Name  = "TurretTrun",
     Model = "models/acf/core/t_trun.mdl",
-    Position = Vector(0, 0, 48),
+    Position = Vector(0, 20, 48),
     ComeFrom = Vector(0, 0, 32),
     ParentTo = "TurretRing"
 })
@@ -40,7 +40,7 @@ chapter1:AddInstruction("ShowText", {
     Name = "expVRing",
     Text = "... and vertical turret rings rotate up and down",
     Time = 0,
-    Position = Vector(0, 0, 48)
+    Position = Vector(0, 20, 48)
 })
 
 chapter1:AddInstruction("Delay", {Length = 0.75})
@@ -59,8 +59,22 @@ chapter2:AddInstruction("Delay", {Length = 0.3})
 chapter2:AddInstruction("PlaceModel", {
     Name  = "Gun",
     Model = "models/tankgun_new/tankgun_100mm.mdl",
-    Position = Vector(30, 0, 48),
+    Position = Vector(0, 0, 48),
     ComeFrom = Vector(500, 0, 0),
     Length = 1.3,
     ParentTo = "TurretTrun"
 })
+
+chapter2:AddInstruction("Delay", {Length = 1.4})
+
+chapter2:AddInstruction("ShowText", {
+    Name = "expGun",
+    Text = "Once parented to the vertical-axis, the gun will\nrotate with the turret",
+    Time = 0,
+    Position = Vector(0, 0, 0),
+    ParentTo = "TurretTrun"
+})
+chapter2:AddInstruction("Delay", {Length = 2})
+
+chapter2:AddInstruction("TransformModel", {Target = "TurretRing", Rotation = Angle(0, 45, 0), Length = 0.75})
+chapter2:AddInstruction("TransformModel", {Target = "TurretTrun", Rotation = Angle(-25, 0, 0), Length = 0.75})
