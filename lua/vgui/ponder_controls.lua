@@ -45,6 +45,38 @@ function PANEL:Init()
     self.chapterProgress:SetSize(0, 24)
     self.chapterProgress:SetFraction(0.75)
     self:DockPadding(4, 4, 4, 4)
+
+    self.Buttons = self:Add "DPanel"
+    self.Buttons:Dock(BOTTOM)
+    self.Buttons:SetSize(0, 64)
+    function self.Buttons:PerformLayout(w, h)
+        local children = self:GetChildren()
+        local w2 = w / (#children + 1)
+        for i = 1, #children do
+            local child = children[i]
+            child:SetPos((w2 * i) - (58 / 2), (64 - 58) / 2)
+        end
+    end
+    self.Buttons.Paint = function() end
+    function self:AddButton(img)
+        local button = self.Buttons:Add "DImageButton"
+        button:SetSize(58, 58)
+        button:Center()
+        button:SetImage(img)
+        button:SetText("")
+        local oPaint = button.Paint
+        function button:Paint(w, h)
+            oPaint(self, w, h)
+
+            surface.SetDrawColor(255, 255, 255, self.Hovered and 200 or 100)
+            surface.DrawOutlinedRect(0, 0, w, h, 2)
+        end
+        return button
+    end
+
+    local back1chap = self:AddButton("gui/html/back")
+    local pause = self:AddButton("vgui/tools/ifm/icon_recordingmode_playback")
+    local time = self:AddButton("gui/html/refresh")
 end
 
 function PANEL:Paint(w, h)
