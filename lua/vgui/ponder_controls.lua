@@ -74,9 +74,9 @@ function PANEL:Init()
         return button
     end
 
-    local back1chap = self:AddButton("gui/html/back")
-    local pause = self:AddButton("vgui/tools/ifm/icon_recordingmode_playback")
-    local time = self:AddButton("gui/html/refresh")
+    local back1chap = self:AddButton("icon16/control_start_blue.png")
+    local pause = self:AddButton("icon16/control_pause_blue.png")
+    local time = self:AddButton("icon16/control_equalizer_blue.png")
 end
 
 function PANEL:Paint(w, h)
