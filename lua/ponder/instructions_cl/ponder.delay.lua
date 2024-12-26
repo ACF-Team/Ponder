@@ -1,4 +1,4 @@
-local instruction = Ponder.API.NewInstruction("Delay")
-instruction.Time   = 0
-instruction.Length = 0
-instruction.AddToTimeOffset = true
+local Delay = Ponder.API.NewInstruction("Delay")
+Delay.Time   = 0
+Delay.Length = 0
+Delay.AddToTimeOffset = true
