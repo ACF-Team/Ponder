@@ -9,6 +9,8 @@ function Ponder.Instruction:ToString()
     return "Ponder Instruction [" .. self.Chapter.Storyboard:GenerateUUID() .. "]"
 end
 
-function Ponder.Instruction:First(playback)  end
-function Ponder.Instruction:Last(playback)   end
-function Ponder.Instruction:Render(playback) end
+function Ponder.Instruction:First(playback)    end
+function Ponder.Instruction:Last(playback)     end
+function Ponder.Instruction:Update(playback)   end
+function Ponder.Instruction:Render3D(playback) end
+function Ponder.Instruction:Render2D(playback) end

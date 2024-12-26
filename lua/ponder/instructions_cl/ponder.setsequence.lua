@@ -22,6 +22,6 @@ function SetSequence:First(playback)
     end)
 end
 
-function SetSequence:Render(playback)
+function SetSequence:Update(playback)
 
 end

@@ -66,6 +66,13 @@ function PANEL:LoadStoryboard(uuid)
     self.Environment = Ponder.Environment()
 
     self.Playback = Ponder.Playback(self.Storyboard, self.Environment)
+    function self.Environment:Render3D()
+        self.Playback:Render3D()
+    end
+    function self.Environment:Render3D()
+        self.Playback:Render2D()
+    end
+
     self.Playback:Play()
 
     self.StartTime = CurTime()

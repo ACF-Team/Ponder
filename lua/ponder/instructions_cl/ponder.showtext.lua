@@ -27,7 +27,7 @@ function ShowText:First(playback)
     txt:SetMarkup(self.Markup)
 end
 
-function ShowText:Render(playback)
+function ShowText:Update(playback)
     local env = playback.Environment
     local object = env:GetNamedText(self.Name)
     if not object then return end

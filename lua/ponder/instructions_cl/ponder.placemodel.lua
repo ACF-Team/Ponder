@@ -26,7 +26,7 @@ function PlaceModel:First(playback)
     end
 end
 
-function PlaceModel:Render(playback)
+function PlaceModel:Update(playback)
     local env = playback.Environment
     local progress = math.ease.OutQuad(playback:GetInstructionProgress(self))
     local object = env:GetNamedModel(self.Name)

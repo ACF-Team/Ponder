@@ -14,7 +14,7 @@ function TransformModel:First(playback)
     mdl.PONDER_TARG_ANG = self.Rotation
 end
 
-function TransformModel:Render(playback)
+function TransformModel:Update(playback)
     local env = playback.Environment
     local progress = self.Easing and self.Easing(playback:GetInstructionProgress(self)) or playback:GetInstructionProgress(self)
     local object = env:GetNamedModel(self.Target)

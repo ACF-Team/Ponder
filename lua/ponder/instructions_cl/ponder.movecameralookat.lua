@@ -11,7 +11,7 @@ function MoveCameraLookAt:First(playback)
     playback.TARG_CAMPOS, playback.TARG_LOOKAT = pos, self.Target
 end
 
-function MoveCameraLookAt:Render(playback)
+function MoveCameraLookAt:Update(playback)
     local env = playback.Environment
     local progress = self.Easing and self.Easing(playback:GetInstructionProgress(self)) or playback:GetInstructionProgress(self)
 

@@ -66,7 +66,7 @@ function Ponder.Playback:Update()
         for instrIndex in pairs(self.RunningInstructionIndices) do
             local instruction = self:GetChapter().Instructions[instrIndex]
 
-            instruction:Render(self)
+            instruction:Update(self)
             instruction:Last(self)
         end
 
@@ -89,7 +89,7 @@ function Ponder.Playback:Update()
         local instruction = curChapter.Instructions[instrIndex]
         local globalEndTime = starttime + instruction.Time + (instruction.Length or 0)
         if self.Time >= globalEndTime then
-            instruction:Render(self)
+            instruction:Update(self)
             instruction:Last(self)
             removals[#removals + 1] = instrIndex
         end
@@ -107,7 +107,18 @@ function Ponder.Playback:Update()
     for _, addition in ipairs(additions) do self.RunningInstructionIndices[addition] = true end
 
     for instrIndex in pairs(self.RunningInstructionIndices) do
-        curChapter.Instructions[instrIndex]:Render(self)
+        curChapter.Instructions[instrIndex]:Update(self)
+    end
+end
+
+function Ponder.Playback:Render3D()
+    for instrIndex in pairs(self.RunningInstructionIndices) do
+        curChapter.Instructions[instrIndex]:Render3D(self)
+    end
+end
+function Ponder.Playback:Render2()
+    for instrIndex in pairs(self.RunningInstructionIndices) do
+        curChapter.Instructions[instrIndex]:Render2D(self)
     end
 end
 

@@ -8,7 +8,7 @@ function HideText:First(playback)
     if not txt then return end
 end
 
-function HideText:Render(playback)
+function HideText:Update(playback)
     local env = playback.Environment
     local object = env:GetNamedText(self.Name)
     if not object then return end
