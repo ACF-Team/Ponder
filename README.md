@@ -3,6 +3,8 @@
 This is a work-in-progress, in-game documentation system, heavily inspired by the Create Minecraft mod's "Pondering" system.
 A couple of example storyboards are provided in lua/ponder/storyboards_cl/.
 
+https://github.com/user-attachments/assets/7e7e1f43-9fde-4f63-a894-1393fccd1e27
+
 ## For Other Addons
 A simple "Open storyboard" button control is provided for you. You should include the lua/vgui/ponder_about.lua file in your addons source code. The control will automatically error-check and notify the user if Ponder is not installed on the server.
 
