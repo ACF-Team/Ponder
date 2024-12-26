@@ -112,11 +112,18 @@ function Ponder.Playback:Update()
 end
 
 function Ponder.Playback:Render3D()
+    local curChapter = self:GetChapter()
+    if not curChapter then return end
+
     for instrIndex in pairs(self.RunningInstructionIndices) do
         curChapter.Instructions[instrIndex]:Render3D(self)
     end
 end
-function Ponder.Playback:Render2()
+
+function Ponder.Playback:Render2D()
+    local curChapter = self:GetChapter()
+    if not curChapter then return end
+
     for instrIndex in pairs(self.RunningInstructionIndices) do
         curChapter.Instructions[instrIndex]:Render2D(self)
     end
