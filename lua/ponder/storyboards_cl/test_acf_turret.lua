@@ -74,11 +74,13 @@ chapter2:AddInstruction("ShowText", {
     Position = Vector(0, 0, 0),
     ParentTo = "TurretTrun"
 })
-chapter2:AddInstruction("ToolFromTo", {
-    From = "Gun", To = "TurretTrun",
-    Tool = "Multi-Parent",
-    Length = 2.2
+
+chapter2:AddInstruction("MultiParent", {
+    Children = {"Gun"},
+    Parent = "TurretTrun",
+    Easing = math.ease.InOutQuad
 })
+
 chapter2:AddInstruction("Delay", {Length = 3})
 
 chapter2:AddInstruction("TransformModel", {Target = "TurretRing", Rotation = Angle(0, 45, 0), Length = 0.75})
