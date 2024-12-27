@@ -42,9 +42,6 @@ function Ponder.Environment:__new()
     self.NamedTextObjects = NamedList()
 
     self:SetLookParams(1300, 55, 600, vector_origin)
-
-    local grid = self:NewModel("models/hunter/blocks/cube150x150x025.mdl", "GRID")
-    grid:SetPos(Vector(0, 0, -5.9))
 end
 
 function Ponder.Environment:GetCameraPosAng()
