@@ -38,7 +38,7 @@ function PANEL:Paint()
     surface.DrawTexturedRectRotated(padding - animXGrad - (size / 2), (padding - 12) + 40, size, 80, 180)
 
     draw.SimpleText("Pondering about...", "Ponder.Title", 76 + padding - animXGrad, padding, COLOR_Title)
-    draw.SimpleText(self.Storyboard.Name, "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
+    draw.SimpleText(self.Storyboard.LongName or self.Storyboard.Name, "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
 
     self.Icon:SetPos(padding - animXGrad, padding)
     local pX, pY = self:LocalToScreen(0, 0)
