@@ -162,14 +162,29 @@ function CONTROL_BUTTON:SetImage(path)
     self.Material = Material(path, "mips smooth")
 end
 
+local function drawCircle( x, y, radius, seg )
+    local cir = {}
+
+    table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+    for i = 0, seg do
+        local a = math.rad( ( i / seg ) * -360 )
+        table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+    end
+
+    local a = math.rad( 0 ) -- This is needed for non absolute segment counts
+    table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+
+    draw.NoTexture()
+    surface.DrawPoly( cir )
+end
+
 function CONTROL_BUTTON:Paint(w, h)
     surface.SetDrawColor(10, 15, 20, 160)
-    surface.DrawRect(0, 0, w, h)
+    drawCircle(w / 2, h / 2, w / 2, h / 2)
 
-    surface.SetDrawColor(10, 15, 20, 255)
-    surface.DrawOutlinedRect(0, 0, w, h)
-    surface.SetDrawColor(139, 143, 148)
-    surface.DrawOutlinedRect(1, 1, w - 2, h - 2, 2)
+    surface.DrawCircle(w / 2, h / 2, w / 2, 10, 15, 20, 255)
+    --surface.SetDrawColor(139, 143, 148)
+    --surface.DrawOutlinedRect(1, 1, w - 2, h - 2, 2)
 
     surface.SetDrawColor(255, 255, 255, 255)
     surface.SetMaterial(self.Material)
@@ -236,7 +251,7 @@ function PANEL:Init()
         self.UI.Playback:TogglePause()
         btn:SetImage(self.UI.Playback.Paused and "ponder/ui/icon64/play.png" or "ponder/ui/icon64/stop.png")
     end)
-    local replay    = self:AddButton("icon16/control_equalizer.png", "Replay")
+    local replay    = self:AddButton("ponder/ui/icon64/replay.png", "Replay")
     local time      = self:AddButton("icon16/clock_play.png", "Set Speed")
 
     -- Shut up linter I'm not ready yet
