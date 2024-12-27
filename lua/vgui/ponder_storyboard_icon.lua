@@ -8,8 +8,8 @@ function PANEL:Init()
     self.Icon:SetMouseInputEnabled(false)
     self.Icon:SetKeyboardInputEnabled(false)
     self.Icon:SetPos(-5000, padding)
-
     self:SetSize(ScrW() - 192, 76)
+    self.Icon:SetVisible(false)
 end
 
 local COLOR_Title = Color(170, 170, 170)
@@ -23,6 +23,8 @@ function PANEL:SetStoryboard(storyboard)
 end
 
 function PANEL:Paint()
+    DisableClipping(true)
+
     surface.SetDrawColor(0, 0, 0, 255)
     surface.SetMaterial(GRADIENT)
 
@@ -39,6 +41,9 @@ function PANEL:Paint()
     draw.SimpleText(self.Storyboard.Name, "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
 
     self.Icon:SetPos(padding - animXGrad, padding)
+    local pX, pY = self:LocalToScreen(0, 0)
+    self.Icon:PaintAt(pX + (padding - animXGrad), pY + padding)
+    DisableClipping(false)
 end
 
 function PANEL:OnRemove()
