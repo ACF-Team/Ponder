@@ -25,3 +25,10 @@ function API.NewInstruction(name)
 
     return instrClass
 end
+
+function API.NewInstructionMacro(name)
+    local instrClass = Ponder.InheritedClass(Ponder.InstructionMacro)
+    API.RegisteredInstructions[name] = instrClass
+
+    return instrClass
+end

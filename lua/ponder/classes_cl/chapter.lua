@@ -11,10 +11,15 @@ function Ponder.Chapter:AddInstruction(instruction_type, instruction_params)
     local instr = Ponder.API.RegisteredInstructions[instruction_type]
     if not instr then return Ponder.Print("No instruction " .. instruction_type) end
 
+    if Ponder.IsTypeOf(instr, Ponder.InstructionMacro) then
+        return instr:Run(self, instruction_params)
+    end
+
     local instructionObj = instr(self)
     for k, v in pairs(instruction_params) do
         instructionObj[k] = v
     end
+
     self.Instructions[#self.Instructions + 1] = instructionObj
     instructionObj.Time = instructionObj.Time + self.Time
 
