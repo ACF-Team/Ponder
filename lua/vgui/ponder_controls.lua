@@ -9,7 +9,7 @@ end
 
 local pointy = Material "icon32/hand_point_180.png"
 
-function PROGRESSPANEL:Paint(w, h)
+function PROGRESSPANEL:Paint(w, _)
     local progress = self:GetFraction()
 
     local upperTall = 20
@@ -207,7 +207,7 @@ function PANEL:Init()
     self.Buttons:SetSize(0, 64)
 
     -- I hate this
-    function self.Buttons:PerformLayout(w, h)
+    function self.Buttons:PerformLayout(w, _)
         local children = self:GetChildren()
         local w2 = w / (#children + 2)
         for i = 1, #children do
@@ -238,6 +238,12 @@ function PANEL:Init()
     end)
     local replay    = self:AddButton("icon16/control_equalizer.png", "Replay")
     local time      = self:AddButton("icon16/clock_play.png", "Set Speed")
+
+    -- Shut up linter I'm not ready yet
+    identify = identify
+    pauseplay = pauseplay
+    replay = replay
+    time = time
 end
 
 function PANEL:Paint()
