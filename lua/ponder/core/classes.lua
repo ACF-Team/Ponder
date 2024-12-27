@@ -13,3 +13,7 @@ function Ponder.InheritedClass(baseclass)
         return obj
     end})
 end
+
+function Ponder.IsTypeOf(object, type)
+    return getmetatable(object).__index == type
+end
