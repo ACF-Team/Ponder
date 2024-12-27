@@ -65,10 +65,14 @@ function Ponder.Environment:SetLookParams(camDist, rotation, height, lookAt)
     self:SetCameraFOV(15)
 end
 
-function Ponder.Environment:NewModel(mdl, name)
+function Ponder.Environment:NewModel(mdl, name, dontSpawn)
     local csModel = ClientsideModel(mdl)
-    csModel:SetPos(vector_origin)
-    csModel:Spawn()
+
+    if dontSpawn ~= true then
+        csModel:SetPos(vector_origin)
+        csModel:Spawn()
+    end
+
     self.ClientsideModels:Add(csModel, name)
     return csModel
 end
