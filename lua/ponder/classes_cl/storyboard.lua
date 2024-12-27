@@ -5,9 +5,19 @@ function Ponder.Storyboard:__new()
     self.Length = 0
 end
 
+function Ponder.Storyboard:SetupFirstChapter(chapter)
+    chapter:AddInstruction("PlaceModel", {Length = 0, Model = "models/hunter/blocks/cube150x150x025.mdl", Name = "GRID", Position = Vector(0, 0, -5.9)})
+    chapter:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 0, Target = vector_origin, Angle = 55, Distance = 1300, Height = 600})
+end
+
 function Ponder.Storyboard:Chapter()
     local chapter = Ponder.Chapter(self)
     self.Chapters[#self.Chapters + 1] = chapter
+
+    if #self.Chapters == 1 then
+        self:SetupFirstChapter(chapter)
+    end
+
     return chapter
 end
 
