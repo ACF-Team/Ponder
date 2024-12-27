@@ -3,7 +3,7 @@
 This is a work-in-progress, in-game documentation system, heavily inspired by the Create Minecraft mod's "Pondering" system.
 A couple of example storyboards are provided in lua/ponder/storyboards_cl/.
 
-https://github.com/user-attachments/assets/7e7e1f43-9fde-4f63-a894-1393fccd1e27
+![gmod_Ot5eA9REfy](https://github.com/user-attachments/assets/99eff8c0-e307-4075-bc15-d7c27bc1a3c2)
 
 ## For Other Addons
 
