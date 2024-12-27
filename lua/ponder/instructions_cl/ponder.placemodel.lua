@@ -7,7 +7,7 @@ PlaceModel.ComeFrom   = Vector(0, 0, 32)
 PlaceModel.RotateFrom = Angle(0, 0, 0)
 PlaceModel.Time       = 0
 PlaceModel.Length     = .5
-PlaceModel.LocalPos   = true
+PlaceModel.LocalTransform = true
 
 function PlaceModel:Preload()
     util.PrecacheModel(self.Model)
@@ -15,7 +15,7 @@ end
 
 function PlaceModel:First(playback)
     local env = playback.Environment
-    local mdl = env:NewModel(self.Model, self.Name)
+    local mdl = env:NewModel(self.Model, self.Name, true)
     if self.ParentTo then
         local parent = env:GetNamedModel(self.ParentTo)
         if IsValid(parent) then
@@ -24,6 +24,17 @@ function PlaceModel:First(playback)
             Ponder.Print("Can't parent; parent target not found")
         end
     end
+
+    if self.LocalTransform then
+        local p, a = LocalToWorld(self.ComeFrom, self.RotateFrom, self.Position, self.Angles)
+        mdl:SetPos(p)
+        mdl:SetAngles(a)
+    else
+        mdl:SetPos(self.Position + self.ComeFrom)
+        mdl:SetAngles(self.Angles + self.RotateFrom)
+    end
+
+    mdl:Spawn()
 end
 
 function PlaceModel:Update(playback)
@@ -31,7 +42,7 @@ function PlaceModel:Update(playback)
     local progress = math.ease.OutQuad(playback:GetInstructionProgress(self))
     local object = env:GetNamedModel(self.Name)
 
-    if self.LocalPos then
+    if self.LocalTransform then
         local p, a = LocalToWorld(
             LerpVector(progress, self.ComeFrom, vector_origin),
             LerpAngle(progress, self.RotateFrom, angle_zero),
