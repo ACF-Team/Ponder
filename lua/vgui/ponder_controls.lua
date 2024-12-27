@@ -40,10 +40,15 @@ function PANEL:Init()
         return button
     end
 
-    local identify  = self:AddButton("ponder/ui/icon64/magnifier.png", "Identify")
-    local pauseplay = self:AddButton("ponder/ui/icon64/stop.png", "Play/Pause", function(btn)
+    local identify  = self:AddButton("ponder/ui/icon64/magnifier.png", "Identify", function(btn)
+        self.UI.Playback:ToggleIdentify()
+        btn:SetImage(self.UI.Playback.Identifying and "ponder/ui/icon64/magnifier_enabled.png" or "ponder/ui/icon64/magnifier.png")
+        btn:SetTooltip(self.UI.Playback.Identifying and "Stop Identifying" or "Identify")
+    end)
+    local pauseplay = self:AddButton("ponder/ui/icon64/stop.png", "Pause", function(btn)
         self.UI.Playback:TogglePause()
         btn:SetImage(self.UI.Playback.Paused and "ponder/ui/icon64/play.png" or "ponder/ui/icon64/stop.png")
+        btn:SetTooltip(self.UI.Playback.Paused and "Play" or "Pause")
     end)
     local replay    = self:AddButton("ponder/ui/icon64/replay.png", "Replay")
     local time      = self:AddButton("ponder/ui/icon64/fast.png", "Set Speed", function(btn)

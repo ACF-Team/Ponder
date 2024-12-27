@@ -22,7 +22,7 @@ function PANEL:SetStoryboard(storyboard)
     self.StartTime = CurTime()
 end
 
-function PANEL:Paint(w, h)
+function PANEL:Paint()
     surface.SetDrawColor(0, 0, 0, 255)
     surface.SetMaterial(GRADIENT)
 

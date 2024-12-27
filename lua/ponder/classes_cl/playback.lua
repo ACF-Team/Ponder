@@ -9,6 +9,7 @@ function Ponder.Playback:__new(storyboard, environment)
     self.Complete       = false
     self.Paused         = true
     self.Length         = self.Storyboard:Recalculate().Length
+    self.Identifying    = false
 
     self.CompletedInstructionIndices = {}
     self.RunningInstructionIndices = {}
@@ -35,6 +36,9 @@ end
 
 function Ponder.Playback:TogglePause()
     if self.Paused then self:Play() else self:Pause() end
+end
+function Ponder.Playback:ToggleIdentify()
+    self.Identifying = not self.Identifying
 end
 
 function Ponder.Playback:GetInstructionProgress(instruction)

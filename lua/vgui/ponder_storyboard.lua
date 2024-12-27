@@ -18,8 +18,6 @@ surface.CreateFont("Ponder.Subtitle", {
     antialias = true
 })
 
-local padding = 48
-
 function PANEL:Init()
     self:Dock(FILL)
 
