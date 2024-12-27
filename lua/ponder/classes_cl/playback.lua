@@ -32,6 +32,10 @@ function Ponder.Playback:Pause()
     self.Paused = true
 end
 
+function Ponder.Playback:TogglePause()
+    if self.Paused then self:Play() else self:Pause() end
+end
+
 function Ponder.Playback:GetInstructionProgress(instruction)
     local curChapTime = self:GetChapter().StartTime
     return math.Clamp(math.Remap(self.Time, curChapTime + instruction.Time, curChapTime + instruction.Time + instruction.Length, 0, 1), 0, 1)
