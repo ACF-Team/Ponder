@@ -1,40 +1,43 @@
 local PROGRESSPANEL     = {}
 
-local barInsidePadding = 6
+local barInsidePadding = 8
 local barInsidePadding2 = barInsidePadding * 2
 
 function PROGRESSPANEL:Init()
     self:SetMouseInputEnabled(true)
 end
 
-local pointy = Material "icon32/hand_point_180.png"
+local pointy   = Material("icon32/hand_point_180.png", "mips smooth")
+local bar      = Material("ponder/ui/progress/bar.png", "mips smooth")
+local stretchy = Material("ponder/ui/progress/stretchy.png", "mips smooth")
+local grabby   = Material("ponder/ui/progress/grabby.png", "mips smooth")
+local left     = Material("ponder/ui/progress/left.png", "mips smooth")
+local right    = Material("ponder/ui/progress/right.png", "mips smooth")
 
 function PROGRESSPANEL:Paint(w, _)
     local progress = self:GetFraction()
-
-    local upperTall = 20
-    surface.SetDrawColor(10, 15, 20, 160)
-    surface.DrawRect(0, 0, w, upperTall)
-
-    surface.SetDrawColor(10, 15, 20, 255)
-    surface.DrawOutlinedRect(0, 0, w, upperTall)
-    surface.SetDrawColor(139, 143, 148)
-    surface.DrawOutlinedRect(1, 1, w - 2, upperTall - 2, 2)
-
-    surface.SetDrawColor(123, 171, 230)
-    surface.DrawRect(barInsidePadding, barInsidePadding, (w - barInsidePadding2) * progress, upperTall - barInsidePadding2)
+    surface.SetDrawColor(255, 255, 255, 255)
+    surface.SetMaterial(left); surface.DrawTexturedRect(0, 0, 3, 24)
+    surface.SetMaterial(stretchy); surface.DrawTexturedRect(3, 0, w - 6, 24)
+    surface.SetMaterial(right); surface.DrawTexturedRect(w - 3, 0, 3, 24)
 
     local storyboardLength = self.UI.Storyboard.Length
-    local chapter_bar_outline_size = 7
-    local chapter_bar_size = 3
+
+    local upperTall = 24
+
+    local storyboardLength = self.UI.Storyboard.Length
+    local chapter_bar_outline_size = 3
+
     for i = 1, #self.UI.Storyboard.Chapters - 1 do
         local chap = self.UI.Storyboard.Chapters[i + 1]
         local ratio = chap.StartTime / storyboardLength
-        surface.SetDrawColor(41, 41, 43, 150)
-        surface.DrawRect(barInsidePadding + ((w - barInsidePadding2) * ratio) - (chapter_bar_outline_size / 2), barInsidePadding / 2, chapter_bar_outline_size, upperTall - barInsidePadding, COLOR_Tick)
-        surface.SetDrawColor(139, 143, 148, 150)
-        surface.DrawRect(barInsidePadding + ((w - barInsidePadding2) * ratio) - (chapter_bar_size / 2), barInsidePadding / 2, chapter_bar_size, upperTall - barInsidePadding, COLOR_Tick)
+        surface.SetDrawColor(71, 71, 79, 150)
+        surface.DrawRect(barInsidePadding + ((w - barInsidePadding2) * ratio) - (chapter_bar_outline_size / 2), barInsidePadding / 2, chapter_bar_outline_size, upperTall - barInsidePadding)
     end
+    surface.SetDrawColor(255, 255, 255, 255)
+
+    surface.SetMaterial(bar); surface.DrawTexturedRect(2 + barInsidePadding, 7, (w - barInsidePadding2 - 2) * progress, 10)
+    surface.SetMaterial(grabby); surface.DrawTexturedRect(3 + barInsidePadding + ((w - barInsidePadding2 - 6) * progress) - 3, 0, 14, 24)
 
     if self.HoveredChapter then
         local storyboard = self.UI.Storyboard
@@ -42,7 +45,10 @@ function PROGRESSPANEL:Paint(w, _)
         local startX = barInsidePadding + ((chapter.StartTime / storyboard.Length) * (w - barInsidePadding2))
 
         surface.SetDrawColor(255, 255, 255, 255)
-        surface.DrawRect(startX - 1, 28, 3, 60)
+        surface.DrawRect(startX - 0, 24, 1, 60)
+        surface.SetDrawColor(255, 255, 255, 55)
+        surface.DrawRect(startX - 1, 24, 3, 60)
+        surface.SetDrawColor(255, 255, 255, 255)
         -- determine if we're going backwards or forwards
         surface.SetMaterial(pointy)
         local s = math.sin(CurTime() * 8) * 8
@@ -179,16 +185,18 @@ local function drawCircle( x, y, radius, seg )
 end
 
 function CONTROL_BUTTON:Paint(w, h)
-    surface.SetDrawColor(10, 15, 20, 160)
-    drawCircle(w / 2, h / 2, w / 2, h / 2)
+    local finalPadding = self.Depressed and paddingIfDepressed or self.Hovered and paddingIfHover or padding
+    --surface.SetDrawColor(10, 15, 20, 120)
+    local r = (w / 2) - finalPadding - 4
+    local sX, sY = 0, 0
+    --drawCircle((w / 2) + sX, (h / 2) + sY, r, r)
 
-    surface.DrawCircle(w / 2, h / 2, w / 2, 10, 15, 20, 255)
+   -- surface.DrawCircle(w / 2, h / 2, w / 2, 10, 15, 20, 255)
     --surface.SetDrawColor(139, 143, 148)
     --surface.DrawOutlinedRect(1, 1, w - 2, h - 2, 2)
 
     surface.SetDrawColor(255, 255, 255, 255)
     surface.SetMaterial(self.Material)
-    local finalPadding = self.Depressed and paddingIfDepressed or self.Hovered and paddingIfHover or padding
     surface.DrawTexturedRectRotated(w / 2, h / 2, 48 - finalPadding, 48 - finalPadding, 0)
 end
 
@@ -240,13 +248,14 @@ function PANEL:Init()
         button:SetImage(img)
         button:SetTooltip(tooltip)
         function button:DoClick()
+            if not onclick then return end
             onclick(self)
         end
 
         return button
     end
 
-    local identify  = self:AddButton("icon16/magnifier.png", "Identify")
+    local identify  = self:AddButton("ponder/ui/icon64/magnifier.png", "Identify")
     local pauseplay = self:AddButton("ponder/ui/icon64/stop.png", "Play/Pause", function(btn)
         self.UI.Playback:TogglePause()
         btn:SetImage(self.UI.Playback.Paused and "ponder/ui/icon64/play.png" or "ponder/ui/icon64/stop.png")
