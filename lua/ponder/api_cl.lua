@@ -2,6 +2,7 @@ Ponder.API = {}
 local API = Ponder.API
 API.RegisteredStoryboards  = {}
 API.RegisteredInstructions = {}
+API.RegisteredRenderers    = {}
 
 function API.NewStoryboard(addon_name, category_name, storyboard_name)
     local storyboard = Ponder.Storyboard()
@@ -31,4 +32,11 @@ function API.NewInstructionMacro(name)
     API.RegisteredInstructions[name] = instrClass
 
     return instrClass
+end
+
+function API.NewRenderer(name)
+    local renderer = Ponder.InheritedClass(Ponder.Renderer)
+    API.RegisteredRenderers[name] = renderer
+
+    return renderer
 end
