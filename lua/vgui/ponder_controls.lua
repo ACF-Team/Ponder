@@ -36,7 +36,7 @@ function PROGRESSPANEL:Paint(w, _)
     end
     surface.SetDrawColor(255, 255, 255, 255)
 
-    draw.NoTexture(); surface.SetDrawColor(30, 30, 30, 60); surface.DrawRect(1 + barInsidePadding, 6, (w - barInsidePadding2 - 1), 12)
+    draw.NoTexture(); surface.SetDrawColor(30, 30, 30, 60); surface.DrawRect(1 + barInsidePadding, 6, w - barInsidePadding2 - 1, 12)
     surface.SetDrawColor(255, 255, 255, 255)
     surface.SetMaterial(bar); surface.DrawTexturedRect(2 + barInsidePadding, 7, (w - barInsidePadding2 - 2) * progress, 10)
     surface.SetMaterial(grabby); surface.DrawTexturedRect(3 + barInsidePadding + ((w - barInsidePadding2 - 6) * progress) - 7, 0, 14, 24)
@@ -170,32 +170,8 @@ function CONTROL_BUTTON:SetImage(path)
     self.Material = Material(path, "mips smooth")
 end
 
-local function drawCircle( x, y, radius, seg )
-    local cir = {}
-
-    table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
-    for i = 0, seg do
-        local a = math.rad( ( i / seg ) * -360 )
-        table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
-    end
-
-    local a = math.rad( 0 ) -- This is needed for non absolute segment counts
-    table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
-
-    draw.NoTexture()
-    surface.DrawPoly( cir )
-end
-
 function CONTROL_BUTTON:Paint(w, h)
     local finalPadding = self.Depressed and paddingIfDepressed or self.Hovered and paddingIfHover or padding
-    --surface.SetDrawColor(10, 15, 20, 120)
-    local r = (w / 2) - finalPadding - 4
-    local sX, sY = 0, 0
-    --drawCircle((w / 2) + sX, (h / 2) + sY, r, r)
-
-   -- surface.DrawCircle(w / 2, h / 2, w / 2, 10, 15, 20, 255)
-    --surface.SetDrawColor(139, 143, 148)
-    --surface.DrawOutlinedRect(1, 1, w - 2, h - 2, 2)
 
     surface.SetDrawColor(255, 255, 255, 255)
     surface.SetMaterial(self.Material)
