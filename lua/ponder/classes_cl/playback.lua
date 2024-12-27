@@ -52,6 +52,19 @@ function Ponder.Playback:SetChapter(chapterIndex)
     return true
 end
 
+function Ponder.Playback:FinalizeChapter()
+    -- Call all finalizers on running instructions
+    for instrIndex in pairs(self.RunningInstructionIndices) do
+        local instruction = self:GetChapter().Instructions[instrIndex]
+
+        instruction:Update(self)
+        instruction:Last(self)
+    end
+
+    table.Empty(self.RunningInstructionIndices)
+    table.Empty(self.CompletedInstructionIndices)
+end
+
 function Ponder.Playback:Update()
     if self.Paused then return end
 
@@ -66,16 +79,7 @@ function Ponder.Playback:Update()
     if not curChapter then return end
 
     if self.Time >= curChapter:GetEndTime() then
-        -- Call all finalizers on running instructions
-        for instrIndex in pairs(self.RunningInstructionIndices) do
-            local instruction = self:GetChapter().Instructions[instrIndex]
-
-            instruction:Update(self)
-            instruction:Last(self)
-        end
-
-        table.Empty(self.RunningInstructionIndices)
-        table.Empty(self.CompletedInstructionIndices)
+        self:FinalizeChapter()
 
         if not self:SetChapter(self.Chapter + 1) then
             self.Paused = true
