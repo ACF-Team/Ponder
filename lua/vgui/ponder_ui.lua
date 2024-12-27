@@ -51,6 +51,8 @@ function PANEL:Init()
     controls:LinkTo(self)
     controls:SetSize(ScrW(), 384)
     controls:SetPos(0, ScrH() - 384 - 64)
+
+    self.Controls = controls
 end
 
 function PANEL:LoadStoryboard(uuid)
@@ -76,6 +78,9 @@ function PANEL:LoadStoryboard(uuid)
     end
 
     self.Playback:Play()
+    self.Playback.OnComplete = function()
+        self.Controls.PlayPauseButton:SetImage("ponder/ui/icon64/play.png")
+    end
 
     self.StartTime = CurTime()
 end

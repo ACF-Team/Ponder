@@ -253,12 +253,13 @@ function PANEL:Init()
     end)
     local replay    = self:AddButton("ponder/ui/icon64/replay.png", "Replay")
     local time      = self:AddButton("icon16/clock_play.png", "Set Speed")
-
     -- Shut up linter I'm not ready yet
     identify = identify
     pauseplay = pauseplay
     replay = replay
     time = time
+
+    self.PlayPauseButton = pauseplay
 end
 
 function PANEL:Paint()

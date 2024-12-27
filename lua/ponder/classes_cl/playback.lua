@@ -23,6 +23,7 @@ function Ponder.Playback:Play()
     if self.Complete then
         self.Complete = false
         self.Time = 0
+        self:SeekChapter(1)
     end
     self.LastUpdate = CurTime()
     self.Paused = false
@@ -84,6 +85,9 @@ function Ponder.Playback:Update()
         if not self:SetChapter(self.Chapter + 1) then
             self.Paused = true
             self.Complete = true
+            if self.OnComplete then
+                self:OnComplete()
+            end
             return
         else
             curChapter = self:GetChapter()

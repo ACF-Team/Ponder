@@ -122,7 +122,7 @@ function Ponder.Environment:SetCameraFOV(nFOV)
     self.CameraFOV = nFOV
 end
 
-function Ponder.Environment:Render(x, y, w, h)
+function Ponder.Environment:Render()
     --[[local ct = CurTime() * 1
     local r = 1200
     local s, c = math.sin(ct) * r, math.cos(ct) * r
