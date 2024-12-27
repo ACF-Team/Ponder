@@ -33,6 +33,10 @@ function PANEL:Init()
 end
 
 function PANEL:LoadStoryboard(uuid)
+    if self.Environment then
+        self.Environment:Free()
+    end
+
     self.Storyboard = Ponder.API.GetStoryboard(uuid)
     self.StoryboardIcon:SetStoryboard(self.Storyboard)
 

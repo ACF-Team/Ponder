@@ -50,7 +50,11 @@ function PANEL:Init()
         btn:SetImage(self.UI.Playback.Paused and "ponder/ui/icon64/play.png" or "ponder/ui/icon64/stop.png")
         btn:SetTooltip(self.UI.Playback.Paused and "Play" or "Pause")
     end)
-    local replay    = self:AddButton("ponder/ui/icon64/replay.png", "Replay")
+    local replay    = self:AddButton("ponder/ui/icon64/replay.png", "Reload from File", function()
+        -- Reload storyboard
+        self.UI:LoadStoryboard(self.UI.Storyboard:GenerateUUID())
+        pauseplay:SetImage("ponder/ui/icon64/stop.png")
+    end)
     local time      = self:AddButton("ponder/ui/icon64/fast.png", "Set Speed", function(btn)
         if IsValid(self.SpeedController) then
             self.SpeedController:Remove()
