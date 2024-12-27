@@ -15,7 +15,7 @@ end
 
 function PlaceModel:First(playback)
     local env = playback.Environment
-    local mdl = env:NewModel(self.Model, self.Name, true)
+    local mdl = env:NewModel(self.Model, self.Name)
     if self.ParentTo then
         local parent = env:GetNamedModel(self.ParentTo)
         if IsValid(parent) then
@@ -23,6 +23,11 @@ function PlaceModel:First(playback)
         else
             Ponder.Print("Can't parent; parent target not found")
         end
+    end
+
+    if self.Length == 0 then -- Does not move
+        self.ComeFrom = vector_origin
+        self.RotateFrom = angle_zero
     end
 
     if self.LocalTransform then
@@ -33,7 +38,6 @@ function PlaceModel:First(playback)
         mdl:SetPos(self.Position + self.ComeFrom)
         mdl:SetAngles(self.Angles + self.RotateFrom)
     end
-    mdl:Spawn()
 end
 
 function PlaceModel:Update(playback)
