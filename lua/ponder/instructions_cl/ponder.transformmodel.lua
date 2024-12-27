@@ -7,8 +7,14 @@ function TransformModel:First(playback)
     local mdl = env:GetNamedModel(self.Target)
     if not IsValid(mdl) then return end
 
-    mdl.PONDER_LAST_POS = mdl:GetPos()
-    mdl.PONDER_LAST_ANG = mdl:GetAngles()
+    local parent = mdl:GetParent()
+    if IsValid(parent) then
+        mdl.PONDER_LAST_POS = parent:WorldToLocal(mdl:GetPos())
+        mdl.PONDER_LAST_ANG = parent:WorldToLocalAngles(mdl:GetAngles())
+    else
+        mdl.PONDER_LAST_POS = mdl:GetPos()
+        mdl.PONDER_LAST_ANG = mdl:GetAngles()
+    end
 
     mdl.PONDER_TARG_POS = self.Position
     mdl.PONDER_TARG_ANG = self.Rotation
