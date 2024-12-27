@@ -4,7 +4,6 @@ SetSequence.Sequence   = "idle"
 SetSequence.Time       = 0
 SetSequence.Speed      = 1
 SetSequence.Loop       = false
-SetSequence.LocalPos   = true
 
 function SetSequence:First(playback)
     local env = playback.Environment
