@@ -61,7 +61,7 @@ function Ponder.Environment:SetLookParams(camDist, rotation, height, lookAt)
     local rads = math.rad(rotation)
     local s, c = math.sin(rads) * camDist, math.cos(rads) * camDist
     self:SetCameraPosition(Vector(s, c, height))
-    self:SetLookAt(Vector(0, 0, 0))
+    self:SetLookAt(lookAt)
     self:SetCameraFOV(15)
 end
 
