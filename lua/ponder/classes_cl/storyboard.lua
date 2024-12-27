@@ -3,10 +3,11 @@ Ponder.Storyboard = Ponder.SimpleClass()
 function Ponder.Storyboard:__new()
     self.Chapters = {}
     self.Length = 0
+    self.BaseEntityModelPath = "models/hunter/blocks/cube150x150x025.mdl"
 end
 
 function Ponder.Storyboard:SetupFirstChapter(chapter)
-    chapter:AddInstruction("PlaceModel", {Length = 0, Model = "models/hunter/blocks/cube150x150x025.mdl", Name = "GRID", Position = Vector(0, 0, -5.9)})
+    chapter:AddInstruction("PlaceModel", {Length = 0, Model = self.BaseEntityModelPath, Name = "GRID", Position = Vector(0, 0, -5.9)})
     chapter:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 0, Target = vector_origin, Angle = 55, Distance = 1300, Height = 600})
 end
 
@@ -39,6 +40,10 @@ end
 
 function Ponder.Storyboard:WithSpawnIcon(icon)
     self.Icon = icon
+end
+
+function Ponder.Storyboard:WithBaseEntity(mdlpath)
+    self.BaseEntityModelPath = mdlpath
 end
 
 function Ponder.Storyboard:Preload()
