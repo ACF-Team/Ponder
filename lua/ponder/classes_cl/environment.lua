@@ -153,7 +153,7 @@ function Ponder.Environment:Render()
     cam.Start(self.Camera)
 
     for _, v in ipairs(self.NamedTextObjects.List) do v:ResolvePos2D() end
-    for _, v in ipairs(self.ClientsideModels.List) do 
+    for _, v in ipairs(self.ClientsideModels.List) do
         local c = v:GetColor()
         render.SetColorModulation(c.r / 255, c.g / 255, c.b / 255)
         render.SetBlend(c.a / 255)
