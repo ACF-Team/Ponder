@@ -28,16 +28,18 @@ function PROGRESSPANEL:Paint(w, _)
     local storyboardLength = self.UI.Storyboard.Length
     local chapter_bar_outline_size = 3
 
-    for i = 1, #self.UI.Storyboard.Chapters - 1 do
-        local chap = self.UI.Storyboard.Chapters[i + 1]
+    for i = 1, #self.UI.Storyboard.Chapters do
+        local chap = self.UI.Storyboard.Chapters[i]
         local ratio = chap.StartTime / storyboardLength
         surface.SetDrawColor(71, 71, 79, 150)
         surface.DrawRect(barInsidePadding + ((w - barInsidePadding2) * ratio) - (chapter_bar_outline_size / 2), barInsidePadding / 2, chapter_bar_outline_size, upperTall - barInsidePadding)
     end
     surface.SetDrawColor(255, 255, 255, 255)
 
+    draw.NoTexture(); surface.SetDrawColor(30, 30, 30, 60); surface.DrawRect(1 + barInsidePadding, 6, (w - barInsidePadding2 - 1), 12)
+    surface.SetDrawColor(255, 255, 255, 255)
     surface.SetMaterial(bar); surface.DrawTexturedRect(2 + barInsidePadding, 7, (w - barInsidePadding2 - 2) * progress, 10)
-    surface.SetMaterial(grabby); surface.DrawTexturedRect(3 + barInsidePadding + ((w - barInsidePadding2 - 6) * progress) - 3, 0, 14, 24)
+    surface.SetMaterial(grabby); surface.DrawTexturedRect(3 + barInsidePadding + ((w - barInsidePadding2 - 6) * progress) - 7, 0, 14, 24)
 
     if self.HoveredChapter then
         local storyboard = self.UI.Storyboard
