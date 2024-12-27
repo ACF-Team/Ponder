@@ -62,6 +62,21 @@ function PROGRESSPANEL:Paint(w, _)
     end
 end
 
+function PROGRESSPANEL:OnChapterChanged(_, chapterIndex, tX, tY)
+    if IsValid(self.HoveredChapterTooltip) then
+        self.HoveredChapterTooltip:Remove()
+    end
+
+    if chapterIndex ~= nil then
+        local chapter = self.UI.Storyboard.Chapters[chapterIndex]
+        if not chapter.Name then return end
+
+        self.HoveredChapterTooltip = vgui.Create("Ponder.ControlTooltip")
+        self.HoveredChapterTooltip:SetText(chapter.Name)
+        self.HoveredChapterTooltip.Target = {x = tX, y = tY}
+    end
+end
+
 function PROGRESSPANEL:Think()
     if not self.UI then return end
     if not self.UI.Storyboard then return end
@@ -83,6 +98,17 @@ function PROGRESSPANEL:Think()
         self.HoveredChapter = found_chapter
     else
         self.HoveredChapter = nil
+    end
+
+    if self.HoveredChapter ~= self.LastHoveredChapter then
+        local startX
+        if self.HoveredChapter then
+            local chapter = self.UI.Storyboard.Chapters[self.HoveredChapter]
+            startX = barInsidePadding + ((chapter.StartTime / self.UI.Storyboard.Length) * (self:GetWide() - barInsidePadding2))
+        end
+
+        self:OnChapterChanged(self.LastHoveredChapter, self.HoveredChapter, self:LocalToScreen(startX, 102))
+        self.LastHoveredChapter = self.HoveredChapter
     end
 end
 

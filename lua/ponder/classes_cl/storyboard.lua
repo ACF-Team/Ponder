@@ -11,8 +11,9 @@ function Ponder.Storyboard:SetupFirstChapter(chapter)
     chapter:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 0, Target = vector_origin, Angle = 55, Distance = 1300, Height = 600})
 end
 
-function Ponder.Storyboard:Chapter()
+function Ponder.Storyboard:Chapter(name)
     local chapter = Ponder.Chapter(self)
+    chapter.Name = name
     self.Chapters[#self.Chapters + 1] = chapter
 
     if #self.Chapters == 1 then

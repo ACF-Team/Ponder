@@ -6,7 +6,7 @@ function TOOLTIP:Init()
     self.Birth = RealTime()
 
     self:SetText("")
-    self:SetFont("DermaDefault")
+    self:SetFont("Ponder.Text")
     self:SetDrawOnTop(true)
 end
 
@@ -31,9 +31,13 @@ function TOOLTIP:Think()
     --local pX, pY = input.GetCursorPos()
     --self:SetPos(pX - (self:GetWide() / 2), pY - 8 - sH - 6)
     local target = self.Target
-    local tpx, tpy = target:LocalToScreen(0, 0)
-    tpx = tpx + (target:GetWide() / 2)
-    self:SetPos(tpx - (self:GetWide() / 2), tpy - 8 - sH - 6)
+    if ispanel(target) then
+        local tpx, tpy = target:LocalToScreen(0, 0)
+        tpx = tpx + (target:GetWide() / 2)
+        self:SetPos(tpx - (self:GetWide() / 2), tpy - 8 - sH - 6)
+    elseif istable(target) then
+        self:SetPos(target.x - (self:GetWide() / 2), target.y - 8 - sH - 6)
+    end
 end
 
 function TOOLTIP:GetAlphaMult(min)
