@@ -6,6 +6,10 @@ ShowText.Position   = vector_origin
 ShowText.Icons      = {}
 ShowText.Time = 0
 ShowText.Length     = 0.5
+ShowText.Horizontal = TEXT_ALIGN_LEFT
+ShowText.Vertical = TEXT_ALIGN_TOP
+ShowText.TextAlignment = TEXT_ALIGN_LEFT
+ShowText.PositionRelativeToScreen = false
 
 function ShowText:First(playback)
     local env = playback.Environment
@@ -23,6 +27,10 @@ function ShowText:First(playback)
         txt.Parent = parent
     end
 
+    txt.PositionRelativeToScreen = self.PositionRelativeToScreen
+    txt.Horizontal    = self.Horizontal
+    txt.Vertical      = self.Vertical
+    txt.TextAlignment = self.TextAlignment
 
     txt:SetMarkup(self.Markup)
 end
