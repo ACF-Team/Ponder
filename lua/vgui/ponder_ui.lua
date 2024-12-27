@@ -49,8 +49,8 @@ function PANEL:Init()
 
     local controls = self:Add "Ponder.Controls"
     controls:LinkTo(self)
-    controls:SetSize(600, 384)
-    controls:SetPos((ScrW() / 2) - 300, ScrH() - 384 - 64)
+    controls:SetSize(ScrW(), 384)
+    controls:SetPos(0, ScrH() - 384 - 64)
 end
 
 function PANEL:LoadStoryboard(uuid)
