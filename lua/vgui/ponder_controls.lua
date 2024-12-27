@@ -92,6 +92,10 @@ end
 
 function PROGRESSPANEL:OnMouseReleased()
     if self.HoveredChapter then
+        if self.UI.Playback.Complete then
+            self.UI.Playback:Play()
+        end
+
         self.UI.Playback:SeekChapter(self.HoveredChapter)
     end
 end
