@@ -1,7 +1,7 @@
 include("includes/gloader.lua")
 gloader.Load("Ponder", "ponder")
 
-Ponder.Debug = true
+Ponder.Debug = false
 if SERVER then
     -- resource.AddFile("materials/ponder/ui/toolgun_cursor64.png")
     resource.AddFile("materials/ponder/ui/toolgun_cursor96.png")
