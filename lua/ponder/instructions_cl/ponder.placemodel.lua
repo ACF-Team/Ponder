@@ -33,7 +33,6 @@ function PlaceModel:First(playback)
         mdl:SetPos(self.Position + self.ComeFrom)
         mdl:SetAngles(self.Angles + self.RotateFrom)
     end
-
     mdl:Spawn()
 end
 

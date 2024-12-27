@@ -22,8 +22,8 @@ local function NamedList()
     end
 
     function ret:RemoveByName(name)
-        table.RemoveByValue(self.List, name)
         local retObj = self.Named[name]
+        table.RemoveByValue(self.List, self.Named[name])
         self.Named[name] = nil
 
         return retObj
@@ -66,6 +66,11 @@ function Ponder.Environment:SetLookParams(camDist, rotation, height, lookAt)
 end
 
 function Ponder.Environment:NewModel(mdl, name, dontSpawn)
+    if self.ClientsideModels:Find(name) then
+        local ent = self.ClientsideModels:RemoveByName(name)
+        if IsValid(ent) then ent:Remove() end
+    end
+
     local csModel = ClientsideModel(mdl)
 
     if dontSpawn ~= true then

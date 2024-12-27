@@ -199,5 +199,11 @@ function Ponder.Playback:SeekChapter(chapterIndex)
     local seekChapter = self.Storyboard.Chapters[chapterIndex]
     self.Time = seekChapter.StartTime
 
+    for _, instruction in ipairs(seekChapter.Instructions) do
+        if instruction.Time == 0 then
+            instruction:First(self)
+        end
+    end
+
     self.Seeking = false
 end
