@@ -194,5 +194,6 @@ function Ponder.Playback:SeekChapter(chapterIndex)
     self:SetChapter(chapterIndex)
     local seekChapter = self.Storyboard.Chapters[chapterIndex]
     self.Time = seekChapter.StartTime
+
     self.Seeking = false
 end
