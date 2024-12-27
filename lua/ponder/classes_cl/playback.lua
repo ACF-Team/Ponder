@@ -165,3 +165,30 @@ end
 function Ponder.Playback:GetChapter() return self.Storyboard.Chapters[self.Chapter] end
 
 function Ponder.Playback:CurFrame() return math.floor(self.Time * Ponder.Playback.TICKS_PER_SECOND) end
+
+function Ponder.Playback:DoAllInstructions(chapterIndex)
+    self:SetChapter(chapterIndex)
+    local chapter = self.Storyboard.Chapters[chapterIndex]
+    self.Time = chapter.StartTime + chapter.Length
+
+    for _, instruction in ipairs(chapter.Instructions) do
+        instruction:First(self)
+        instruction:Update(self)
+        instruction:Last(self)
+    end
+end
+
+function Ponder.Playback:SeekChapter(chapterIndex)
+    self.Seeking = true
+    self:FinalizeChapter()
+    self.Environment:Free()
+
+    for i = 1, chapterIndex - 1 do
+        self:DoAllInstructions(i)
+    end
+
+    self:SetChapter(chapterIndex)
+    local seekChapter = self.Storyboard.Chapters[chapterIndex]
+    self.Time = seekChapter.StartTime
+    self.Seeking = false
+end
