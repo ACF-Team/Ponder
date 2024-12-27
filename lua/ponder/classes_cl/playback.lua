@@ -14,6 +14,8 @@ function Ponder.Playback:__new(storyboard, environment)
     self.CompletedInstructionIndices = {}
     self.RunningInstructionIndices = {}
     self:SetChapter(1)
+
+    for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Initialize(self.Environment) end
 end
 
 function Ponder.Playback:ToString()
@@ -71,10 +73,11 @@ function Ponder.Playback:FinalizeChapter()
 end
 
 function Ponder.Playback:Update()
-    if self.Paused then return end
+    if self.Paused then self.DeltaTime = 0 return end
 
     local now = CurTime()
     local delta = now - self.LastUpdate
+    self.DeltaTime = delta * self.Speed
     self.Time = math.Clamp(self.Time + (delta * self.Speed), 0, self.Length)
     self.LastUpdate = now
     self.Frame = self:CurFrame()
@@ -190,6 +193,7 @@ function Ponder.Playback:SeekChapter(chapterIndex)
     self.Seeking = true
     self:FinalizeChapter()
     self.Environment:Free()
+    for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Initialize(self.Environment) end
 
     for i = 1, chapterIndex - 1 do
         self:DoAllInstructions(i)
