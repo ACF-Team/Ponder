@@ -15,6 +15,14 @@ if CLIENT then
         antialias = true
     })
 
+    surface.CreateFont("Ponder.BigText", {
+        font = "Tahoma",
+        extended = false,
+        size = 60,
+        weight = 100,
+        antialias = true
+    })
+
     surface.CreateFont("Ponder.Text", {
         font = "Arial",
         extended = false,
