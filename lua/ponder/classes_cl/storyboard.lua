@@ -3,6 +3,7 @@ Ponder.Storyboard = Ponder.SimpleClass()
 function Ponder.Storyboard:__new()
     self.Chapters = {}
     self.Length = 0
+    self.IndexOrder = -1
     self.BaseEntityModelPath = "models/hunter/blocks/cube150x150x025.mdl"
 end
 
@@ -16,6 +17,14 @@ end
 
 function Ponder.Storyboard:WithLongName(name)
     self.LongName = name
+end
+
+function Ponder.Storyboard:WithIndexOrder(order)
+    self.IndexOrder = order
+end
+
+function Ponder.Storyboard:WithDescription(description)
+    self.Description = description
 end
 
 function Ponder.Storyboard:Chapter(name)

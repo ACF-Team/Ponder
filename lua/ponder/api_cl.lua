@@ -103,6 +103,6 @@ function API.GetCategoryStoryboardList(addon_name, category_name)
     local items = {}
     for _, v in pairs(lookup) do items[#items + 1] = v end
 
-    table.SortByMember(items, "Order")
+    table.SortByMember(items, "IndexOrder")
     return items
 end
