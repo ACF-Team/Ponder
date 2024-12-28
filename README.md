@@ -14,5 +14,3 @@ A couple of example storyboards are provided in lua/ponder/storyboards_cl/.
 [![Developer Wiki](https://img.shields.io/badge/Developer_Wiki-bbccff)](https://github.com/ACF-Team/Ponder/wiki)
 
 ![gmod_Ot5eA9REfy](https://github.com/user-attachments/assets/99eff8c0-e307-4075-bc15-d7c27bc1a3c2)
-
-## [Developer Wiki](https://github.com/ACF-Team/ACF-3/wiki)
