@@ -31,12 +31,3 @@ function TransformModel:Update(playback)
         object:SetAngles((self.LocalToParent and IsValid(object:GetParent())) and object:GetParent():LocalToWorldAngles(ang) or ang)
     end
 end
-
-local function LerpColor(t, a, b)
-    return Color(
-        Lerp(t, a.r, b.r),
-        Lerp(t, a.g, b.g),
-        Lerp(t, a.b, b.b),
-        Lerp(t, a.a, b.a)
-    )
-end
