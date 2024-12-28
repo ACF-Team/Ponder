@@ -1,0 +1,1 @@
+Ponder.API.RegisterAddon("Ponder", "models/props_lab/binderbluelabel.mdl", "Ponder example storyboards.")
