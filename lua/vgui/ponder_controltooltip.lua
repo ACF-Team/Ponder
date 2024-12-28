@@ -32,9 +32,14 @@ function TOOLTIP:Think()
     --self:SetPos(pX - (self:GetWide() / 2), pY - 8 - sH - 6)
     local target = self.Target
     if ispanel(target) then
+        if not IsValid(target) then
+            self:Remove()
+            return
+        end
         local tpx, tpy = target:LocalToScreen(0, 0)
         tpx = tpx + (target:GetWide() / 2)
         self:SetPos(tpx - (self:GetWide() / 2), tpy - 8 - sH - 6)
+        self:SetText(target:GetTooltip())
     elseif istable(target) then
         self:SetPos(target.x - (self:GetWide() / 2), target.y - 8 - sH - 6)
     end
