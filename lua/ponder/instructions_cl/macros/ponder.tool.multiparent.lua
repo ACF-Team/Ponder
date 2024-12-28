@@ -3,7 +3,7 @@ local MultiParent = Ponder.API.NewInstructionMacro("MultiParent")
 function MultiParent:Run(chapter, parameters)
     local length = parameters.Length or 1
     local timeForEachClick = length / (#parameters.Children + 1)
-    chapter:AddInstruction("ShowToolgun", {Length = timeForEachClick, Tool = "Multi-Parent"})
+
     local tAdd = 0
     for _, child in ipairs(parameters.Children) do
         chapter:AddInstruction("MoveToolgunTo", {Time = tAdd, Target = child, Easing = parameters.Easing})
@@ -17,7 +17,6 @@ function MultiParent:Run(chapter, parameters)
     for _, child in ipairs(parameters.Children) do
         chapter:AddInstruction("ColorModel", {Time = tAdd + timeForEachClick, Target = child, Length = 0.1, Color = Color(255, 255, 255, 255)})
     end
-    chapter:AddInstruction("HideToolgun", {Time = tAdd + timeForEachClick + 0, Length = timeForEachClick})
 
     return tAdd + timeForEachClick
 end
