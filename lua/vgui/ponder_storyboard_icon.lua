@@ -32,7 +32,7 @@ function PANEL:Paint()
 
     local animTime = math.Clamp((CurTime() - self.StartTime) / 1, 0, 1)
     local animGradient = math.ease.OutCirc(animTime)
-    local animXGrad = (1 - math.ease.OutBack(animTime)) * 64
+    local animXGrad = (1 - math.ease.OutQuart(animTime)) * 64
 
     surface.DrawTexturedRect(padding - animXGrad, padding - 12, 500 * animGradient, 48 + 32, 0)
     surface.DrawTexturedRectRotated(padding - animXGrad - (size / 2), (padding - 12) + 40, size, 80, 180)
