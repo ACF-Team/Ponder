@@ -7,7 +7,10 @@ function Ponder.Storyboard:__new()
 end
 
 function Ponder.Storyboard:SetupFirstChapter(chapter)
-    chapter:AddInstruction("PlaceModel", {Length = 0, Model = self.BaseEntityModelPath, Name = "GRID", Position = Vector(0, 0, -5.9)})
+    if self.BaseEntityModelPath then
+        chapter:AddInstruction("PlaceModel", {Length = 0, Model = self.BaseEntityModelPath, Name = "GRID", Position = Vector(0, 0, -5.9)})
+    end
+
     chapter:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 0, Target = vector_origin, Angle = 55, Distance = 1300, Height = 600})
 end
 
