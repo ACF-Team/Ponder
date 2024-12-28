@@ -1,6 +1,6 @@
 local storyboard = Ponder.API.NewStoryboard("Ponder", "Tests", "Taking a Shower")
 storyboard:WithSpawnIcon("models/props_interiors/BathTub01a.mdl")
-
+storyboard:WithDescription("How to take a shower.")
 local chapter1 = storyboard:Chapter()
 chapter1:AddInstruction("PlaceModel", {
     Name  = "Bathtub",

@@ -19,7 +19,7 @@ function API.NewStoryboard(addon_name, category_name, storyboard_name)
     if not API.RegisteredACSLookup[addon_name] then API.RegisteredACSLookup[addon_name] = {} end
     if not API.RegisteredACSLookup[addon_name][category_name] then API.RegisteredACSLookup[addon_name][category_name] = {} end
     local storyboards = API.RegisteredACSLookup[addon_name][category_name]
-    storyboards[#storyboards + 1] = storyboard
+    storyboards[storyboard_name] = storyboard
 
     return storyboard
 end
