@@ -15,5 +15,7 @@ end
 function ShowToolgun:Update(playback)
     local env = playback.Environment
     local state = env.ToolgunState
+    if not state then return end
+
     state.Alpha = Lerp(playback:GetInstructionProgress(self), 0, 1)
 end

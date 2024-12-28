@@ -12,21 +12,24 @@ end
 
 function MoveToolgunTo:First(playback)
     local env = playback.Environment
+    local state = env.ToolgunState
+    if not state then return end
 
     if self.Length == 0 then
-        env.ToolgunState.Position = GetToolgunPos(playback, self.Target, self.Position)
+        state.Position = GetToolgunPos(playback, self.Target, self.Position)
         return
     end
 
-    env.ToolgunState.LerpingPosition = true
-    env.ToolgunState.StartPos  = env.ToolgunState.Position
-    env.ToolgunState.Target    = self.Target
-    env.ToolgunState.TargetPos = self.Position
+    state.LerpingPosition = true
+    state.StartPos  = state.Position
+    state.Target    = self.Target
+    state.TargetPos = self.Position
 end
 
 function MoveToolgunTo:Update(playback)
     local env = playback.Environment
     local state = env.ToolgunState
+    if not state then return end
 
     if state.LerpingPosition then
         local progress = playback:GetInstructionProgress(self)
