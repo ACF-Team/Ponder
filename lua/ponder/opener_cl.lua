@@ -15,3 +15,14 @@ function Ponder.Open(uuid)
     local UI = Ponder.UIWindow
     UI:LoadStoryboard(uuid)
 end
+
+function Ponder.OpenIndex()
+    if not IsValid(Ponder.UIWindow) then
+        Ponder.UIWindow = vgui.Create "Ponder.UI"
+    else
+        Ponder.UIWindow:Remove()
+    end
+
+    local UI = Ponder.UIWindow
+    UI:LoadIndex()
+end
