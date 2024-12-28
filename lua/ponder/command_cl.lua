@@ -16,3 +16,7 @@ end, function(cmd, _, args)
 
     return rets
 end, "Open the Ponder storyboard for the given UUID")
+
+concommand.Add("ponder_index", function(_, _, _)
+    Ponder.OpenIndex()
+end, nil, "Open the Ponder index")
