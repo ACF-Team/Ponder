@@ -71,7 +71,7 @@ function PANEL:Init()
     self.Close = close
 end
 
-function PANEL:Paint(w, h)
+function PANEL:Paint()
     local Fraction = math.ease.OutQuart(math.Clamp((CurTime() - self.Birth) * 4, 0, 1))
     local x, y = self:LocalToScreen(0, 0)
     local wasEnabled = DisableClipping(true)

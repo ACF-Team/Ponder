@@ -1,11 +1,11 @@
 local PANEL     = {}
 
-DEFINE_BASECLASS "Panel"
+DEFINE_BASECLASS("Panel")
 
 function PANEL:Init()
     self:Dock(FILL)
 
-    local toplabel = self:Add "DLabel"
+    local toplabel = self:Add("DLabel")
     toplabel:Dock(TOP)
     toplabel:SetFont("Ponder.Subtitle")
     toplabel:SetText("Ponder")
@@ -14,7 +14,7 @@ function PANEL:Init()
     toplabel:SetColor(Color(255, 255, 255))
     toplabel:DockMargin(0, 64, 0, 0)
 
-    local toplabel = self:Add "DLabel"
+    local toplabel = self:Add("DLabel")
     toplabel:Dock(TOP)
     toplabel:SetFont("Ponder.Title")
     toplabel:SetText("What are you pondering about?")
@@ -28,34 +28,34 @@ function PANEL:Init()
     scroller:DockMargin(scrw / 5, 32, scrw / 5, 32)
 
     for _, v in ipairs(Ponder.API.GetAddonsList()) do
-        local panel = scroller:Add "DButton"
+        local panel = scroller:Add("DButton")
         panel:Dock(TOP)
         panel:SetSize(0, 96)
         panel:DockMargin(8, 8, 8, 8)
         panel:SetText("")
 
-        local mdl = panel:Add "ModelImage"
+        local mdl = panel:Add("ModelImage")
         mdl:SetModel(v.Model)
         mdl:SetMouseInputEnabled(false)
         local y = (panel:GetTall() / 2) - (mdl:GetTall() / 2)
         mdl:SetPos(y, y)
 
-        local name = panel:Add "DLabel"
+        local name = panel:Add("DLabel")
         name:SetFont("Ponder.BigText")
         name:SetText(v.Name)
         name:Dock(LEFT)
         name:DockMargin(y + 48 + 32, 0, 0, 0)
         name:SizeToContents()
-        name:SetColor(Color(35, 35, 35))
+        name:SetColor(SKIN.Colours.Label.Dark)
         name:SetContentAlignment(5)
 
-        local desc = panel:Add "DLabel"
+        local desc = panel:Add("DLabel")
         desc:SetFont("Ponder.Title")
         desc:SetText(v.Description or "No description provided.")
         desc:Dock(RIGHT)
         desc:DockMargin(8, 0, 32, 0)
         desc:SizeToContents()
-        desc:SetColor(Color(35, 35, 35))
+        desc:SetColor(SKIN.Colours.Label.Dark)
         desc:SetContentAlignment(5)
 
         function panel:DoClick()
