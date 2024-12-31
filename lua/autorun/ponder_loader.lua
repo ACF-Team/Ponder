@@ -14,6 +14,7 @@ if SERVER then
     resource.AddFile("materials/ponder/ui/icon64/magnifier.png")
     resource.AddFile("materials/ponder/ui/icon64/magnifier_enabled.png")
     resource.AddFile("materials/ponder/ui/icon64/magnifier_no_back.png")
+    resource.AddFile("materials/ponder/ui/icon128/back.png")
     resource.AddFile("materials/ponder/ui/progress/bar.png")
     resource.AddFile("materials/ponder/ui/progress/grabby.png")
     resource.AddFile("materials/ponder/ui/progress/left.png")
