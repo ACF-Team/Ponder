@@ -38,6 +38,13 @@ function PlaceModel:First(playback)
         mdl:SetPos(self.Position + self.ComeFrom)
         mdl:SetAngles(self.Angles + self.RotateFrom)
     end
+
+    if self.Scale then
+        local mat = Matrix()
+        mat:Scale(self.Scale)
+        mdl:EnableMatrix("RenderMultiply", mat)
+        mdl.Scale = self.Scale
+    end
 end
 
 function PlaceModel:Update(playback)
