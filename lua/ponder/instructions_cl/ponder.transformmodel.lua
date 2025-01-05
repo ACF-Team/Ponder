@@ -16,8 +16,12 @@ function TransformModel:First(playback)
         mdl.PONDER_LAST_ANG = mdl:GetAngles()
     end
 
+    if not mdl.Scale then mdl.Scale = Vector(1, 1, 1) end
+    mdl.PONDER_LAST_SCA = mdl.Scale
+
     mdl.PONDER_TARG_POS = self.Position
     mdl.PONDER_TARG_ANG = self.Rotation
+    mdl.PONDER_TARG_SCA = self.Scale
 end
 
 function TransformModel:Update(playback)
@@ -29,5 +33,12 @@ function TransformModel:Update(playback)
     if object.PONDER_TARG_ANG then
         local ang = LerpAngle(progress, object.PONDER_LAST_ANG, object.PONDER_TARG_ANG)
         object:SetAngles((self.LocalToParent and IsValid(object:GetParent())) and object:GetParent():LocalToWorldAngles(ang) or ang)
+    end
+
+    if object.PONDER_TARG_SCA then
+        mdl.Scale = LerpVector(progress, object.PONDER_LAST_SCA, object.PONDER_TARG_SCA)
+        local mat = Matrix()
+        mat:Scale(mdl.Scale)
+        mdl:EnableMatrix("RenderMultiply", mat)
     end
 end
