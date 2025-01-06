@@ -18,6 +18,15 @@ function API.NewStoryboard(addon_name, category_name, storyboard_name)
 
     if not API.RegisteredACSLookup[addon_name] then API.RegisteredACSLookup[addon_name] = {} end
     if not API.RegisteredACSLookup[addon_name][category_name] then API.RegisteredACSLookup[addon_name][category_name] = {} end
+
+    -- Blank placeholders for addon/categories. This ensures they're still visible in the menu
+    if not API.RegisteredAddons[addon_name] then
+        API.RegisterAddon(addon_name, "models/error.mdl", "No description provided. Contact the developer of this addon.")
+    end
+    if not API.RegisteredAddonCategories[addon_name] then API.RegisteredAddonCategories[addon_name] = {} end
+    if not API.RegisteredAddonCategories[addon_name][category_name] then
+        API.RegisterAddonCategory(addon_name, category_name, 0, "models/error.mdl", "No category description provided.")
+    end
     local storyboards = API.RegisteredACSLookup[addon_name][category_name]
     storyboards[storyboard_name] = storyboard
 
