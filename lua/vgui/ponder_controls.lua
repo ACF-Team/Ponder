@@ -18,7 +18,6 @@ function PANEL:Init()
     -- I hate this
     function self.Buttons:PerformLayout(w, h)
         local children = self:GetChildren()
-        local w2 = w / (#children + 2)
         local padding = 0.2
         for i = 1, #children do
             local child = children[i]
