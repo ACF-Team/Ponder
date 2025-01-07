@@ -47,6 +47,7 @@ function Ponder.Playback:TogglePause()
 end
 function Ponder.Playback:ToggleIdentify()
     self.Identifying = not self.Identifying
+    self.Environment.Identifying = self.Identifying
 end
 
 function Ponder.Playback:GetInstructionProgress(instruction)

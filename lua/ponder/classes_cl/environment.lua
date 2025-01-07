@@ -78,6 +78,10 @@ function Ponder.Environment:NewModel(mdl, name, dontSpawn)
         csModel:Spawn()
     end
 
+    csModel.IsPonderEntity = true
+    csModel:SetNoDraw(true)
+    csModel.Name = name
+
     self.ClientsideModels:Add(csModel, name)
     return csModel
 end
@@ -131,14 +135,7 @@ function Ponder.Environment:SetCameraFOV(nFOV)
     self.CameraFOV = nFOV
 end
 
-function Ponder.Environment:Render()
-    --[[local ct = CurTime() * 1
-    local r = 1200
-    local s, c = math.sin(ct) * r, math.cos(ct) * r
-    self:SetCameraPosition(Vector(s, c, r * .2))
-    self:SetLookAt(Vector(0, 0, 0))
-    self:SetCameraFOV(15)]]
-
+function Ponder.Environment:BuildCamera()
     self.Camera = {
         x = 0,
         y = 0,
@@ -149,12 +146,47 @@ function Ponder.Environment:Render()
         angles = self.CameraAngles,
         fov = self.CameraFOV
     }
+end
 
+function Ponder.Environment:AimVector()
+    local mX, mY = input.GetCursorPos()
+    local mV = util.AimVector(self.Camera.angles, self.Camera.fov, mX, mY, ScrW(), ScrH())
+    return mV
+end
+function Ponder.Environment:AimEntity()
+    local pos = self.Camera.origin
+    local dir = self:AimVector()
+    local stop = pos + (dir * 10000)
+
+    local ret
+    local dist = 1000000000
+
+    for _, v in ipairs(self.ClientsideModels.List) do
+        local bMI, bMA = v:GetRenderBounds()
+        --render.DrawWireframeBox(v:GetPos(), v:GetAngles(), bMI, bMA)
+        local test = util.IntersectRayWithOBB(pos, stop, v:GetPos(), v:GetAngles(), bMI, bMA)
+        if test then
+            local testDist = test:Distance(pos)
+            if testDist < dist then
+                dist = testDist
+                ret = v
+            end
+        end
+    end
+
+    return ret
+end
+
+local magnifier = Material("ponder/ui/icon64/magnifier_no_back.png", "mips smooth")
+
+function Ponder.Environment:Render()
+    self:BuildCamera()
     cam.Start(self.Camera)
+    self.Rendering3D = true
     if self.Fullbright then
         render.SuppressEngineLighting(true)
     end
-
+    self.AimedEntity = self:AimEntity()
     for _, v in ipairs(self.NamedTextObjects.List) do v:ResolvePos2D() end
     for _, v in ipairs(self.ClientsideModels.List) do
         local c = v:GetColor()
@@ -168,10 +200,36 @@ function Ponder.Environment:Render()
     if self.Render3D then self:Render3D() end
 
     render.SuppressEngineLighting(false)
+    self.Rendering3D = false
     cam.End()
+
+    self.Rendering2D = true
     for _, v in ipairs(self.NamedTextObjects.List) do v:Render() end
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render2D(self) end
     if self.Render2D then self:Render2D() end
+
+    if self.Identifying then
+        local mX, mY = input.GetCursorPos()
+        surface.SetMaterial(magnifier)
+        surface.SetDrawColor(255, 255, 255)
+        surface.DrawTexturedRectRotated(mX + 8, mY + 9, 64, 64, 0)
+
+        if self.AimedEntity then
+            mX = mX + 32
+            local name = self.AimedEntity.Name
+            surface.SetFont("Ponder.Text")
+            local w, h = surface.GetTextSize(name)
+            local p = 8
+            surface.SetDrawColor(245, 245, 245, 220)
+            surface.DrawRect(mX - p, mY - p, w + (p * 2), h + (p * 2))
+            surface.SetDrawColor(25, 25, 25, 255)
+            surface.DrawOutlinedRect(mX - p, mY - p, w + (p * 2), h + (p * 2))
+
+            draw.SimpleText(name, "Ponder.Text", mX + (w / 2), mY + (h / 2), Color(25, 25, 25, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        end
+    end
+
+    self.Rendering2D = false
 
     -- surface.SetDrawColor(255,255,255,255)
     -- surface.DrawOutlinedRect(rX, rY, w, h, 2)
