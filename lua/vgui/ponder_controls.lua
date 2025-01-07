@@ -3,11 +3,12 @@ local PANEL     = {}
 DEFINE_BASECLASS "DPanel"
 
 function PANEL:Init()
+    local padding = 0.2
     self.chapterProgress = self:Add "Ponder.Progress"
     self.chapterProgress:Dock(BOTTOM)
     self.chapterProgress:SetSize(0, 64)
     self.chapterProgress:SetFraction(0.75)
-    self.chapterProgress:DockMargin(ScrW() / 3.5, 0, ScrW() / 3.5, 0)
+    self.chapterProgress:DockMargin(ScrW() * padding, 0, ScrW() * padding, 0)
     self:DockPadding(4, 4, 4, 4)
 
     self.Buttons = self:Add "DPanel"
@@ -15,12 +16,18 @@ function PANEL:Init()
     self.Buttons:SetSize(0, 64)
 
     -- I hate this
-    function self.Buttons:PerformLayout(w, _)
+    function self.Buttons:PerformLayout(w, h)
         local children = self:GetChildren()
         local w2 = w / (#children + 2)
+        local padding = 0.2
         for i = 1, #children do
             local child = children[i]
-            child:SetPos((w2 * (i + 1)) - (58 / 2), (64 - 58) / 2)
+            local csW, csH = child:GetSize()
+
+            local px = (math.Remap(i, 1, #children, padding, 1 - padding) * w) - (csW / 2)
+            local py = (h / 2) + (csH / -2)
+
+            child:SetPos(px, py)
         end
     end
 
@@ -40,22 +47,27 @@ function PANEL:Init()
         return button
     end
 
-    local identify  = self:AddButton("ponder/ui/icon64/magnifier.png", "Identify", function(btn)
+    self:AddButton("ponder/ui/icon64/brightness_off.png", "Turn On Fullbright", function(btn)
+        self.UI.Playback:ToggleFullbright()
+        btn:SetImage(self.UI.Playback.Fullbright and "ponder/ui/icon64/brightness_on.png" or "ponder/ui/icon64/brightness_off.png")
+        btn:SetTooltip(self.UI.Playback.Fullbright and "Turn Off Fullbright" or "Turn On Fullbright")
+    end)
+    self:AddButton("ponder/ui/icon64/magnifier.png", "Identify", function(btn)
         self.UI.Playback:ToggleIdentify()
         btn:SetImage(self.UI.Playback.Identifying and "ponder/ui/icon64/magnifier_enabled.png" or "ponder/ui/icon64/magnifier.png")
         btn:SetTooltip(self.UI.Playback.Identifying and "Stop Identifying" or "Identify")
     end)
-    local pauseplay = self:AddButton("ponder/ui/icon64/stop.png", "Pause", function(btn)
+    self.PlayPauseButton = self:AddButton("ponder/ui/icon64/stop.png", "Pause", function(btn)
         self.UI.Playback:TogglePause()
         btn:SetImage(self.UI.Playback.Paused and "ponder/ui/icon64/play.png" or "ponder/ui/icon64/stop.png")
         btn:SetTooltip(self.UI.Playback.Paused and "Play" or "Pause")
     end)
-    local replay    = self:AddButton("ponder/ui/icon64/replay.png", "Reload from File", function()
+    self:AddButton("ponder/ui/icon64/replay.png", "Reload from File", function()
         -- Reload storyboard
         self.UI:LoadStoryboard(self.UI.Storyboard:GenerateUUID())
         pauseplay:SetImage("ponder/ui/icon64/stop.png")
     end)
-    local time      = self:AddButton("ponder/ui/icon64/fast.png", "Set Speed", function(btn)
+    self:AddButton("ponder/ui/icon64/fast.png", "Set Speed", function(btn)
         if IsValid(self.SpeedController) then
             self.SpeedController:Remove()
             return
@@ -69,13 +81,6 @@ function PANEL:Init()
 
         self.SpeedController = speed
     end)
-    -- Shut up linter I'm not ready yet
-    identify = identify
-    pauseplay = pauseplay
-    replay = replay
-    time = time
-
-    self.PlayPauseButton = pauseplay
 end
 
 function PANEL:Paint()

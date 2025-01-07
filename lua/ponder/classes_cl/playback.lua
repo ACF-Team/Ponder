@@ -10,6 +10,7 @@ function Ponder.Playback:__new(storyboard, environment)
     self.Paused         = true
     self.Length         = self.Storyboard:Recalculate().Length
     self.Identifying    = false
+    self.Fullbright     = false
 
     self.CompletedInstructionIndices = {}
     self.RunningInstructionIndices = {}
@@ -20,6 +21,11 @@ end
 
 function Ponder.Playback:ToString()
     return "Ponder Playback, playing " .. self.Storyboard:GenerateUUID() .. ""
+end
+
+function Ponder.Playback:ToggleFullbright()
+    self.Fullbright = not self.Fullbright
+    self.Environment.Fullbright = self.Fullbright
 end
 
 function Ponder.Playback:Play()

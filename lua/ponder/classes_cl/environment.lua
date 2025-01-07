@@ -151,6 +151,9 @@ function Ponder.Environment:Render()
     }
 
     cam.Start(self.Camera)
+    if self.Fullbright then
+        render.SuppressEngineLighting(true)
+    end
 
     for _, v in ipairs(self.NamedTextObjects.List) do v:ResolvePos2D() end
     for _, v in ipairs(self.ClientsideModels.List) do
@@ -164,6 +167,7 @@ function Ponder.Environment:Render()
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render3D(self) end
     if self.Render3D then self:Render3D() end
 
+    render.SuppressEngineLighting(false)
     cam.End()
     for _, v in ipairs(self.NamedTextObjects.List) do v:Render() end
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render2D(self) end
