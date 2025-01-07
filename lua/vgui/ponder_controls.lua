@@ -1,17 +1,17 @@
 local PANEL     = {}
 
-DEFINE_BASECLASS "DPanel"
+DEFINE_BASECLASS("DPanel")
 
 function PANEL:Init()
     local padding = 0.2
-    self.chapterProgress = self:Add "Ponder.Progress"
+    self.chapterProgress = self:Add("Ponder.Progress")
     self.chapterProgress:Dock(BOTTOM)
     self.chapterProgress:SetSize(0, 64)
     self.chapterProgress:SetFraction(0.75)
     self.chapterProgress:DockMargin(ScrW() * padding, 0, ScrW() * padding, 0)
     self:DockPadding(4, 4, 4, 4)
 
-    self.Buttons = self:Add "DPanel"
+    self.Buttons = self:Add("DPanel")
     self.Buttons:Dock(BOTTOM)
     self.Buttons:SetSize(0, 64)
 
@@ -32,7 +32,7 @@ function PANEL:Init()
 
     self.Buttons.Paint = function() end
     function self:AddButton(img, tooltip, onclick)
-        local button = self.Buttons:Add "Ponder.ControlButton"
+        local button = self.Buttons:Add("Ponder.ControlButton")
 
         button:SetSize(58, 58)
         button:Center()
@@ -64,14 +64,14 @@ function PANEL:Init()
     self:AddButton("ponder/ui/icon64/replay.png", "Reload from File", function()
         -- Reload storyboard
         self.UI:LoadStoryboard(self.UI.Storyboard:GenerateUUID())
-        pauseplay:SetImage("ponder/ui/icon64/stop.png")
+        self.PlayPauseButton:SetImage("ponder/ui/icon64/stop.png")
     end)
     self:AddButton("ponder/ui/icon64/fast.png", "Set Speed", function(btn)
         if IsValid(self.SpeedController) then
             self.SpeedController:Remove()
             return
         end
-        local speed = self:Add "Ponder.SpeedPanel"
+        local speed = self:Add("Ponder.SpeedPanel")
         local pX, pY = btn:LocalToScreen(0, 0)
         pY = (pY + (btn:GetTall() / 2)) - (speed:GetTall() / 2)
         pX, pY = self:ScreenToLocal(pX, pY)
