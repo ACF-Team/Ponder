@@ -32,7 +32,8 @@ end
 
 function PANEL:Load(addon)
     local scroller = self.Scroller
-    self.TopLabel:SetText(string.format(language.GetPhrase("ponder.pondering_about_addon"), addon))
+    local addonData = Ponder.API.RegisteredAddons[addon]
+    self.TopLabel:SetText(string.format(language.GetPhrase("ponder.pondering_about_addon"), language.GetPhrase(addonData.Name)))
 
     for _, v in ipairs(Ponder.API.GetAddonCategoriesList(addon)) do
         local panel = scroller:Add("DButton")
