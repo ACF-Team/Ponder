@@ -1,1 +1,6 @@
-Ponder.API.RegisterAddonCategory(language.GetPhrase("ponder"), language.GetPhrase("ponder.tests"), 1, "models/props_lab/monitor02.mdl", language.GetPhrase("ponder.tests.desc"))
+Ponder.API.RegisterAddonCategory("ponder", "tests", {
+    Name = "ponder.tests",
+    Order = 1,
+    ModelIcon = "models/props_lab/monitor02.mdl",
+    Description = "ponder.tests.desc"
+})

@@ -1,1 +1,5 @@
-Ponder.API.RegisterAddon(language.GetPhrase("ponder"), "models/props_lab/binderbluelabel.mdl", language.GetPhrase("ponder.addon_desc"))
+Ponder.API.RegisterAddon("ponder", {
+    Name = "ponder",
+    ModelIcon = "models/props_lab/binderbluelabel.mdl",
+    Description = "ponder.addon_desc"
+})

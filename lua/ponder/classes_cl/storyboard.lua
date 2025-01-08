@@ -15,8 +15,17 @@ function Ponder.Storyboard:SetupFirstChapter(chapter)
     chapter:AddInstruction("MoveCameraLookAt", {Time = 0, Length = 0, Target = vector_origin, Angle = 55, Distance = 1300, Height = 600})
 end
 
-function Ponder.Storyboard:WithLongName(name)
-    self.LongName = name
+function Ponder.Storyboard:WithMenuName(name)
+    self.MenuName = name
+end
+
+function Ponder.Storyboard:WithPlaybackName(name)
+    self.PlaybackName = name
+end
+
+function Ponder.Storyboard:WithName(name)
+    self.MenuName = name
+    self.PlaybackName = name
 end
 
 function Ponder.Storyboard:WithIndexOrder(order)
@@ -55,8 +64,8 @@ function Ponder.Storyboard:GenerateUUID()
     return table.concat({string.lower(string.Replace(self.AddonName, " ", "-")), string.lower(string.Replace(self.CategoryName, " ", "-")), string.lower(string.Replace(self.Name, " ", "-"))}, ".")
 end
 
-function Ponder.Storyboard:WithSpawnIcon(icon)
-    self.Icon = icon
+function Ponder.Storyboard:WithModelIcon(icon)
+    self.ModelIcon = icon
 end
 
 function Ponder.Storyboard:WithBaseEntity(mdlpath)

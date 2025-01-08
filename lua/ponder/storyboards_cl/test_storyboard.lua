@@ -1,5 +1,7 @@
-local storyboard = Ponder.API.NewStoryboard(language.GetPhrase("ponder"), language.GetPhrase("ponder.tests"), language.GetPhrase("ponder.tests.shower"))
-storyboard:WithSpawnIcon("models/props_interiors/BathTub01a.mdl")
+local storyboard = Ponder.API.NewStoryboard("ponder", "tests", "taking-a-shower")
+storyboard:WithMenuName("ponder.tests.shower.menuname")
+storyboard:WithPlaybackName("ponder.tests.shower.playname")
+storyboard:WithModelIcon("models/props_interiors/BathTub01a.mdl")
 storyboard:WithDescription(language.GetPhrase("ponder.tests.shower.desc"))
 local chapter1 = storyboard:Chapter()
 chapter1:AddInstruction("PlaceModel", {

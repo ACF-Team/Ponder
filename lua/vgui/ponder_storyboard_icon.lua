@@ -18,7 +18,7 @@ local GRADIENT = Material("gui/gradient")
 
 function PANEL:SetStoryboard(storyboard)
     self.Storyboard = storyboard
-    self.Icon:SetModel(storyboard.Icon)
+    self.Icon:SetModel(storyboard.ModelIcon)
     self.StartTime = CurTime()
 end
 
@@ -38,7 +38,7 @@ function PANEL:Paint()
     surface.DrawTexturedRectRotated(padding - animXGrad - (size / 2), (padding - 12) + 40, size, 80, 180)
 
     draw.SimpleText(language.GetPhrase("ponder.pondering_about_storyboard"), "Ponder.Title", 76 + padding - animXGrad, padding, COLOR_Title)
-    draw.SimpleText(self.Storyboard.LongName or self.Storyboard.Name, "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
+    draw.SimpleText(language.GetPhrase(self.Storyboard.PlaybackName or self.Storyboard.MenuName), "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
 
     self.Icon:SetPos(padding - animXGrad, padding)
     local pX, pY = self:LocalToScreen(0, 0)
