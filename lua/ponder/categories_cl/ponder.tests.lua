@@ -1,1 +1,1 @@
-Ponder.API.RegisterAddonCategory("Ponder", "Tests", 1, "models/props_lab/monitor02.mdl", "Ponder tests.")
+Ponder.API.RegisterAddonCategory(language.GetPhrase("ponder"), language.GetPhrase("ponder.tests"), 1, "models/props_lab/monitor02.mdl", language.GetPhrase("ponder.tests.desc"))

@@ -1,1 +1,1 @@
-Ponder.API.RegisterAddon("Ponder", "models/props_lab/binderbluelabel.mdl", "Ponder example storyboards.")
+Ponder.API.RegisterAddon(language.GetPhrase("ponder"), "models/props_lab/binderbluelabel.mdl", language.GetPhrase("ponder.addon_desc"))

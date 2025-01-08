@@ -1,16 +1,16 @@
 local PANEL     = {}
 
-DEFINE_BASECLASS "Panel"
+DEFINE_BASECLASS("Panel")
 
 function PANEL:Init()
     self:Dock(FILL)
 
-    local controls = self:Add "Ponder.Controls"
+    local controls = self:Add("Ponder.Controls")
     controls:LinkTo(self)
     controls:SetSize(ScrW(), 384)
     controls:SetPos(0, ScrH() - 384 - 64)
 
-    self.StoryboardIcon = self:Add "Ponder.StoryboardIcon"
+    self.StoryboardIcon = self:Add("Ponder.StoryboardIcon")
     self.StoryboardIcon:SetPos(48, 48)
 
     self.Controls = controls

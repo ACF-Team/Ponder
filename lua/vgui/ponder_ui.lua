@@ -1,7 +1,7 @@
 local PANEL     = {}
-local matBlurScreen = Material( "pp/blurscreen" )
+local matBlurScreen = Material("pp/blurscreen")
 
-DEFINE_BASECLASS "Panel"
+DEFINE_BASECLASS("Panel")
 
 surface.CreateFont("Ponder.Title", {
     font = "Tahoma",
@@ -29,7 +29,7 @@ function PANEL:Init()
 
     self.Actions = {}
 
-    local close = self:Add "DButton"
+    local close = self:Add("DButton")
     close:SetSize(64, 64)
     close:SetPos(ScrW() - 64 - padding, padding)
     function close.DoClick()
@@ -52,7 +52,7 @@ function PANEL:Init()
     function self:UpdateTooltip()
         local action = self.Actions[#self.Actions]
         if not action then
-            close:SetTooltip("Back to Game")
+            close:SetTooltip(language.GetPhrase("ponder.back_to_game"))
         else
             close:SetTooltip(action.text)
         end

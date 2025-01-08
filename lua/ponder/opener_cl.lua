@@ -7,7 +7,7 @@ function Ponder.Open(uuid)
     if not storyboard then return Ponder.Print("Unknown storyboard '" .. uuid .. "'") end
 
     if not IsValid(Ponder.UIWindow) then
-        Ponder.UIWindow = vgui.Create "Ponder.UI"
+        Ponder.UIWindow = vgui.Create("Ponder.UI")
     else
         Ponder.UIWindow:Remove()
     end
@@ -18,7 +18,7 @@ end
 
 function Ponder.OpenIndex()
     if not IsValid(Ponder.UIWindow) then
-        Ponder.UIWindow = vgui.Create "Ponder.UI"
+        Ponder.UIWindow = vgui.Create("Ponder.UI")
     else
         Ponder.UIWindow:Remove()
     end

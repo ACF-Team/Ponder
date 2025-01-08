@@ -1,6 +1,6 @@
 hook.Add("PopulateMenuBar", "Ponder.PopulateMenuBar.InsertMenuOption", function(menubar)
     local b = menubar:Add("DButton")
-    b:SetText("Ponder")
+    b:SetText(language.GetPhrase("ponder"))
     b:Dock(LEFT)
     b:DockMargin(5, 0, 0, 0)
     b:SetIsMenu(true)

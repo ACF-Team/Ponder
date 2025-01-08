@@ -1,5 +1,5 @@
 local PANEL     = {}
-DEFINE_BASECLASS "Panel"
+DEFINE_BASECLASS("Panel")
 
 local padding = 8
 
@@ -37,7 +37,7 @@ function PANEL:Paint()
     surface.DrawTexturedRect(padding - animXGrad, padding - 12, 500 * animGradient, 48 + 32, 0)
     surface.DrawTexturedRectRotated(padding - animXGrad - (size / 2), (padding - 12) + 40, size, 80, 180)
 
-    draw.SimpleText("Pondering about...", "Ponder.Title", 76 + padding - animXGrad, padding, COLOR_Title)
+    draw.SimpleText(language.GetPhrase("ponder.pondering_about_storyboard"), "Ponder.Title", 76 + padding - animXGrad, padding, COLOR_Title)
     draw.SimpleText(self.Storyboard.LongName or self.Storyboard.Name, "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
 
     self.Icon:SetPos(padding - animXGrad, padding)
