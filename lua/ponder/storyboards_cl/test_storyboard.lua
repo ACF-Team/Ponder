@@ -4,6 +4,7 @@ storyboard:WithDescription(language.GetPhrase("ponder.tests.shower.desc"))
 local chapter1 = storyboard:Chapter()
 chapter1:AddInstruction("PlaceModel", {
     Name  = "Bathtub",
+    IdentifyAs = "Bathtub. You will get in the bathtub.\n\nWow. Bathtubs are pretty cool..."
     Model = "models/props_interiors/BathTub01a.mdl",
     Position = Vector(0, 0, 10),
     ComeFrom = Vector(0, 0, 32)
