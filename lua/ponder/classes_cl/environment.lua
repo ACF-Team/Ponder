@@ -217,7 +217,7 @@ function Ponder.Environment:Render()
         if self.AimedEntity then
             mX = mX + 32
 
-            local mkup = markup.Parse(self.AimedEntity.IdentifyMarkup and self.AimedEntity.IdentifyMarkup or ("<font=Ponder.Text><colour=25,25,25,255>" .. self.AimedEntity.Name .. "</colour></font>")) -- I don't feel like caching this right now...
+            local mkup = markup.Parse(self.AimedEntity.IdentifyMarkup and self.AimedEntity.IdentifyMarkup or ("<font=Ponder.Text><colour=25,25,25,255>" .. (self.AimedEntity.IdentifyAs or self.AimedEntity.Name) .. "</colour></font>")) -- I don't feel like caching this right now...
             surface.SetFont("Ponder.Text")
             local w, h = mkup:Size()
             local p = 8
