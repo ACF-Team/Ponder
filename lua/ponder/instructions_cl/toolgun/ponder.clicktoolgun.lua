@@ -20,6 +20,8 @@ function ClickToolgun:First(playback)
     state.RenderingBeam = true
     state.BeamStart = playback.Environment.ToolgunState.Position
     state.BeamEnd = GetToolgunPos(playback, self.Target, self.Position)
+
+    if playback.Seeking then return end
     surface.PlaySound(toolsound)
 end
 
