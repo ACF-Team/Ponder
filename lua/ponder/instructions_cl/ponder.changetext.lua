@@ -11,6 +11,4 @@ function ChangeText:First(playback)
     end
 
     txt:SetMarkup(self.Markup)
-    print(txt)
-    print(self.Markup)
 end
