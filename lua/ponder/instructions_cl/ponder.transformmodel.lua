@@ -2,6 +2,14 @@ local TransformModel = Ponder.API.NewInstruction("TransformModel")
 TransformModel.Length = 1
 TransformModel.LocalToParent = true
 
+local function LerpAngle(ratio, angleStart, angleEnd)
+    return Angle(
+        Lerp(ratio, angleStart[1], angleEnd[1]),
+        Lerp(ratio, angleStart[2], angleEnd[2]),
+        Lerp(ratio, angleStart[3], angleEnd[3])
+    )
+end
+
 function TransformModel:First(playback)
     local env = playback.Environment
     local mdl = env:GetNamedModel(self.Target)

@@ -14,6 +14,15 @@ function PANEL:Init()
     self.StoryboardIcon:SetPos(48, 48)
 
     self.Controls = controls
+
+    if Ponder.Debug then
+        self.Console = self:Add("RichText")
+        self.Console:SetPos(128, 128)
+        self.Console:SetSize(384, 512)
+        hook.Add("Ponder.Print", self.Console, function(_, txt)
+            self.Console:AppendText(txt .. "\n")
+        end)
+    end
 end
 
 function PANEL:LoadStoryboard(uuid)
@@ -51,10 +60,12 @@ function PANEL:LoadStoryboard(uuid)
 end
 
 function PANEL:Think()
+    if not self.Playback then return end
     self.Playback:Update()
 end
 
 function PANEL:Paint()
+    if not self.Environment then return end
     self.Environment:Render()
 end
 

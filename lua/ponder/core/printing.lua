@@ -4,4 +4,9 @@ local COLOR_Text    = Color(230, 230, 230)
 
 function Ponder.Print(...)
     MsgC(COLOR_Bracket, "[", COLOR_Ponder, "Ponder", COLOR_Bracket, "]: ", COLOR_Text, ..., "\n")
+    hook.Run("Ponder.Print", ...)
+end
+function Ponder.DebugPrint(...)
+    if not Ponder.Debug then return end
+    Ponder.Print(...)
 end

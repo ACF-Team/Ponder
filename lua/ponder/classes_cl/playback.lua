@@ -63,6 +63,7 @@ function Ponder.Playback:SetChapter(chapterIndex)
     if not chapter then self.Chapter = oldC return false end
 
     chapter:Recalculate()
+    Ponder.DebugPrint("Starting Chapter [" .. chapterIndex .. "]")
     return true
 end
 
@@ -131,6 +132,7 @@ function Ponder.Playback:Update()
             instruction:Update(self)
             instruction:Last(self)
             removals[#removals + 1] = instrIndex
+            Ponder.DebugPrint("Instruction [" .. instrIndex .. "] ended.")
         end
     end
 
@@ -138,6 +140,7 @@ function Ponder.Playback:Update()
         local globalStartTime = starttime + instruction.Time
         if self.Time >= globalStartTime and not self.RunningInstructionIndices[instrIndex] and not self.CompletedInstructionIndices[instrIndex] then
             instruction:First(self)
+            Ponder.DebugPrint("Called Instruction:First [" .. instrIndex .. "]")
             additions[#additions + 1] = instrIndex
         end
     end
