@@ -33,6 +33,9 @@ end
 
 function Ponder.Playback:ClearInstructionIndices()
     table.Empty(self.InstructionIndices)
+    table.Empty(self.PendingInstructionIndices)
+    table.Empty(self.RunningInstructionIndices)
+    table.Empty(self.CompletedInstructionIndices)
 end
 
 function Ponder.Playback:InitializeInstructionIndices()
@@ -185,10 +188,7 @@ function Ponder.Playback:FinalizeChapter()
         end
     end
 
-    table.Empty(self.InstructionIndices)
-    table.Empty(self.PendingInstructionIndices)
-    table.Empty(self.RunningInstructionIndices)
-    table.Empty(self.CompletedInstructionIndices)
+    self:ClearInstructionIndices()
 end
 
 function Ponder.Playback:Update()
@@ -297,6 +297,7 @@ function Ponder.Playback:SeekChapter(chapterIndex)
     self.Seeking = true
     self:FinalizeChapter()
     self.Environment:Free()
+
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Initialize(self.Environment) end
 
     for i = 1, chapterIndex - 1 do
@@ -313,6 +314,7 @@ function Ponder.Playback:SeekChapter(chapterIndex)
         end
     end
 
+    self:ClearInstructionIndices()
     self:InitializeInstructionIndices()
     self.Seeking = false
 end
