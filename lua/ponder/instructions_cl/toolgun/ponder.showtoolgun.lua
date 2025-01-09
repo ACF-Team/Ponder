@@ -5,7 +5,7 @@ function ShowToolgun:First(playback)
     local env = playback.Environment
 
     env.ToolgunState = {
-        Position = Vector(0, 0, 0),
+        Position = self.Position or Vector(0, 0, 0),
         ToolName = self.Tool or "",
         Alpha = 0,
         IsShowing = true
