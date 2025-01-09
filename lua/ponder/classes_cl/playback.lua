@@ -68,26 +68,13 @@ function Ponder.Playback:SetChapter(chapterIndex)
 end
 
 function Ponder.Playback:FinalizeChapter()
-    local chapter = self:GetChapter().Instructions
-
-    -- See if anything didn't get to run yet...
-    local additions = {}
-    for k, v in pairs(chapter) do
-        if not self.RunningInstructionIndices[k] then
-            v:First(self)
-            additions[#additions + 1] = k
-        end
-    end
-    for _, addition in ipairs(additions) do self.RunningInstructionIndices[addition] = true end
-
     -- Call all finalizers on running instructions
     for instrIndex in pairs(self.RunningInstructionIndices) do
-        local instruction = chapter[instrIndex]
+        local instruction = self:GetChapter().Instructions[instrIndex]
 
         instruction:Update(self)
         instruction:Last(self)
     end
-
 
     table.Empty(self.RunningInstructionIndices)
     table.Empty(self.CompletedInstructionIndices)
