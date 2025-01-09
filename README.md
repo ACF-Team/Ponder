@@ -1,6 +1,8 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/49a0867a-4c7f-4247-8817-4d91973ed232" />
+  <img src="https://github.com/user-attachments/assets/49a0867a-4c7f-4247-8817-4d91973ed232#gh-dark-mode-only" />
+  <img src="https://github.com/user-attachments/assets/3b1bd4ec-187c-498a-9846-067cbb957adb#gh-light-mode-only" />
 </p>
+
 
 ***
 
