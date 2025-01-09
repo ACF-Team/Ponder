@@ -29,10 +29,17 @@ function TransformModel:Update(playback)
     local progress = self.Easing and self.Easing(playback:GetInstructionProgress(self)) or playback:GetInstructionProgress(self)
     local object = env:GetNamedModel(self.Target)
 
-    if object.PONDER_TARG_POS then object:SetPos(LerpVector(progress, object.PONDER_LAST_POS, object.PONDER_TARG_POS)) end
+    local parent = object:GetParent()
+    local isUsingParent = self.LocalToParent and IsValid(parent)
+
+    if object.PONDER_TARG_POS then
+        local pos = LerpVector(progress, object.PONDER_LAST_POS, object.PONDER_TARG_POS)
+        object:SetPos(isUsingParent and parent:LocalToWorld(pos) or pos)
+    end
+
     if object.PONDER_TARG_ANG then
         local ang = LerpAngle(progress, object.PONDER_LAST_ANG, object.PONDER_TARG_ANG)
-        object:SetAngles((self.LocalToParent and IsValid(object:GetParent())) and object:GetParent():LocalToWorldAngles(ang) or ang)
+        object:SetAngles(isUsingParent and parent:LocalToWorldAngles(ang) or ang)
     end
 
     if object.PONDER_TARG_SCA then
