@@ -1,5 +1,8 @@
-# Ponder
-> An in-game documentation/wiki system
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/49a0867a-4c7f-4247-8817-4d91973ed232" />
+</p>
+
+***
 
 This is a work-in-progress, in-game documentation system, heavily inspired by the Create Minecraft mod's "Pondering" system.
 
