@@ -84,7 +84,7 @@ function API.GetAddonsList()
     local items = {}
     for _, v in pairs(API.RegisteredAddons) do items[#items + 1] = v end
 
-    table.SortByMember(items, "Name")
+    table.SortByMember(items, "Name", true)
     return items
 end
 
