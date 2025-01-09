@@ -34,6 +34,11 @@ function Ponder.Chapter:AddInstruction(instruction_type, instruction_params)
     return instructionObj
 end
 
+-- Delay macro
+function Ponder.Chapter:AddDelay(delay)
+    return self:AddInstruction("Delay", {Length = delay})
+end
+
 function Ponder.Chapter:Recalculate()
     --table.SortByMember(self.Instructions, "Time", true)
     local l = 0
