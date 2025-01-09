@@ -137,10 +137,18 @@ function Ponder.Playback:Play()
 
     self.LastUpdate = CurTime()
     self.Paused = false
+
+    if self.OnPlay then
+        self:OnPlay()
+    end
 end
 
 function Ponder.Playback:Pause()
     self.Paused = true
+
+    if self.OnPause then
+        self:OnPause()
+    end
 end
 
 function Ponder.Playback:TogglePause()
