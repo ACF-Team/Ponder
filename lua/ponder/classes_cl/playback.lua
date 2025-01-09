@@ -1,5 +1,10 @@
+Ponder.InstructionPlaybackState = {
+    Pending   = 0,
+    Running   = 1,
+    Completed = 2
+}
+
 Ponder.Playback = Ponder.SimpleClass()
-Ponder.Playback.TICKS_PER_SECOND = 60
 
 function Ponder.Playback:__new(storyboard, environment)
     self.Storyboard     = storyboard or error("No storyboard for Playback")
@@ -12,12 +17,107 @@ function Ponder.Playback:__new(storyboard, environment)
     self.Identifying    = false
     self.Fullbright     = false
 
+    self.InstructionIndices          = {}
+    self.PendingInstructionIndices   = {}
+    self.RunningInstructionIndices   = {}
     self.CompletedInstructionIndices = {}
-    self.RunningInstructionIndices = {}
+
     self:SetChapter(1)
 
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Initialize(self.Environment) end
 end
+
+----------------------------------------------------------------------------------------------------------------
+-- Instruction index methods
+----------------------------------------------------------------------------------------------------------------
+
+function Ponder.Playback:ClearInstructionIndices()
+    table.Empty(self.InstructionIndices)
+end
+
+function Ponder.Playback:InitializeInstructionIndices()
+    for k, v in ipairs(self:GetChapter().Instructions) do
+        self.InstructionIndices[k] = {
+            Instruction = v,
+            Index = k,
+            State = Ponder.InstructionPlaybackState.Pending
+        }
+        self.PendingInstructionIndices[k] = true
+    end
+end
+
+function Ponder.Playback:GetInstructionFromIndex(instrIndex)
+    return self.InstructionIndices[instrIndex].Instruction
+end
+
+function Ponder.Playback:GetInstructionIndexState(instrIndex)
+    return self.InstructionIndices[instrIndex].State
+end
+
+function Ponder.Playback:SetInstructionIndexState(instrIndex, state)
+    self.InstructionIndices[instrIndex].State = state
+end
+
+function Ponder.Playback:IsInstructionIndexPending(instrIndex)
+    return self.InstructionIndices[instrIndex].State == Ponder.InstructionPlaybackState.Pending
+end
+
+function Ponder.Playback:IsInstructionIndexRunning(instrIndex)
+    return self.InstructionIndices[instrIndex].State == Ponder.InstructionPlaybackState.Running
+end
+
+function Ponder.Playback:HasInstructionIndexCompleted(instrIndex)
+    return self.InstructionIndices[instrIndex].State == Ponder.InstructionPlaybackState.Completed
+end
+
+function Ponder.Playback:StartInstructionIndex(instrIndex)
+    local instr = self.InstructionIndices[instrIndex]
+    instr.Instruction:First(self)
+    instr.State = Ponder.InstructionPlaybackState.Running
+    self.PendingInstructionIndices[instrIndex] = nil
+    self.RunningInstructionIndices[instrIndex] = true
+end
+
+function Ponder.Playback:UpdateInstructionIndex(instrIndex)
+    local instr = self.InstructionIndices[instrIndex]
+    if not self:IsInstructionIndexRunning(instrIndex) then return Ponder.DebugPrint("Wtf? Instruction index not running but Update got called??") end
+
+    instr.Instruction:Update(self)
+end
+
+function Ponder.Playback:FinalizeInstructionIndex(instrIndex)
+    local instr = self.InstructionIndices[instrIndex]
+
+    if instr.State == Ponder.InstructionPlaybackState.Pending then
+        Ponder.DebugPrint("Finalize called on instruction that was pending, resolving...")
+        instr.Instruction:First(self)
+        instr.Instruction:Update(self)
+    end
+
+    instr.Instruction:Last(self)
+    instr.State = Ponder.InstructionPlaybackState.Completed
+    self.RunningInstructionIndices[instrIndex] = nil
+    self.CompletedInstructionIndices[instrIndex] = true
+end
+
+function Ponder.Playback:GetInstructionIndexStartTime(instrIndex)
+    return self:GetChapter().StartTime + self:GetInstructionFromIndex(instrIndex).Time
+end
+
+function Ponder.Playback:GetInstructionIndexEndTime(instrIndex)
+    local instr = self:GetInstructionFromIndex(instrIndex)
+    return self:GetChapter().StartTime + instr.Time + (instr.Length or 0)
+end
+
+function Ponder.Playback:ShouldInstructionIndexStart(instrIndex, curtime)
+    return curtime >= self:GetInstructionIndexStartTime(instrIndex)
+end
+
+function Ponder.Playback:ShouldInstructionIndexEnd(instrIndex, curtime)
+    return curtime >= self:GetInstructionIndexEndTime(instrIndex)
+end
+
+----------------------------------------------------------------------------------------------------------------
 
 function Ponder.Playback:ToString()
     return "Ponder Playback, playing " .. self.Storyboard:GenerateUUID() .. ""
@@ -34,6 +134,7 @@ function Ponder.Playback:Play()
         self.Time = 0
         self:SeekChapter(1)
     end
+
     self.LastUpdate = CurTime()
     self.Paused = false
 end
@@ -63,19 +164,21 @@ function Ponder.Playback:SetChapter(chapterIndex)
     if not chapter then self.Chapter = oldC return false end
 
     chapter:Recalculate()
+    self:InitializeInstructionIndices()
     Ponder.DebugPrint("Starting Chapter [" .. chapterIndex .. "]")
     return true
 end
 
 function Ponder.Playback:FinalizeChapter()
     -- Call all finalizers on running instructions
-    for instrIndex in pairs(self.RunningInstructionIndices) do
-        local instruction = self:GetChapter().Instructions[instrIndex]
-
-        instruction:Update(self)
-        instruction:Last(self)
+    for instrIndex in pairs(self.InstructionIndices) do
+        if not self:HasInstructionIndexCompleted(instrIndex) then
+            self:FinalizeInstructionIndex(instrIndex)
+        end
     end
 
+    table.Empty(self.InstructionIndices)
+    table.Empty(self.PendingInstructionIndices)
     table.Empty(self.RunningInstructionIndices)
     table.Empty(self.CompletedInstructionIndices)
 end
@@ -83,15 +186,15 @@ end
 function Ponder.Playback:Update()
     if self.Paused then self.DeltaTime = 0 return end
 
-    local now = CurTime()
-    local delta = now - self.LastUpdate
-    self.DeltaTime = delta * self.Speed
-    self.Time = math.Clamp(self.Time + (delta * self.Speed), 0, self.Length)
-    self.LastUpdate = now
-    self.Frame = self:CurFrame()
+    local now        = CurTime()
+    local delta      = now - self.LastUpdate
+    local curChapter = self:GetChapter()
+
+    self.DeltaTime   = delta * self.Speed
+    self.Time        = math.Clamp(self.Time + (delta * self.Speed), 0, self.Length)
+    self.LastUpdate  = now
 
     -- Check if we reached the end of the chapter
-    local curChapter = self:GetChapter()
     if not curChapter then return end
 
     if self.Time >= curChapter:GetEndTime() then
@@ -100,43 +203,28 @@ function Ponder.Playback:Update()
         if not self:SetChapter(self.Chapter + 1) then
             self.Paused = true
             self.Complete = true
+
             if self.OnComplete then
                 self:OnComplete()
             end
+
             return
         else
             curChapter = self:GetChapter()
         end
     end
 
-    -- Find deltas
-    local additions, removals = {}, {}
-    local starttime = curChapter.StartTime
-    for instrIndex in pairs(self.RunningInstructionIndices) do
-        local instruction = curChapter.Instructions[instrIndex]
-        local globalEndTime = starttime + instruction.Time + (instruction.Length or 0)
-        if self.Time >= globalEndTime then
-            instruction:Update(self)
-            instruction:Last(self)
-            removals[#removals + 1] = instrIndex
-            Ponder.DebugPrint("Instruction [" .. instrIndex .. "] ended.")
+    for instrIndex in pairs(self.PendingInstructionIndices) do
+        if self:ShouldInstructionIndexStart(instrIndex, self.Time) then
+            self:StartInstructionIndex(instrIndex)
         end
     end
 
-    for instrIndex, instruction in ipairs(curChapter.Instructions) do
-        local globalStartTime = starttime + instruction.Time
-        if self.Time >= globalStartTime and not self.RunningInstructionIndices[instrIndex] and not self.CompletedInstructionIndices[instrIndex] then
-            instruction:First(self)
-            Ponder.DebugPrint("Called Instruction:First [" .. instrIndex .. "]")
-            additions[#additions + 1] = instrIndex
-        end
-    end
-
-    for _, removal in ipairs(removals) do self.RunningInstructionIndices[removal] = nil; self.CompletedInstructionIndices[removal] = true end
-    for _, addition in ipairs(additions) do self.RunningInstructionIndices[addition] = true end
-
     for instrIndex in pairs(self.RunningInstructionIndices) do
-        curChapter.Instructions[instrIndex]:Update(self)
+        self:UpdateInstructionIndex(instrIndex)
+        if self:ShouldInstructionIndexEnd(instrIndex, self.Time) then
+            self:FinalizeInstructionIndex(instrIndex)
+        end
     end
 end
 
@@ -185,8 +273,6 @@ end
 
 function Ponder.Playback:GetChapter() return self.Storyboard.Chapters[self.Chapter] end
 
-function Ponder.Playback:CurFrame() return math.floor(self.Time * Ponder.Playback.TICKS_PER_SECOND) end
-
 function Ponder.Playback:DoAllInstructions(chapterIndex)
     self:SetChapter(chapterIndex)
     local chapter = self.Storyboard.Chapters[chapterIndex]
@@ -219,5 +305,6 @@ function Ponder.Playback:SeekChapter(chapterIndex)
         end
     end
 
+    self:InitializeInstructionIndices()
     self.Seeking = false
 end
