@@ -52,8 +52,17 @@ function PANEL:LoadStoryboard(uuid)
     end
 
     self.Playback:Play()
+
+    local function togglePause()
+        self.Controls.PlayPauseButton:SetImage(self.Playback.Paused and "ponder/ui/icon64/play.png" or "ponder/ui/icon64/stop.png")
+        self.Controls.PlayPauseButton:SetTooltip(self.Playback.Paused and language.GetPhrase("ponder.buttons.play") or language.GetPhrase("ponder.buttons.pause"))
+    end
+
+    self.Playback.OnPlay = togglePause
+    self.Playback.OnPause = togglePause
+
     self.Playback.OnComplete = function()
-        self.Controls.PlayPauseButton:SetImage("ponder/ui/icon64/play.png")
+        self.Playback:Pause()
     end
 
     self.StartTime = CurTime()
