@@ -144,6 +144,10 @@ function Ponder.Playback:Play()
     if self.OnPlay then
         self:OnPlay()
     end
+
+    for instrIndex in pairs(self.RunningInstructionIndices) do
+        self:GetInstructionFromIndex(instrIndex):OnResumed(self)
+    end
 end
 
 function Ponder.Playback:Pause()
@@ -151,6 +155,10 @@ function Ponder.Playback:Pause()
 
     if self.OnPause then
         self:OnPause()
+    end
+
+    for instrIndex in pairs(self.RunningInstructionIndices) do
+        self:GetInstructionFromIndex(instrIndex):OnPaused(self)
     end
 end
 

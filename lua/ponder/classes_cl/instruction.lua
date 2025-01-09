@@ -11,8 +11,13 @@ function Ponder.Instruction:ToString()
     return "Ponder Instruction [" .. self.Chapter.Storyboard:GenerateUUID() .. "]"
 end
 
-function Ponder.Instruction:First(playback)    playback = playback end
-function Ponder.Instruction:Last(playback)     playback = playback end
-function Ponder.Instruction:Update(playback)   playback = playback end
-function Ponder.Instruction:Render3D(playback) playback = playback end
-function Ponder.Instruction:Render2D(playback) playback = playback end
+-- playback = playback so the linter shuts up...
+
+function Ponder.Instruction:First(playback)     playback = playback end
+function Ponder.Instruction:Last(playback)      playback = playback end
+function Ponder.Instruction:Update(playback)    playback = playback end
+function Ponder.Instruction:Render3D(playback)  playback = playback end
+function Ponder.Instruction:Render2D(playback)  playback = playback end
+
+function Ponder.Instruction:OnPaused(playback)  playback = playback end
+function Ponder.Instruction:OnResumed(playback) playback = playback end
