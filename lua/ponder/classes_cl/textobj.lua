@@ -12,7 +12,19 @@ function Ponder.TextObject:__new()
 end
 
 function Ponder.TextObject:SetMarkup(markupTxt)
-    self.Markup = markup.Parse(markupTxt)
+    self.Markup = markupTxt
+    self.LastMaxWidth = nil
+end
+
+function Ponder.TextObject:GetMarkupObject()
+    local maxWidth = ScrW() - self.Pos2D.x - 32
+
+    if not self.MarkupCache or self.LastMaxWidth ~= maxWidth then
+        self.MarkupCache = markup.Parse(self.Markup, maxWidth)
+        self.LastMaxWidth = maxWidth
+    end
+
+    return self.MarkupCache
 end
 
 -- Expect 3D context here
@@ -39,9 +51,11 @@ end
 
 -- We expect 2D context here
 function Ponder.TextObject:Render()
-    if not self.Markup then Ponder.Print("No self.Markup!!!") return end
+    local mkup = self:GetMarkupObject()
 
-    local x, y, w, h = self.Pos2D.x, self.Pos2D.y, self.Markup:Size()
+    if not mkup then Ponder.Print("No self.Markup!!!") return end
+
+    local x, y, w, h = self.Pos2D.x, self.Pos2D.y, mkup:Size()
     local alphaFrac = self.Alpha / 255
 
     local textOffsetX, textOffsetY = 0, 0
@@ -66,5 +80,5 @@ function Ponder.TextObject:Render()
     surface.SetDrawColor(20, 20, 20, alphaFrac * 170)
     surface.DrawRect((x - textPadding + textOffsetX) - rX, (y - textPadding + textOffsetY) - rY , w + (textPadding * 2), h + (textPadding * 2))
 
-    self.Markup:Draw(x + textOffsetX, y + textOffsetY, self.Horizontal, self.Vertical, self.Alpha, self.TextAlignment)
+    mkup:Draw(x + textOffsetX, y + textOffsetY, self.Horizontal, self.Vertical, self.Alpha, self.TextAlignment)
 end
