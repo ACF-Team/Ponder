@@ -30,6 +30,7 @@ function TOOLTIP:Think()
 
     --local pX, pY = input.GetCursorPos()
     --self:SetPos(pX - (self:GetWide() / 2), pY - 8 - sH - 6)
+
     local target = self.Target
     if ispanel(target) then
         if not IsValid(target) then
@@ -38,6 +39,14 @@ function TOOLTIP:Think()
         end
         local tpx, tpy = target:LocalToScreen(0, 0)
         tpx = tpx + (target:GetWide() / 2)
+
+        local overflow = -1 * (ScrW() - tpx - (self:GetWide() / 2) - 32)
+        print(overflow)
+        if overflow < 0 then
+            overflow = 0
+        end
+        tpx = tpx - overflow
+
         self:SetPos(tpx - (self:GetWide() / 2), tpy - 8 - sH - 6)
         self:SetText(target:GetTooltip())
     elseif istable(target) then
