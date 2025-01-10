@@ -263,6 +263,7 @@ function Ponder.Playback:Update()
         local removals = {}
         for instrIndex in pairs(self.RunningInstructionIndices) do
             if self:ShouldInstructionIndexEnd(instrIndex, self.Time) then
+                self:UpdateInstructionIndex(instrIndex)
                 self:FinalizeInstructionIndex(instrIndex)
                 removals[#removals + 1] = instrIndex
             end
