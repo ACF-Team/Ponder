@@ -77,8 +77,8 @@ function Ponder.Playback:StartInstructionIndex(instrIndex)
     local instr = self.InstructionIndices[instrIndex]
     instr.Instruction:First(self)
     instr.State = Ponder.InstructionPlaybackState.Running
-    self.PendingInstructionIndices[instrIndex] = nil
-    self.RunningInstructionIndices[instrIndex] = true
+
+    Ponder.DebugPrint("Starting instruction index @ " .. instrIndex)
 end
 
 function Ponder.Playback:UpdateInstructionIndex(instrIndex)
@@ -99,8 +99,22 @@ function Ponder.Playback:FinalizeInstructionIndex(instrIndex)
 
     instr.Instruction:Last(self)
     instr.State = Ponder.InstructionPlaybackState.Completed
-    self.RunningInstructionIndices[instrIndex] = nil
-    self.CompletedInstructionIndices[instrIndex] = true
+
+    Ponder.DebugPrint("Finalizing instruction index @ " .. instrIndex)
+end
+
+function Ponder.Playback:ProcessInstructionIndexAdditions(additions)
+    for _, instrIndex in ipairs(additions) do
+        self.PendingInstructionIndices[instrIndex] = nil
+        self.RunningInstructionIndices[instrIndex] = true
+    end
+end
+
+function Ponder.Playback:ProcessInstructionIndexRemovals(removals)
+    for _, instrIndex in ipairs(removals) do
+        self.RunningInstructionIndices[instrIndex] = nil
+        self.CompletedInstructionIndices[instrIndex] = true
+    end
 end
 
 function Ponder.Playback:GetInstructionIndexStartTime(instrIndex)
@@ -230,18 +244,28 @@ function Ponder.Playback:Update()
         end
     end
 
+    local additions, removals = {}, {}
     for instrIndex in pairs(self.PendingInstructionIndices) do
         if self:ShouldInstructionIndexStart(instrIndex, self.Time) then
             self:StartInstructionIndex(instrIndex)
+            additions[#additions + 1] = instrIndex
         end
     end
 
+    self:ProcessInstructionIndexAdditions(additions)
+
     for instrIndex in pairs(self.RunningInstructionIndices) do
         self:UpdateInstructionIndex(instrIndex)
-        if self:ShouldInstructionIndexEnd(instrIndex, self.Time) then
+    end
+
+    for instrIndex in pairs(self.RunningInstructionIndices) do
+        if self:ShouldInstructionIndexEnd(instrIndex, self.Time) and not self:IsInstructionIndexRunning(instrIndex) then
             self:FinalizeInstructionIndex(instrIndex)
+            removals[#removals + 1] = instrIndex
         end
     end
+
+    self:ProcessInstructionIndexRemovals(removals)
 end
 
 function Ponder.Playback:Render3D()
