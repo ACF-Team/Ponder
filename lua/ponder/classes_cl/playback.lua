@@ -88,7 +88,7 @@ function Ponder.Playback:StartInstructionIndex(instrIndex)
     self.PendingInstructionIndices[instrIndex] = nil
     self.RunningInstructionIndices[instrIndex] = true
 
-    Ponder.DebugPrint("Starting instruction index @ " .. instrIndex)
+    Ponder.DebugPrint("Starting instruction index @ " .. instrIndex .. "[" .. instr.Instruction.__INSTRUCTION_NAME .. "]")
 end
 
 function Ponder.Playback:UpdateInstructionIndex(instrIndex)
@@ -113,7 +113,7 @@ function Ponder.Playback:FinalizeInstructionIndex(instrIndex)
     self.RunningInstructionIndices[instrIndex] = nil
     self.CompletedInstructionIndices[instrIndex] = true
 
-    Ponder.DebugPrint("Finalizing instruction index @ " .. instrIndex)
+    Ponder.DebugPrint("Finalizing instruction index @ " .. instrIndex .. "[" .. instr.Instruction.__INSTRUCTION_NAME .. "]")
 end
 
 function Ponder.Playback:IsInstructionIndexLengthless(instrIndex)
@@ -267,6 +267,7 @@ function Ponder.Playback:Update()
                     self:RunLengthlessInstructionIndex(instrIndex)
                 else
                     self:StartInstructionIndex(instrIndex)
+                    self:UpdateInstructionIndex(instrIndex)
                 end
             end
         elseif state == INSTRUCTION_PLAYBACK_RUNNING then

@@ -48,6 +48,7 @@ end
 
 function API.NewInstruction(name)
     local instrClass = Ponder.InheritedClass(Ponder.Instruction)
+    instrClass.__INSTRUCTION_NAME = name
     API.RegisteredInstructions[name] = instrClass
 
     return instrClass
