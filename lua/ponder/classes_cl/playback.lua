@@ -36,6 +36,7 @@ function Ponder.Playback:ClearInstructionIndices()
     table.Empty(self.PendingInstructionIndices)
     table.Empty(self.RunningInstructionIndices)
     table.Empty(self.CompletedInstructionIndices)
+    Ponder.DebugPrint("Playback:ClearInstructionIndices()")
 end
 
 function Ponder.Playback:InitializeInstructionIndices()
@@ -47,6 +48,8 @@ function Ponder.Playback:InitializeInstructionIndices()
         }
         self.PendingInstructionIndices[k] = true
     end
+
+    Ponder.DebugPrint("Playback:InitializeInstructionIndices()")
 end
 
 function Ponder.Playback:GetInstructionFromIndex(instrIndex)
@@ -199,6 +202,7 @@ function Ponder.Playback:SetChapter(chapterIndex)
     chapter:Recalculate()
     self:InitializeInstructionIndices()
     Ponder.DebugPrint("Starting Chapter [" .. chapterIndex .. "]")
+
     return true
 end
 
@@ -259,7 +263,7 @@ function Ponder.Playback:Update()
     end
 
     for instrIndex in pairs(self.RunningInstructionIndices) do
-        if self:ShouldInstructionIndexEnd(instrIndex, self.Time) and not self:IsInstructionIndexRunning(instrIndex) then
+        if self:ShouldInstructionIndexEnd(instrIndex, self.Time) then
             self:FinalizeInstructionIndex(instrIndex)
             removals[#removals + 1] = instrIndex
         end

@@ -62,6 +62,7 @@ function PANEL:Init()
     self:AddButton("ponder/ui/icon64/replay.png", language.GetPhrase("ponder.buttons.reload"), function()
         -- Reload storyboard
         self.UI:LoadStoryboard(self.UI.Storyboard:GenerateUUID())
+        if self.UI.Console then self.UI.Console:SetText("") end
         self.PlayPauseButton:SetImage("ponder/ui/icon64/stop.png")
     end)
     self:AddButton("ponder/ui/icon64/fast.png", language.GetPhrase("ponder.buttons.speed"), function(btn)
