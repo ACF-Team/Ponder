@@ -46,12 +46,12 @@ function PANEL:Init()
         return button
     end
 
-    self:AddButton("ponder/ui/icon64/brightness_off.png", language.GetPhrase("ponder.buttons.fullbright_on"), function(btn)
+    self.FullbrightButton = self:AddButton("ponder/ui/icon64/brightness_off.png", language.GetPhrase("ponder.buttons.fullbright_on"), function(btn)
         self.UI.Playback:ToggleFullbright()
         btn:SetImage(self.UI.Playback.Fullbright and "ponder/ui/icon64/brightness_on.png" or "ponder/ui/icon64/brightness_off.png")
         btn:SetTooltip(self.UI.Playback.Fullbright and language.GetPhrase("ponder.buttons.fullbright_off") or language.GetPhrase("ponder.buttons.fullbright_on"))
     end)
-    self:AddButton("ponder/ui/icon64/magnifier.png", language.GetPhrase("ponder.buttons.identify_on"), function(btn)
+    self.IdentifyButton = self:AddButton("ponder/ui/icon64/magnifier.png", language.GetPhrase("ponder.buttons.identify_on"), function(btn)
         self.UI.Playback:ToggleIdentify()
         btn:SetImage(self.UI.Playback.Identifying and "ponder/ui/icon64/magnifier_enabled.png" or "ponder/ui/icon64/magnifier.png")
         btn:SetTooltip(self.UI.Playback.Identifying and language.GetPhrase("ponder.buttons.identify_off") or language.GetPhrase("ponder.buttons.identify_on"))
@@ -63,7 +63,11 @@ function PANEL:Init()
         -- Reload storyboard
         self.UI:LoadStoryboard(self.UI.Storyboard:GenerateUUID())
         if self.UI.Console then self.UI.Console:SetText("") end
+        self.FullbrightButton:SetImage("ponder/ui/icon64/brightness_off.png")
+        self.IdentifyButton:SetImage("ponder/ui/icon64/magnifier.png")
         self.PlayPauseButton:SetImage("ponder/ui/icon64/stop.png")
+        self.FullbrightButton:SetTooltip(language.GetPhrase("ponder.buttons.fullbright_on"))
+        self.IdentifyButton:SetTooltip(language.GetPhrase("ponder.buttons.identify_on"))
     end)
     self:AddButton("ponder/ui/icon64/fast.png", language.GetPhrase("ponder.buttons.speed"), function(btn)
         if IsValid(self.SpeedController) then
