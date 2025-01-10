@@ -4,6 +4,10 @@ Ponder.InstructionPlaybackState = {
     Completed = 2
 }
 
+local INSTRUCTION_PLAYBACK_PENDING = Ponder.InstructionPlaybackState.Pending
+local INSTRUCTION_PLAYBACK_RUNNING = Ponder.InstructionPlaybackState.Running
+local INSTRUCTION_PLAYBACK_COMPLETED = Ponder.InstructionPlaybackState.Completed
+
 Ponder.Playback = Ponder.SimpleClass()
 
 function Ponder.Playback:__new(storyboard, environment)
@@ -44,7 +48,7 @@ function Ponder.Playback:InitializeInstructionIndices()
         self.InstructionIndices[k] = {
             Instruction = v,
             Index = k,
-            State = Ponder.InstructionPlaybackState.Pending
+            State = INSTRUCTION_PLAYBACK_PENDING
         }
         self.PendingInstructionIndices[k] = true
     end
@@ -65,21 +69,24 @@ function Ponder.Playback:SetInstructionIndexState(instrIndex, state)
 end
 
 function Ponder.Playback:IsInstructionIndexPending(instrIndex)
-    return self.InstructionIndices[instrIndex].State == Ponder.InstructionPlaybackState.Pending
+    return self.InstructionIndices[instrIndex].State == INSTRUCTION_PLAYBACK_PENDING
 end
 
 function Ponder.Playback:IsInstructionIndexRunning(instrIndex)
-    return self.InstructionIndices[instrIndex].State == Ponder.InstructionPlaybackState.Running
+    return self.InstructionIndices[instrIndex].State == INSTRUCTION_PLAYBACK_RUNNING
 end
 
 function Ponder.Playback:HasInstructionIndexCompleted(instrIndex)
-    return self.InstructionIndices[instrIndex].State == Ponder.InstructionPlaybackState.Completed
+    return self.InstructionIndices[instrIndex].State == INSTRUCTION_PLAYBACK_COMPLETED
 end
 
 function Ponder.Playback:StartInstructionIndex(instrIndex)
     local instr = self.InstructionIndices[instrIndex]
     instr.Instruction:First(self)
-    instr.State = Ponder.InstructionPlaybackState.Running
+    instr.State = INSTRUCTION_PLAYBACK_RUNNING
+
+    self.PendingInstructionIndices[instrIndex] = nil
+    self.RunningInstructionIndices[instrIndex] = true
 
     Ponder.DebugPrint("Starting instruction index @ " .. instrIndex)
 end
@@ -94,14 +101,17 @@ end
 function Ponder.Playback:FinalizeInstructionIndex(instrIndex)
     local instr = self.InstructionIndices[instrIndex]
 
-    if instr.State == Ponder.InstructionPlaybackState.Pending then
+    if instr.State == INSTRUCTION_PLAYBACK_PENDING then
         Ponder.DebugPrint("Finalize called on instruction that was pending, resolving...")
         instr.Instruction:First(self)
         instr.Instruction:Update(self)
     end
 
     instr.Instruction:Last(self)
-    instr.State = Ponder.InstructionPlaybackState.Completed
+    instr.State = INSTRUCTION_PLAYBACK_COMPLETED
+
+    self.RunningInstructionIndices[instrIndex] = nil
+    self.CompletedInstructionIndices[instrIndex] = true
 
     Ponder.DebugPrint("Finalizing instruction index @ " .. instrIndex)
 end
@@ -114,21 +124,9 @@ function Ponder.Playback:RunLengthlessInstructionIndex(instrIndex)
     self:StartInstructionIndex(instrIndex)
     self:UpdateInstructionIndex(instrIndex)
     self:FinalizeInstructionIndex(instrIndex)
-end
 
-
-function Ponder.Playback:ProcessInstructionIndexAdditions(additions)
-    for _, instrIndex in ipairs(additions) do
-        self.PendingInstructionIndices[instrIndex] = nil
-        self.RunningInstructionIndices[instrIndex] = true
-    end
-end
-
-function Ponder.Playback:ProcessInstructionIndexRemovals(removals)
-    for _, instrIndex in ipairs(removals) do
-        self.RunningInstructionIndices[instrIndex] = nil
-        self.CompletedInstructionIndices[instrIndex] = true
-    end
+    self.PendingInstructionIndices[instrIndex] = nil
+    self.RunningInstructionIndices[instrIndex] = true
 end
 
 function Ponder.Playback:GetInstructionIndexStartTime(instrIndex)
@@ -259,37 +257,24 @@ function Ponder.Playback:Update()
         end
     end
 
-    do
-        local removals = {}
-        for instrIndex in pairs(self.RunningInstructionIndices) do
-            if self:ShouldInstructionIndexEnd(instrIndex, self.Time) then
-                self:UpdateInstructionIndex(instrIndex)
-                self:FinalizeInstructionIndex(instrIndex)
-                removals[#removals + 1] = instrIndex
-            end
-        end
-
-        self:ProcessInstructionIndexRemovals(removals)
-    end
-
-    do
-        local additions = {}
-        for instrIndex in pairs(self.PendingInstructionIndices) do
-            if self:ShouldInstructionIndexStart(instrIndex, self.Time) then
+    local time = self.Time
+    for instrIndex in ipairs(curChapter.Instructions) do
+        local state = self:GetInstructionIndexState(instrIndex)
+        if state == INSTRUCTION_PLAYBACK_PENDING then
+            -- Determine if this instruction is coming up.
+            if self:ShouldInstructionIndexStart(instrIndex, time) then
                 if self:IsInstructionIndexLengthless(instrIndex) then
                     self:RunLengthlessInstructionIndex(instrIndex)
                 else
                     self:StartInstructionIndex(instrIndex)
-                    additions[#additions + 1] = instrIndex
                 end
             end
+        elseif state == INSTRUCTION_PLAYBACK_RUNNING then
+            self:UpdateInstructionIndex(instrIndex)
+            if self:ShouldInstructionIndexEnd(instrIndex, self.Time) then
+                self:FinalizeInstructionIndex(instrIndex)
+            end
         end
-
-        self:ProcessInstructionIndexAdditions(additions)
-    end
-
-    for instrIndex in pairs(self.RunningInstructionIndices) do
-        self:UpdateInstructionIndex(instrIndex)
     end
 end
 
