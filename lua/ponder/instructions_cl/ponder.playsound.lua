@@ -1,5 +1,8 @@
 local PlaySound = Ponder.API.NewInstruction("PlaySound")
 
+PlaySound.Volume = 1
+PlaySound.Pitch = 100
+
 function PlaySound:First(playback)
     if playback.Seeking and self.Length == 0 then return end
     if not self.Sound then return end
@@ -11,11 +14,11 @@ function PlaySound:First(playback)
 
     local mdlSound = CreateSound(LocalPlayer(), self.Sound)
     self.ActiveSound = mdlSound
-    mdlSound:Play()
+    mdlSound:PlayEx(self.Volume, self.Pitch)
 end
 
 function PlaySound:Last()
-    if self.Length ~= 0 and self.ActiveSound:IsPlaying() then
+    if self.Length and self.Length > 0 and self.ActiveSound:IsPlaying() then
         self.ActiveSound:Stop()
     end
 end
@@ -25,5 +28,5 @@ function PlaySound:OnPaused()
 end
 
 function PlaySound:OnResumed()
-    self.ActiveSound:ChangeVolume(1)
+    self.ActiveSound:ChangeVolume(self.Volume)
 end
