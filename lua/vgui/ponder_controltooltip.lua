@@ -41,7 +41,7 @@ function TOOLTIP:Think()
         tpx = tpx + (target:GetWide() / 2)
 
         local overflow = -1 * (ScrW() - tpx - (self:GetWide() / 2) - 32)
-        print(overflow)
+
         if overflow < 0 then
             overflow = 0
         end
