@@ -48,7 +48,7 @@ function toolgunRenderer:Render2D(env)
     draw.SimpleTextOutlined(state.ToolName, "DermaLarge", x, y + 32, Color(255, 255, 255, alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0, alpha))
 
     if state.RenderingMarker then
-        local endX, endY = state.TargetFromToPos2D.x, state.TargetFromToPos2D.y
+        local endX, endY = state.TargetFromToPos2D.x - 16, state.TargetFromToPos2D.y - 16
 
         surface.SetMaterial(selectIndicator)
         surface.SetDrawColor(255, 255, 255, state.MarkerAlpha)
