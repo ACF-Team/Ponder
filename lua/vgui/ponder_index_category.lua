@@ -34,7 +34,10 @@ function PANEL:Load(addon, category)
     local scroller = self.Scroller
     local addonData = Ponder.API.RegisteredAddons[addon]
     local catData = Ponder.API.RegisteredAddonCategories[addon][category]
-    self.TopLabel:SetText(string.format(language.GetPhrase("ponder.pondering_about_category"), language.GetPhrase(addonData.Name), language.GetPhrase(catData.Name)))
+
+    local localized_addonName = language.GetPhrase(addonData.Name)
+    local localized_catName   = language.GetPhrase(catData.Name)
+    self.TopLabel:SetText(string.format(language.GetPhrase("ponder.pondering_about_category"), localized_addonName, localized_catName))
 
     for _, v in ipairs(Ponder.API.GetCategoryStoryboardList(addon, category)) do
         local panel = scroller:Add("DButton")
@@ -68,7 +71,7 @@ function PANEL:Load(addon, category)
         desc:SetContentAlignment(5)
 
         function panel:DoClick()
-            Ponder.UIWindow:AddBackAction(string.format(language.GetPhrase("ponder.back_to_category"), addon, category), function(ui)
+            Ponder.UIWindow:AddBackAction(string.format(language.GetPhrase("ponder.back_to_category"), localized_addonName, localized_catName), function(ui)
                 ui:LoadAddonCategoriesIndex(addon, category)
             end)
             Ponder.UIWindow:LoadStoryboard(v:GenerateUUID())

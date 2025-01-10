@@ -67,7 +67,7 @@ function PANEL:Load(addon)
         desc:SetContentAlignment(5)
 
         function panel:DoClick()
-            Ponder.UIWindow:AddBackAction(string.format(language.GetPhrase("ponder.back_to_addon"), addon), function(ui)
+            Ponder.UIWindow:AddBackAction(string.format(language.GetPhrase("ponder.back_to_addon"), language.GetPhrase(v.Name)), function(ui)
                 ui:LoadAddonIndex(addon)
             end)
             Ponder.UIWindow:LoadAddonCategoriesIndex(addon, v.ID)
