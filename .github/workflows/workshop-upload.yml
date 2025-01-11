@@ -1,9 +1,9 @@
 name: Deploy to Workshop
 
 on:
-  #push:
-    #branches:
-      #- master
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - name: Upload to Workshop
         uses: CFC-Servers/gmod-upload@master
         with:
-          #id: placeholder
+          id: 3404950276
           changelog: "${{ github.event.head_commit.message }}"
           title: "Ponder"
           type: "tool"

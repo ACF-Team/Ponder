@@ -3,6 +3,7 @@ gloader.Load("Ponder", "ponder")
 
 Ponder.Debug = false
 if SERVER then
+    resource.AddWorkshop("3404950276")
     -- resource.AddFile("materials/ponder/ui/toolgun_cursor64.png")
     resource.AddFile("materials/ponder/ui/toolgun_cursor96.png")
     -- resource.AddFile("materials/ponder/ui/toolgun_cursor128.png")
