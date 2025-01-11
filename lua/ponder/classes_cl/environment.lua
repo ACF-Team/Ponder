@@ -62,7 +62,7 @@ function Ponder.Environment:NewNamedObject(listname, name, ...)
         if IsValid(obj) then obj:Remove() end
     end
 
-    local obj = Ponder.API.GetNamedObjectImplementors()[listname].Initialize(self, ...)
+    local obj = Ponder.API.GetNamedObjectImplementors()[listname].Initialize(self, name, ...)
 
     list:Add(obj, name)
     return obj
