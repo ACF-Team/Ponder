@@ -44,8 +44,59 @@ function Ponder.Environment:__new()
     self.ClientsideModels = NamedList()
     self.NamedTextObjects = NamedList()
 
+    self.CustomNamedLists = {}
+    for k in pairs(Ponder.API.GetNamedObjectImplementors()) do
+        self.CustomNamedLists[k] = NamedList()
+    end
+
     self.Opacity = 1
     self:SetLookParams(1300, 55, 600, vector_origin)
+end
+
+function Ponder.Environment:NewNamedObject(listname, name, ...)
+    local list = self.CustomNamedLists[listname]
+    if not list then return ErrorNoHaltWithStack("Ponder.Environment: No NamedList with the name '" .. listname .. "'") end
+
+    if list:Find(name) then
+        local obj = list:RemoveByName(name)
+        if IsValid(obj) then obj:Remove() end
+    end
+
+    local obj = Ponder.API.GetNamedObjectImplementors()[listname].Initialize(self, ...)
+
+    list:Add(obj, name)
+    return obj
+end
+
+function Ponder.Environment:GetNamedObject(listname, objName)
+    local list = self.CustomNamedLists[listname]
+    if not list then return ErrorNoHaltWithStack("Ponder.Environment: No NamedList with the name '" .. listname .. "'") end
+
+    return list:Find(objName)
+end
+
+function Ponder.Environment:GetAllNamedObjects(listname)
+    local list = self.CustomNamedLists[listname]
+    if not list then return ErrorNoHaltWithStack("Ponder.Environment: No NamedList with the name '" .. listname .. "'") end
+
+    return list.List
+end
+
+function Ponder.Environment:RemoveNamedObject(listname, object)
+    local list = self.CustomNamedLists[listname]
+    if not list then return ErrorNoHaltWithStack("Ponder.Environment: No NamedList with the name '" .. listname .. "'") end
+
+    local obj = list:RemoveByValue(object)
+    if IsValid(obj) then obj:Remove() end
+end
+
+function Ponder.Environment:RemoveNamedObjectByName(listname, objName)
+    local list = self.CustomNamedLists[listname]
+    if not list then return ErrorNoHaltWithStack("Ponder.Environment: No NamedList with the name '" .. listname .. "'") end
+    local obj = list:Find(objName)
+    if not IsValid(obj) then return end
+
+    list:RemoveByName(objName):Remove()
 end
 
 function Ponder.Environment:GetCameraPosAng()
@@ -114,8 +165,13 @@ end
 
 function Ponder.Environment:Free()
     for _, v in ipairs(self.ClientsideModels.List) do v:Remove() end
+
     self.ClientsideModels:Clear()
     self.NamedTextObjects:Clear()
+
+    for _, v in pairs(self.CustomNamedLists) do
+        v:Clear(function(x) x:Remove() end)
+    end
 end
 
 function Ponder.Environment:SetCameraPosition(vPos)
