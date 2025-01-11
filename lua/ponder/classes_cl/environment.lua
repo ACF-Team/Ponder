@@ -41,6 +41,7 @@ function Ponder.Environment:__new()
     self.ClientsideModels = NamedList()
     self.NamedTextObjects = NamedList()
 
+    self.Opacity = 1
     self:SetLookParams(1300, 55, 600, vector_origin)
 end
 
@@ -187,11 +188,13 @@ function Ponder.Environment:Render()
         render.SuppressEngineLighting(true)
     end
     self.AimedEntity = self:AimEntity()
+    local envOpacity = self.Opacity
+
     for _, v in ipairs(self.NamedTextObjects.List) do v:ResolvePos2D() end
     for _, v in ipairs(self.ClientsideModels.List) do
         local c = v:GetColor()
         local aOverride = v.PONDER_AlphaOverride or 1
-        local blend = (c.a / 255) * aOverride
+        local blend = (c.a / 255) * aOverride * envOpacity
 
         render.SetColorModulation(c.r / 255, c.g / 255, c.b / 255)
         if blend < 1 then
