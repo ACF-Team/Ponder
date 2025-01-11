@@ -29,7 +29,10 @@ local function NamedList()
         return retObj
     end
 
-    function ret:Clear()
+    function ret:Clear(foreach)
+        if foreach then
+            for _, v in ipairs(self.List) do foreach(v) end
+        end
         table.Empty(self.List)
         table.Empty(self.Named)
     end
