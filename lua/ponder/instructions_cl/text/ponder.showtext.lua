@@ -10,6 +10,8 @@ ShowText.Horizontal               = TEXT_ALIGN_LEFT
 ShowText.Vertical                 = TEXT_ALIGN_TOP
 ShowText.TextAlignment            = TEXT_ALIGN_LEFT
 ShowText.PositionRelativeToScreen = false
+-- If true, the text will render on top of Ponder.Renderer's
+ShowText.RenderOnTopOfRenderers   = true
 
 function ShowText:First(playback)
     local env = playback.Environment
@@ -28,9 +30,10 @@ function ShowText:First(playback)
     end
 
     txt.PositionRelativeToScreen = self.PositionRelativeToScreen
-    txt.Horizontal    = self.Horizontal
-    txt.Vertical      = self.Vertical
-    txt.TextAlignment = self.TextAlignment
+    txt.Horizontal               = self.Horizontal
+    txt.Vertical                 = self.Vertical
+    txt.TextAlignment            = self.TextAlignment
+    txt.RenderOnTopOfRenderers   = self.RenderOnTopOfRenderers
 
     txt:SetMarkup(self.Markup)
 end

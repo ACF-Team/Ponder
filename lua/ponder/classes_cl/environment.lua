@@ -214,9 +214,17 @@ function Ponder.Environment:Render()
     cam.End()
 
     self.Rendering2D = true
-    for _, v in ipairs(self.NamedTextObjects.List) do v:Render() end
+
+    for _, v in ipairs(self.NamedTextObjects.List) do
+        if not v.RenderOnTopOfRenderers then v:Render() end
+    end
+
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render2D(self) end
     if self.Render2D then self:Render2D() end
+
+    for _, v in ipairs(self.NamedTextObjects.List) do
+        if v.RenderOnTopOfRenderers then v:Render() end
+    end
 
     if self.Identifying then
         local mX, mY = input.GetCursorPos()
