@@ -6,7 +6,7 @@
 
 ***
 
-This is a work-in-progress, in-game documentation system, heavily inspired by the Create Minecraft mod's "Pondering" system.
+Inspired by the [Create](https://github.com/Creators-of-Create/Create/wiki/Internal---Ponder-UI) Minecraft mod, Ponder is an in-game user documentation API. With this API, any other addon can register their own storyboards and provide visual documentation for their addon, rather than having to maintain an online wiki/rely on word of mouth.
 
 A couple of example storyboards are provided in lua/ponder/storyboards_cl/.
 
