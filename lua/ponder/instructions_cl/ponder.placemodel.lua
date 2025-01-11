@@ -68,4 +68,5 @@ function PlaceModel:Update(playback)
         object:SetPos(self.Position + LerpVector(progress, self.ComeFrom, vector_origin))
         object:SetAngles(self.Angles + LerpAngle(progress, self.RotateFrom, angle_zero))
     end
+    object.PONDER_AlphaOverride = progress
 end

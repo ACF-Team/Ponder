@@ -190,11 +190,21 @@ function Ponder.Environment:Render()
     for _, v in ipairs(self.NamedTextObjects.List) do v:ResolvePos2D() end
     for _, v in ipairs(self.ClientsideModels.List) do
         local c = v:GetColor()
+        local aOverride = v.PONDER_AlphaOverride or 1
+        local blend = (c.a / 255) * aOverride
+
         render.SetColorModulation(c.r / 255, c.g / 255, c.b / 255)
-        render.SetBlend(c.a / 255)
-        v:DrawModel()
+        if blend < 1 then
+            render.OverrideColorWriteEnable(true, false)
+            v:DrawModel()
+            render.OverrideColorWriteEnable(false, false)
+            render.SetBlend(blend)
+            v:DrawModel()
+            render.SetBlend(1)
+        else
+            v:DrawModel()
+        end
         render.SetColorModulation(1, 1, 1)
-        render.SetBlend(1)
     end
     for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render3D(self) end
     if self.Render3D then self:Render3D() end

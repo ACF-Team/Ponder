@@ -37,6 +37,8 @@ function RemoveModel:Update(playback)
         object:SetPos(self.Position + LerpVector(progress, vector_origin, self.GoTo))
         object:SetAngles(self.Angles + LerpAngle(progress, angle_zero, self.RotateTo))
     end
+
+    object.PONDER_AlphaOverride = 1 - progress
 end
 
 function RemoveModel:Last(playback)
