@@ -6,6 +6,7 @@ API.RegisteredRenderers       = {}
 API.RegisteredAddons          = {}
 API.RegisteredAddonCategories = {}
 API.RegisteredACSLookup       = {}
+API.RegisteredNamedObjects    = {}
 
 function API.NewStoryboard(addon_name, category_name, storyboard_name)
     local storyboard = Ponder.Storyboard()
@@ -146,4 +147,17 @@ function API.GetCategoryStoryboardList(addon_name, category_name)
 
     table.SortByMember(items, "IndexOrder")
     return items
+end
+
+function API.NewNamedObjectType(typename)
+    local ret = {
+        Name = typename
+    }
+
+    API.RegisteredNamedObjects[typename] = ret
+    return ret
+end
+
+function API.GetNamedObjectImplementors()
+    return API.RegisteredNamedObjects
 end
