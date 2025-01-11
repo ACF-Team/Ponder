@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://i.imgur.com/Vc1c5EU.png#gh-dark-mode-only" />
-  <img src="https://i.imgur.com/uTgiNC7.png#gh-light-mode-only" />
+  <img src="https://github.com/user-attachments/assets/92abdd72-aed4-43a4-a28a-7e8fa3f81c8d#gh-dark-mode-only" />
+  <img src="https://github.com/user-attachments/assets/f779f274-611a-45f6-bacd-0032e3c33405#gh-light-mode-only" />
 </p>
 
 
