@@ -5,7 +5,7 @@ function PlacePanel:First(playback)
     local env   = playback.Environment
     local panel = env:NewNamedObject("VGUIPanel", self.Name, self.Type, self.Parent)
 
-    Ponder.VGUI_Support.RunMethods(env, panel, self.Calls)
+    Ponder.VGUI_Support.RunMethods(env, panel, self.Calls, self.Properties)
 end
 
 function PlacePanel:Update(playback)

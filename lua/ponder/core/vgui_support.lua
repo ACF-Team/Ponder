@@ -12,10 +12,19 @@ function Ponder.VGUI_Support.ConfigureParentPaint(panel, parent)
     panel:SetPaintedManually(panel.PONDER_RenderRoot)
 end
 
-function Ponder.VGUI_Support.RunMethods(env, panel, calls)
+function Ponder.VGUI_Support.RunMethods(env, panel, calls, props)
     if not panel then return end
     if not calls then return end
-
+    if props then
+        for k, v in pairs(props) do
+            local method = Ponder.VGUI_Support.CustomMethodHandlers[v.Method]
+            if method then
+                panel[k] = method(panel, env, v)
+            else
+                panel[k] = v
+            end
+        end
+    end
     for _, v in ipairs(calls) do
         if not v.Method then ErrorNoHaltWithStack("Instructions.Ponder.PlacePanel: Instruction must specify the Method property") end
 

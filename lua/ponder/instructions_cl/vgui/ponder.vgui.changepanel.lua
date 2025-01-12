@@ -5,5 +5,5 @@ function ChangePanel:First(playback)
     local env   = playback.Environment
     local panel = env:GetNamedObject("VGUIPanel", self.Name)
 
-    Ponder.VGUI_Support.RunMethods(env, panel, self.Calls)
+    Ponder.VGUI_Support.RunMethods(env, panel, self.Calls, self.Properties)
 end
