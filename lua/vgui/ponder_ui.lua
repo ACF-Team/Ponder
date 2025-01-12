@@ -3,22 +3,6 @@ local matBlurScreen = Material("pp/blurscreen")
 
 DEFINE_BASECLASS("Panel")
 
-surface.CreateFont("Ponder.Title", {
-    font = "Tahoma",
-    extended = false,
-    size = 24,
-    weight = 100,
-    antialias = true
-})
-
-surface.CreateFont("Ponder.Subtitle", {
-    font = "Tahoma",
-    extended = false,
-    size = 38,
-    weight = 100,
-    antialias = true
-})
-
 local padding = 64
 
 local back = Material("ponder/ui/icon128/back.png", "mips smooth")
