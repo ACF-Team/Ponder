@@ -13,6 +13,16 @@ function Ponder.Storyboard:__new()
     self:SetPrimaryLanguage("en")
 end
 
+
+function Ponder.Storyboard:GetContactInfo()
+    return self.ContactInfo_Name, self.ContactInfo_URL
+end
+
+function Ponder.Storyboard:SetContactInfo(name, url)
+    self.ContactInfo_Name = name
+    self.ContactInfo_URL = url
+end
+
 function Ponder.Storyboard:MarkLanguageAsSupported(langID, isSupported, translationQuality)
     self.SupportedLanguages[langID] = {
         Supported = isSupported == nil and true or isSupported,
