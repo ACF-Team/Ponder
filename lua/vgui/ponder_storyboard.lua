@@ -39,8 +39,7 @@ function PANEL:LoadStoryboard(uuid)
         self.StoryboardLangWarning:Remove()
     end
     local langStatus = self.Storyboard:GetCurrentLanguageQuality()
-
-    if langStatus ~= TranslationQuality.OK then
+    if langStatus ~= TranslationQuality.Supported then
         self.StoryboardLangWarning = self:Add("Ponder.LanguageNotice")
         self.StoryboardLangWarning:SetPos(64, 140)
 
