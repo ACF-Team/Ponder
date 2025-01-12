@@ -49,10 +49,19 @@ function PANEL:Init()
         surface.SetDrawColor(255, 255, 255, 255)
         surface.DrawTexturedRectRotated(w2, h2, w, h, 0)
     end
+
     close:SetTooltipPanelOverride("Ponder.ControlTooltip")
     close:SetTooltipDelay(0)
     self.Birth = CurTime()
     self.Close = close
+
+    if Ponder.Localization.GetLanguageTranslationQuality() ~= Ponder.Localization.TranslationQuality.OK then
+        self.PonderLangNotice = vgui.Create("Ponder.LanguageNotice")
+        self.PonderLangNotice:SetDrawOnTop(true)
+        self.PonderLangNotice:MakePopup()
+        self.PonderLangNotice:InitializeOverallPonderNotice()
+        self.PonderLangNotice:SetPos(32, ScrH() - 64)
+    end
 end
 
 function PANEL:Paint()
@@ -112,7 +121,9 @@ function PANEL:Think()
 end
 
 function PANEL:OnRemove()
-
+    if IsValid(self.PonderLangNotice) then
+        self.PonderLangNotice:Remove()
+    end
 end
 
 derma.DefineControl("Ponder.UI", "Ponder's root UI element", PANEL, "Panel")
