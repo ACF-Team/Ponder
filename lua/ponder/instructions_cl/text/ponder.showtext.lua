@@ -12,13 +12,16 @@ ShowText.TextAlignment            = TEXT_ALIGN_LEFT
 ShowText.PositionRelativeToScreen = false
 -- If true, the text will render on top of Ponder.Renderer's
 ShowText.RenderOnTopOfRenderers   = true
+ShowText.LocalizeText             = true
 
 function ShowText:First(playback)
     local env = playback.Environment
     local txt = env:NewText(self.Name)
 
-    if not self.Markup then
-        self.Markup = "<font=DermaLarge>" .. tostring(self.Text) .. "</font>"
+    local noMarkup = not self.Markup
+    if noMarkup then
+        local txt = tostring(self.Text)
+        self.Markup = "<font=DermaLarge>" .. (self.LocalizeText and language.GetPhrase(txt) or txt) .. "</font>"
     end
 
     txt.Dimension = self.Dimension
@@ -35,7 +38,7 @@ function ShowText:First(playback)
     txt.TextAlignment            = self.TextAlignment
     txt.RenderOnTopOfRenderers   = self.RenderOnTopOfRenderers
 
-    txt:SetMarkup(self.Markup)
+    txt:SetMarkup(noMarkup and self.Markup or language.GetPhrase(self.Markup))
 end
 
 function ShowText:Update(playback)
