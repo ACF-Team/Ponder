@@ -8,8 +8,6 @@ function Ponder.Open(uuid)
 
     if not IsValid(Ponder.UIWindow) then
         Ponder.UIWindow = vgui.Create("Ponder.UI")
-    else
-        Ponder.UIWindow:Remove()
     end
 
     local UI = Ponder.UIWindow
