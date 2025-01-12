@@ -26,12 +26,26 @@ function PANEL:Init()
 end
 
 function PANEL:LoadStoryboard(uuid)
+    local TranslationQuality = Ponder.Localization.TranslationQuality
+
     if self.Environment then
         self.Environment:Free()
     end
 
     self.Storyboard = Ponder.API.GetStoryboard(uuid)
     self.StoryboardIcon:SetStoryboard(self.Storyboard)
+
+    if self.StoryboardLangWarning then
+        self.StoryboardLangWarning:Remove()
+    end
+    local langStatus = self.Storyboard:GetCurrentLanguageQuality()
+
+    if langStatus ~= TranslationQuality.OK then
+        self.StoryboardLangWarning = self:Add("Ponder.LanguageNotice")
+        self.StoryboardLangWarning:SetPos(64, 140)
+
+        self.StoryboardLangWarning:SetTranslationQuality(langStatus)
+    end
 
     if self.Environment then
         self.Environment:Free()
