@@ -55,7 +55,7 @@ function PANEL:Init()
     self.Birth = CurTime()
     self.Close = close
 
-    if Ponder.Localization.GetLanguageTranslationQuality() ~= Ponder.Localization.TranslationQuality.OK then
+    if Ponder.Localization.GetCurrentLanguageTranslationQuality() ~= Ponder.Localization.TranslationQuality.Supported then
         self.PonderLangNotice = vgui.Create("Ponder.LanguageNotice")
         self.PonderLangNotice:SetDrawOnTop(true)
         self.PonderLangNotice:MakePopup()

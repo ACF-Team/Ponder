@@ -42,7 +42,7 @@ Ponder.Localization.TranslationQuality = {
     -- Default value.
     Unsupported = -1,
     -- Human translated, good quality
-    Good = 0,
+    Supported = 0,
     -- Human translated, shaky quality
     Shaky = 50,
     -- Machine translated placeholder, shaky/poor quality, should be replaced with human translation
@@ -68,6 +68,8 @@ function Ponder.Localization.MarkLanguageAsSupported(lang, translationQuality)
 end
 
 function Ponder.Localization.GetLanguageTranslationQuality(lang)
+    if not lang then return Ponder.Localization.GetCurrentLanguageTranslationQuality() end
+
     local langObj = Ponder.Localization.SupportedLanguages[lang]
     if not langObj then return TranslationQuality.Unsupported end
 
@@ -86,11 +88,11 @@ function Ponder.Localization.GetCurrentLanguageTranslationQuality()
     return langObj.TranslationQuality
 end
 
-Ponder.Localization.MarkLanguageAsSupported("en",    TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("en-PT", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("es-ES", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("hr",    TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("cs",    TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("pl",    TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("sk",    TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("ru",    TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("en",    TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("en-PT", TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("es-ES", TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("hr",    TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("cs",    TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("pl",    TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("sk",    TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("ru",    TranslationQuality.Supported)
