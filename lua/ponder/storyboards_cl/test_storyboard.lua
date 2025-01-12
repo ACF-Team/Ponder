@@ -3,8 +3,7 @@ storyboard:WithMenuName("ponder.tests.shower.menuname")
 storyboard:WithPlaybackName("ponder.tests.shower.playname")
 storyboard:WithModelIcon("models/props_interiors/BathTub01a.mdl")
 storyboard:WithDescription(language.GetPhrase("ponder.tests.shower.desc"))
-storyboard:SetPrimaryLanguage("ru")
-storyboard:MarkLanguageAsSupported("en", true, Ponder.Localization.TranslationQuality.Supported)
+storyboard:SetPrimaryLanguage("en")
 
 local chapter1 = storyboard:Chapter()
 chapter1:AddInstruction("PlaceModel", {
