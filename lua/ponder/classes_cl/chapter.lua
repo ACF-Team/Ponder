@@ -39,6 +39,11 @@ function Ponder.Chapter:AddDelay(delay)
     return self:AddInstruction("Delay", {Length = delay})
 end
 
+-- Recommend macro
+function Ponder.Chapter:RecommendStoryboard(uuid)
+    return self:AddInstruction("RecommendStoryboard", {Storyboard = uuid})
+end
+
 function Ponder.Chapter:Recalculate()
     --table.SortByMember(self.Instructions, "Time", true)
     local l = 0
