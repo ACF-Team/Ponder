@@ -1,6 +1,6 @@
 Ponder.Storyboard = Ponder.SimpleClass()
 
-local TRANSLATION_QUALITY_OK = Ponder.Localization.TranslationQuality.OK
+local TRANSLATION_QUALITY_OK = Ponder.Localization.TranslationQuality.Supported
 local TRANSLATION_QUALITY_UNSUPPORTED = Ponder.Localization.TranslationQuality.Unsupported
 
 function Ponder.Storyboard:__new()
