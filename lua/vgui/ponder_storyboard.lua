@@ -143,6 +143,10 @@ function PANEL:SetStoryboard(storyboardUUID)
     self:SetWide(self:GetWide() + 16)
 end
 
+function PANEL:Think()
+    self:MoveToFront()
+end
+
 function PANEL:DoClick()
     Ponder.Open(self.Storyboard)
 end
