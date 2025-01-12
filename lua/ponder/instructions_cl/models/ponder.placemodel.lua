@@ -16,8 +16,14 @@ end
 function PlaceModel:First(playback)
     local env = playback.Environment
     local mdl = env:NewModel(self.Model, self.Name)
-    mdl.IdentifyAs = self.IdentifyAs
-    mdl.IdentifyMarkup = self.IdentifyMarkup
+
+    if self.IdentifyAs then
+        mdl.IdentifyAs = language.GetPhrase(self.IdentifyAs)
+    end
+
+    if self.IdentifyMarkup then
+        mdl.IdentifyMarkup = language.GetPhrase(self.IdentifyMarkup)
+    end
 
     if self.ParentTo then
         local parent = env:GetNamedModel(self.ParentTo)
