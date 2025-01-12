@@ -56,3 +56,4 @@ chapter2:AddInstruction("ShowText", {
     Position = Vector(-35.834717, 10.808605, 36.374023)
 })
 chapter2:AddInstruction("Delay", {Time = 0, Length = 6})
+chapter2:RecommendStoryboard("ponder.tests.taking-a-shower")
