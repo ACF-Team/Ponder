@@ -2,7 +2,6 @@ Ponder.Storyboard = Ponder.SimpleClass()
 
 local TRANSLATION_QUALITY_OK = Ponder.Localization.TranslationQuality.OK
 local TRANSLATION_QUALITY_UNSUPPORTED = Ponder.Localization.TranslationQuality.Unsupported
-local Oxygen_Language = Material("ponder/ui/icon64/oxygen_language.png", "mips smooth")
 
 function Ponder.Storyboard:__new()
     self.Chapters = {}
@@ -11,7 +10,7 @@ function Ponder.Storyboard:__new()
     self.BaseEntityModelPath = "models/hunter/blocks/cube150x150x025.mdl"
     self.SupportedLanguages = {}
 
-    self:MarkLanguageAsSupported("en", true, TRANSLATION_QUALITY_OK)
+    self:SetPrimaryLanguage("en")
 end
 
 function Ponder.Storyboard:MarkLanguageAsSupported(langID, isSupported, translationQuality)
@@ -21,8 +20,14 @@ function Ponder.Storyboard:MarkLanguageAsSupported(langID, isSupported, translat
     }
 end
 
+function Ponder.Storyboard:SetPrimaryLanguage(langID)
+    self.PrimaryLanguage = langID
+end
+
 function Ponder.Storyboard:GetCurrentLanguageQuality()
     local langID  = Ponder.Localization.GetCurrentLangID()
+    if langID == self.PrimaryLanguage then return TRANSLATION_QUALITY_OK end
+
     local langObj = self.SupportedLanguages[langID]
 
     return langObj and (langObj.TranslationQuality or TRANSLATION_QUALITY_UNSUPPORTED) or TRANSLATION_QUALITY_UNSUPPORTED
