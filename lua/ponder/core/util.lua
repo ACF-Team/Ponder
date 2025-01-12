@@ -30,5 +30,20 @@ if CLIENT then
         weight = 900,
         antialias = true
     })
+
+    surface.CreateFont("Ponder.TitleText", {
+        font = "Tahoma",
+        extended = false,
+        size = 16,
+        weight = 900,
+        antialias = true
+    })
+    surface.CreateFont("Ponder.DescText", {
+        font = "Tahoma",
+        extended = false,
+        size = 13,
+        weight = 900,
+        antialias = true
+    })
 end
 function Ponder.IsStringNilOrEmpty(s) return s == nil or #string.Trim(s) == 0 end
