@@ -56,6 +56,11 @@ function Ponder.Localization.LangIDToLanguageName(langID)
     return __LangIDToLanguageName[langID]
 end
 
+function Ponder.Localization.GetCurrentLangName()
+    local id = Ponder.Localization.GetCurrentLangID()
+    return __LangIDToLanguageName[id]
+end
+
 function Ponder.Localization.MarkLanguageAsSupported(lang, translationQuality)
     Ponder.Localization.SupportedLanguages[lang] = {
         TranslationQuality = translationQuality
@@ -74,7 +79,6 @@ function Ponder.Localization.GetCurrentLangID()
     return ret == "" and "en" or (ret or "en") -- Is this even needed??
 end
 
-
 function Ponder.Localization.GetCurrentLanguageTranslationQuality()
     local langObj = Ponder.Localization.SupportedLanguages[GetConVar("gmod_language"):GetString()]
     if not langObj then return TranslationQuality.Unsupported end
@@ -82,11 +86,11 @@ function Ponder.Localization.GetCurrentLanguageTranslationQuality()
     return langObj.TranslationQuality
 end
 
-Ponder.Localization.MarkLanguageAsSupported("en", TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("en",    TranslationQuality.Good)
 Ponder.Localization.MarkLanguageAsSupported("en-PT", TranslationQuality.Good)
 Ponder.Localization.MarkLanguageAsSupported("es-ES", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("hr", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("cs", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("pl", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("sk", TranslationQuality.Good)
-Ponder.Localization.MarkLanguageAsSupported("ru", TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("hr",    TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("cs",    TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("pl",    TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("sk",    TranslationQuality.Good)
+Ponder.Localization.MarkLanguageAsSupported("ru",    TranslationQuality.Good)
