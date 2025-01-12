@@ -23,9 +23,8 @@ function Ponder.Storyboard:SetContactInfo(name, url)
     self.ContactInfo_URL = url
 end
 
-function Ponder.Storyboard:MarkLanguageAsSupported(langID, isSupported, translationQuality)
+function Ponder.Storyboard:MarkLanguageAsSupported(langID, translationQuality)
     self.SupportedLanguages[langID] = {
-        Supported = isSupported == nil and true or isSupported,
         Quality = translationQuality == nil and TRANSLATION_QUALITY_OK or translationQuality
     }
 end
@@ -40,7 +39,7 @@ function Ponder.Storyboard:GetCurrentLanguageQuality()
 
     local langObj = self.SupportedLanguages[langID]
 
-    return langObj and (langObj.TranslationQuality or TRANSLATION_QUALITY_UNSUPPORTED) or TRANSLATION_QUALITY_UNSUPPORTED
+    return langObj and (langObj.Quality or TRANSLATION_QUALITY_UNSUPPORTED) or TRANSLATION_QUALITY_UNSUPPORTED
 end
 
 function Ponder.Storyboard:SetupFirstChapter(chapter)
