@@ -12,7 +12,7 @@ function PlaySound:First(playback)
         ply.Ponder3DSounds = {}
     end
 
-    local mdlSound = CreateSound(LocalPlayer(), self.Sound)
+    local mdlSound = playback.Environment:CreateSound(LocalPlayer(), self.Sound)
     self.ActiveSound = mdlSound
     mdlSound:PlayEx(self.Volume, self.Pitch)
 end

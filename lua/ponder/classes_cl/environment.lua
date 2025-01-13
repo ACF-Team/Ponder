@@ -43,6 +43,7 @@ end
 function Ponder.Environment:__new()
     self.ClientsideModels = NamedList()
     self.NamedTextObjects = NamedList()
+    self.SoundPatches     = {}
 
     self.CustomNamedLists = {}
     for k in pairs(Ponder.API.GetNamedObjectImplementors()) do
@@ -80,6 +81,12 @@ function Ponder.Environment:GetAllNamedObjects(listname)
     if not list then return ErrorNoHaltWithStack("Ponder.Environment: No NamedList with the name '" .. listname .. "'") end
 
     return list.List
+end
+
+function Ponder.Environment:CreateSound(...)
+    local soundPatch = CreateSound(...)
+    self.SoundPatches[#self.SoundPatches + 1] = soundPatch
+    return soundPatch
 end
 
 function Ponder.Environment:RemoveNamedObject(listname, object)
@@ -164,10 +171,12 @@ function Ponder.Environment:RemoveTextByName(name)
 end
 
 function Ponder.Environment:Free()
+    for _, v in ipairs(self.SoundPatches) do v:Stop() end
     for _, v in ipairs(self.ClientsideModels.List) do v:Remove() end
 
     self.ClientsideModels:Clear()
     self.NamedTextObjects:Clear()
+    table.Empty(self.SoundPatches)
 
     for _, v in pairs(self.CustomNamedLists) do
         v:Clear(function(x) x:Remove() end)
