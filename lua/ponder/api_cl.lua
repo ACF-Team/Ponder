@@ -141,6 +141,7 @@ function API.GetCategoryStoryboardList(addon_name, category_name)
     if not category then return {} end
 
     local lookup = API.RegisteredACSLookup[addon_name][category_name]
+    if not lookup then return {} end
 
     local items = {}
     for _, v in pairs(lookup) do items[#items + 1] = v end
