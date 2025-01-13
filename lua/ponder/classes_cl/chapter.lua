@@ -8,6 +8,11 @@ function Ponder.Chapter:__new(storyboard)
 end
 
 function Ponder.Chapter:AddInstruction(instruction_type, instruction_params)
+    -- THIS SHOULD BE REMOVED AFTER THE NEXT ACF-3 DEV BRANCH -> MASTER MERGE
+    -- This is just so absolutely nothing breaks when I update Ponder on the
+    -- workshop while ACF is using an outdated instruction name.
+    if instruction_type == "MultiParent" then instruction_type = "Tools.MultiParent" end
+
     local instr = Ponder.API.RegisteredInstructions[instruction_type]
     if not instr then return Ponder.Print("No instruction " .. instruction_type) end
 
