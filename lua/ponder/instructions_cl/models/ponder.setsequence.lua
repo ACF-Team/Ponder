@@ -12,11 +12,11 @@ function SetSequence:First(playback)
     self.SequenceDuration = object:SequenceDuration(object:LookupSequence(self.Sequence))
     self.Length = self.Loop and 0 or self.SequenceDuration
     object:SetSequence(self.Sequence)
-    local start = CurTime()
+    local start = playback.Time
     hook.Add("Think", object, function()
         if not IsValid(object) then return end
 
-        local t = ((CurTime() - start) * self.Speed) / self.SequenceDuration
+        local t = ((playback.Time - start) * self.Speed) / self.SequenceDuration
         object:SetCycle(t)
     end)
 end
