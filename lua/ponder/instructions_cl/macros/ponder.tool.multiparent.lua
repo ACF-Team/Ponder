@@ -1,4 +1,4 @@
-local MultiParent = Ponder.API.NewInstructionMacro("MultiParent")
+local MultiParent = Ponder.API.NewInstructionMacro("Tools.MultiParent")
 
 function MultiParent:Run(chapter, parameters)
     local length = parameters.Length or 1
