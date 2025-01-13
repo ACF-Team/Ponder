@@ -94,9 +94,9 @@ local function sortByName(tab)
 
         if isstring(aMemberName) then
             if bReverse then
-                return language.GetPhrase(aMemberName:lower()) < language.GetPhrase(bMemberName:lower())
+                return aMemberName:lower() < bMemberName:lower()
             else
-                return language.GetPhrase(aMemberName:lower()) > language.GetPhrase(bMemberName:lower())
+                return aMemberName:lower() > bMemberName:lower()
             end
         end
 
@@ -108,7 +108,7 @@ local function sortByName(tab)
 
     end
 
-    table.sort(tab, function(a, b) return TableMemberSort(a, b, "Name", false) end)
+    table.sort(tab, function(a, b) return TableMemberSort(b, a, "Name", false) end)
 end
 
 -- Gets all addons
