@@ -8,7 +8,7 @@ function PANEL:Init()
     self.Icon:SetMouseInputEnabled(false)
     self.Icon:SetKeyboardInputEnabled(false)
     self.Icon:SetPos(-5000, padding)
-    self:SetSize(ScrW() - 192, 76)
+    self:SetSize(ScrW() - 500, 76)
     self.Icon:SetVisible(false)
 end
 
