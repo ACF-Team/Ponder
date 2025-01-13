@@ -11,6 +11,7 @@ function Ponder.Open(uuid)
     end
 
     local UI = Ponder.UIWindow
+    UI:PonderShow()
     UI:LoadStoryboard(uuid)
 end
 
