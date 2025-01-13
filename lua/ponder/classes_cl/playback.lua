@@ -117,7 +117,7 @@ function Ponder.Playback:FinalizeInstructionIndex(instrIndex)
 end
 
 function Ponder.Playback:IsInstructionIndexLengthless(instrIndex)
-    return self.InstructionIndices[instrIndex].Length == 0
+    return self.InstructionIndices[instrIndex].Instruction.Length == 0
 end
 
 function Ponder.Playback:RunLengthlessInstructionIndex(instrIndex)
@@ -197,6 +197,7 @@ function Ponder.Playback:ToggleIdentify()
 end
 
 function Ponder.Playback:GetInstructionProgress(instruction)
+    if instruction.Length == 0 then return 1 end
     local curChapTime = self:GetChapter().StartTime
     return math.Clamp(math.Remap(self.Time, curChapTime + instruction.Time, curChapTime + instruction.Time + instruction.Length, 0, 1), 0, 1)
 end
@@ -357,13 +358,19 @@ function Ponder.Playback:SeekChapter(chapterIndex)
     local seekChapter = self.Storyboard.Chapters[chapterIndex]
     self.Time = seekChapter.StartTime
 
-    for _, instruction in ipairs(seekChapter.Instructions) do
+    self:ClearInstructionIndices()
+    self:InitializeInstructionIndices()
+
+    for instrIndex, instruction in ipairs(seekChapter.Instructions) do
         if instruction.Time == 0 then
-            instruction:First(self)
+            if self:IsInstructionIndexLengthless(instrIndex) then
+                self:RunLengthlessInstructionIndex(instrIndex)
+            else
+                self:StartInstructionIndex(instrIndex)
+                self:UpdateInstructionIndex(instrIndex)
+            end
         end
     end
 
-    self:ClearInstructionIndices()
-    self:InitializeInstructionIndices()
     self.Seeking = false
 end
