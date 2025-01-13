@@ -20,3 +20,9 @@ end, "Open the Ponder storyboard for the given UUID")
 concommand.Add("ponder_index", function(_, _, _)
     Ponder.OpenIndex()
 end, nil, "Open the Ponder index")
+
+concommand.Add("ponder_restore", function(_, _, _)
+    local UI = Ponder.UIWindow
+    if not IsValid(UI) then return Ponder.Print("The Ponder UI is not minimized, so it cannot be restored") end
+    UI:PonderShow()
+end, nil, "Re-opens the Ponder window")
