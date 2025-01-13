@@ -12,7 +12,7 @@ function SetSequence:First(playback)
     self.SequenceDuration = object:SequenceDuration(object:LookupSequence(self.Sequence))
     self.Length = self.Loop and 0 or self.SequenceDuration
     object:SetSequence(self.Sequence)
-    local start = playback.Time
+    local start = playback:GetInstructionStartTime(self)
     hook.Add("Think", object, function()
         if not IsValid(object) then return end
 

@@ -201,6 +201,10 @@ function Ponder.Playback:GetInstructionProgress(instruction)
     return math.Clamp(math.Remap(self.Time, curChapTime + instruction.Time, curChapTime + instruction.Time + instruction.Length, 0, 1), 0, 1)
 end
 
+function Ponder.Playback:GetInstructionStartTime(instruction)
+    return instruction.Chapter.StartTime + instruction.Time
+end
+
 function Ponder.Playback:SetChapter(chapterIndex)
     local oldC = self.Chapter or 1
 
