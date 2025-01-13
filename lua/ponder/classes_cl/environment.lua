@@ -170,6 +170,26 @@ function Ponder.Environment:RemoveTextByName(name)
     self.NamedTextObjects:RemoveByName(name)
 end
 
+function Ponder.Environment:Halt()
+    for _, v in pairs(self.CustomNamedLists) do
+        for _, o in ipairs(v.List) do
+            if o.Ponder_OnHalt then
+                o:Ponder_OnHalt(self)
+            end
+        end
+    end
+end
+
+function Ponder.Environment:Continue()
+    for _, v in pairs(self.CustomNamedLists) do
+        for _, o in ipairs(v.List) do
+            if o.Ponder_OnContinue then
+                o:Ponder_OnContinue(self)
+            end
+        end
+    end
+end
+
 function Ponder.Environment:Free()
     for _, v in ipairs(self.SoundPatches) do v:Stop() end
     for _, v in ipairs(self.ClientsideModels.List) do v:Remove() end
@@ -205,11 +225,12 @@ function Ponder.Environment:SetCameraFOV(nFOV)
 end
 
 function Ponder.Environment:BuildCamera()
+    local __MinimizeState = Ponder.__MinimizeState
     self.Camera = {
-        x = 0,
-        y = 0,
-        w = ScrW(),
-        h = ScrH(),
+        x = __MinimizeState and __MinimizeState.X or 0,
+        y = __MinimizeState and __MinimizeState.Y or 0,
+        w = __MinimizeState and __MinimizeState.W or ScrW(),
+        h = __MinimizeState and __MinimizeState.H or ScrH(),
         type = "3D",
         origin = self.CameraPosition,
         angles = self.CameraAngles,
@@ -250,7 +271,9 @@ local magnifier = Material("ponder/ui/icon64/magnifier_no_back.png", "mips smoot
 
 function Ponder.Environment:Render()
     self:BuildCamera()
+
     cam.Start(self.Camera)
+
     self.Rendering3D = true
     if self.Fullbright then
         render.SuppressEngineLighting(true)
@@ -277,7 +300,7 @@ function Ponder.Environment:Render()
         end
         render.SetColorModulation(1, 1, 1)
     end
-    for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render3D(self) end
+    for _, v in pairs(Ponder.API.RegisteredRenderers) do if v.Render3D then v:Render3D(self) end end
     if self.Render3D then self:Render3D() end
 
     render.SuppressEngineLighting(false)
@@ -290,7 +313,7 @@ function Ponder.Environment:Render()
         if not v.RenderOnTopOfRenderers then v:Render() end
     end
 
-    for _, v in pairs(Ponder.API.RegisteredRenderers) do v:Render2D(self) end
+    for _, v in pairs(Ponder.API.RegisteredRenderers) do if v.Render2D then v:Render2D(self) end end
     if self.Render2D then self:Render2D() end
 
     for _, v in ipairs(self.NamedTextObjects.List) do
