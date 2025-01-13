@@ -16,6 +16,72 @@ function PANEL:Init()
     local close = self:Add("DButton")
     close:SetSize(64, 64)
     close:SetPos(ScrW() - 64 - padding, padding)
+
+    local minimize = self:Add("DButton")
+    minimize:SetSize(64, 64)
+    minimize:SetPos(ScrW() - 97 - (padding * 2), padding)
+    minimize:SetText("TempMin")
+
+    local nointeraction = false
+    local minimizeOpener
+
+    function minimize.DoClick()
+        if nointeraction then return end
+
+        self:PonderHide()
+    end
+
+    function self:PonderShow()
+        if not IsValid(minimizeOpener) then
+            self:SetVisible(true)
+            self:SetPaintedManually(false)
+            return
+        end
+
+        self:SetVisible(true)
+        self:SetPaintedManually(true)
+        self:SetMouseInputEnabled(true)
+        self:SetKeyboardInputEnabled(true)
+
+        minimizeOpener:StartRestore()
+
+        nointeraction = true
+        timer.Simple(Ponder.UI_RESTORE_TIME, function()
+            nointeraction = false
+            self:SetPaintedManually(false)
+            if IsValid(self.MainPanel) and self.MainPanel.OnShowComplete then
+                self.MainPanel:OnShowComplete()
+            end
+
+            if IsValid(minimizeOpener) then
+                minimizeOpener:Remove()
+            end
+        end)
+    end
+
+    function self:SetMinimizeModelIcon(modelIcon)
+        minimizeOpener:SetModelIcon(modelIcon)
+    end
+    function self:PonderHide()
+        self:SetPaintedManually(true)
+        self:SetMouseInputEnabled(false)
+        self:SetKeyboardInputEnabled(false)
+
+        minimizeOpener = vgui.Create("Ponder.MinimizedOpener")
+        minimizeOpener:SetupUI(self)
+        minimizeOpener:StartMinimize()
+
+        if IsValid(self.MainPanel) and self.MainPanel.OnHideStarted then
+            self.MainPanel:OnHideStarted()
+        end
+
+        nointeraction = true
+        timer.Simple(Ponder.UI_MINIMIZE_TIME, function()
+            nointeraction = false
+            self:SetVisible(false)
+        end)
+    end
+
     function close.DoClick()
         if #self.Actions <= 0 then
             self:Remove()
@@ -26,6 +92,7 @@ function PANEL:Init()
         end
         self:UpdateTooltip()
     end
+
     function self:AddBackAction(text, action)
         self.Actions[#self.Actions + 1] = {
             callback = action,
@@ -33,6 +100,7 @@ function PANEL:Init()
         }
         self:UpdateTooltip()
     end
+
     function self:UpdateTooltip()
         local action = self.Actions[#self.Actions]
         if not action then
@@ -41,6 +109,15 @@ function PANEL:Init()
             close:SetTooltip(action.text)
         end
     end
+
+    function self:ShowMinimize()
+        minimize:SetVisible(true)
+    end
+
+    function self:HideMinimize()
+        minimize:SetVisible(false)
+    end
+
     self:UpdateTooltip()
     close:SetText("")
     function close:Paint(w, h)
@@ -52,8 +129,14 @@ function PANEL:Init()
 
     close:SetTooltipPanelOverride("Ponder.ControlTooltip")
     close:SetTooltipDelay(0)
+
+    minimize:SetTooltipPanelOverride("Ponder.ControlTooltip")
+    minimize:SetTooltipDelay(0)
+    minimize:SetTooltip(language.GetPhrase("ponder.minimize"))
+
     self.Birth = CurTime()
     self.Close = close
+    self.Minimize = minimize
 
     if Ponder.Localization.GetCurrentLanguageTranslationQuality() ~= Ponder.Localization.TranslationQuality.Supported then
         self.PonderLangNotice = vgui.Create("Ponder.LanguageNotice")
@@ -61,6 +144,10 @@ function PANEL:Init()
         self.PonderLangNotice:MakePopup()
         self.PonderLangNotice:InitializeOverallPonderNotice()
         self.PonderLangNotice:SetPos(32, ScrH() - 64)
+    end
+
+    function minimize:Think()
+        self:MoveToFront()
     end
 end
 
@@ -73,10 +160,11 @@ function PANEL:Paint()
         surface.SetMaterial(matBlurScreen)
         surface.SetDrawColor(255, 255, 255, 255)
 
+        if Ponder.__MinimizeState and render then render.UpdateScreenEffectTexture() end
         for i = 0.33, 1, 0.33 do
             matBlurScreen:SetFloat("$blur", Fraction * 5 * i)
             matBlurScreen:Recompute()
-            if render then render.UpdateScreenEffectTexture() end
+            if not Ponder.__MinimizeState and render then render.UpdateScreenEffectTexture() end
             surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH())
         end
     end
@@ -118,6 +206,9 @@ end
 
 function PANEL:Think()
     self.Close:MoveToFront()
+    if self.PonderThink then
+        self:PonderThink()
+    end
 end
 
 function PANEL:OnRemove()
