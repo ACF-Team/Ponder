@@ -97,4 +97,20 @@ function PANEL:OnRemove()
     self.Environment:Free()
 end
 
+function PANEL:OnHideStarted()
+    if not self.Playback then return end
+    self.PauseState = self.Playback.Paused
+    self.Playback:Pause()
+    self.Playback.Environment:Halt()
+    Ponder.UIWindow:SetMinimizeModelIcon(self.Storyboard.ModelIcon)
+end
+
+function PANEL:OnShowComplete()
+    if not self.Playback then return end
+    self.Playback.Environment:Continue()
+    if not self.PauseState then
+        self.Playback:Play()
+    end
+end
+
 derma.DefineControl("Ponder.Storyboard", "Ponder's storyboard visualizer", PANEL, "Panel")
