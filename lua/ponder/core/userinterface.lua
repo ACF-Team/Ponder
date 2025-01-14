@@ -8,6 +8,10 @@ hook.Add("PopulateMenuBar", "Ponder.PopulateMenuBar.InsertMenuOption", function(
     b:SizeToContentsX(16)
 
     function b:DoClick()
-        Ponder.OpenIndex()
+        if IsValid(Ponder.UIWindow) then
+            Ponder.UIWindow:PonderShow()
+        else
+            Ponder.OpenIndex()
+        end
     end
 end)
