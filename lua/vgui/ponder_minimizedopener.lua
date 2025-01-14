@@ -56,6 +56,7 @@ local function DrawUI(self, alphaProgress, scaleProgress, translationProgress)
     matrix:Identity()
 
     surface.SetAlphaMultiplier(alphaProgress)
+
     local scrw, scrh = ScrW(), ScrH()
     local sW = math.Remap(scaleProgress, 0, 1, 1, self:GetWide() / scrw)
     local sH = math.Remap(scaleProgress, 0, 1, 1, self:GetTall() / scrh)
@@ -113,7 +114,6 @@ function MINIMIZED_OPENER:Paint(w, h)
 
     local time = CurTime() - self.Start
     if self.State == -1 then
-        Ponder.__MinimizeState = nil
         DButton.Paint(self, w, h)
         self.Icon:PaintManual()
     elseif self.State == 0 then
@@ -129,13 +129,15 @@ function MINIMIZED_OPENER:Paint(w, h)
         end
     elseif self.State == 1 then
         local progress = math.Clamp(time / Ponder.UI_RESTORE_TIME, 0, 1)
+        local scaleProgress = math.ease.InSine(1 - progress)
+        local translationProgress = math.ease.InCubic(1 - progress)
+        DrawUI(self, progress, scaleProgress, translationProgress)
+        DrawButton(self, 1 - progress, scaleProgress, translationProgress)
+
         if progress >= 1 then
-            self.State = -1
-        else
-            local scaleProgress = math.ease.InSine(1 - progress)
-            local translationProgress = math.ease.InCubic(1 - progress)
-            DrawUI(self, progress, scaleProgress, translationProgress)
-            DrawButton(self, 1 - progress, scaleProgress, translationProgress)
+            self.State = -2
+            Ponder.__MinimizeState = nil
+            self.UI:SetPaintedManually(false)
         end
     end
 

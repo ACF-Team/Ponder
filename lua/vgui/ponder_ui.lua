@@ -48,7 +48,9 @@ function PANEL:Init()
         nointeraction = true
         timer.Simple(Ponder.UI_RESTORE_TIME, function()
             nointeraction = false
-            self:SetPaintedManually(false)
+
+            if not IsValid(self) then return end
+
             if IsValid(self.MainPanel) and self.MainPanel.OnShowComplete then
                 self.MainPanel:OnShowComplete()
             end
@@ -56,6 +58,9 @@ function PANEL:Init()
             if IsValid(minimizeOpener) then
                 minimizeOpener:Remove()
             end
+
+            Ponder.__MinimizeState = nil
+            self:SetPaintedManually(false)
         end)
     end
 
@@ -160,11 +165,12 @@ function PANEL:Paint()
         surface.SetMaterial(matBlurScreen)
         surface.SetDrawColor(255, 255, 255, 255)
 
-        if Ponder.__MinimizeState and render then render.UpdateScreenEffectTexture() end
-        for i = 0.33, 1, 0.33 do
+        local did = Ponder.__MinimizeState ~= nil
+        if did and render then render.UpdateScreenEffectTexture() end
+        for i = 0.33, 1, 1 do
             matBlurScreen:SetFloat("$blur", Fraction * 5 * i)
             matBlurScreen:Recompute()
-            if not Ponder.__MinimizeState and render then render.UpdateScreenEffectTexture() end
+            if not did and render then render.UpdateScreenEffectTexture() end
             surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH())
         end
     end
