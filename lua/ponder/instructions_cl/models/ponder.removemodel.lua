@@ -4,6 +4,7 @@ RemoveModel.GoTo       = Vector(0, 0, 32)
 RemoveModel.RotateTo   = Angle(0, 0, 0)
 RemoveModel.Length    = .5
 RemoveModel.LocalTransform = true
+RemoveModel.LocalToParent = true
 
 function RemoveModel:First(playback)
     local env = playback.Environment
@@ -24,11 +25,22 @@ function RemoveModel:Update(playback)
     local object = env:GetNamedModel(self.Name)
 
     if self.LocalTransform then
+        local pos = self.Position
+        local ang = self.Angles
+
+        if self.LocalToParent and self.ParentTo then
+            local parent = env:GetNamedModel(self.ParentTo)
+            if IsValid(parent) then
+                pos = parent:LocalToWorld(pos)
+                ang = parent:LocalToWorldAngles(ang)
+            end
+        end
+
         local p, a = LocalToWorld(
             LerpVector(progress, vector_origin, self.GoTo),
             LerpAngle(progress, angle_zero, self.RotateTo),
-            self.Position,
-            self.Angles
+            pos,
+            ang
         )
 
         object:SetPos(p)

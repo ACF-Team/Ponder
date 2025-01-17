@@ -8,6 +8,7 @@ PlaceModel.RotateFrom = Angle(0, 0, 0)
 PlaceModel.Time       = 0
 PlaceModel.Length     = .5
 PlaceModel.LocalTransform = true
+PlaceModel.LocalToParent = true
 
 function PlaceModel:Preload()
     util.PrecacheModel(self.Model)
@@ -40,7 +41,19 @@ function PlaceModel:First(playback)
     end
 
     if self.LocalTransform then
-        local p, a = LocalToWorld(self.ComeFrom, self.RotateFrom, self.Position, self.Angles)
+        local pos = self.Position
+        local ang = self.Angles
+
+        if self.LocalToParent and self.ParentTo then
+            local parent = env:GetNamedModel(self.ParentTo)
+            if IsValid(parent) then
+                pos = parent:LocalToWorld(pos)
+                ang = parent:LocalToWorldAngles(ang)
+            end
+        end
+
+        local p, a = LocalToWorld(self.ComeFrom, self.RotateFrom, pos, ang)
+
         mdl:SetPos(p)
         mdl:SetAngles(a)
     else
@@ -62,11 +75,22 @@ function PlaceModel:Update(playback)
     local object = env:GetNamedModel(self.Name)
 
     if self.LocalTransform then
+        local pos = self.Position
+        local ang = self.Angles
+
+        if self.LocalToParent and self.ParentTo then
+            local parent = env:GetNamedModel(self.ParentTo)
+            if IsValid(parent) then
+                pos = parent:LocalToWorld(pos)
+                ang = parent:LocalToWorldAngles(ang)
+            end
+        end
+
         local p, a = LocalToWorld(
             LerpVector(progress, self.ComeFrom, vector_origin),
             LerpAngle(progress, self.RotateFrom, angle_zero),
-            self.Position,
-            self.Angles
+            pos,
+            ang
         )
         object:SetPos(p)
         object:SetAngles(a)
