@@ -89,6 +89,7 @@ function Ponder.Localization.GetCurrentLanguageTranslationQuality()
 end
 
 Ponder.Localization.MarkLanguageAsSupported("en",    TranslationQuality.Supported)
+Ponder.Localization.MarkLanguageAsSupported("fr",    TranslationQuality.Supported)
 Ponder.Localization.MarkLanguageAsSupported("en-PT", TranslationQuality.Supported)
 Ponder.Localization.MarkLanguageAsSupported("es-ES", TranslationQuality.Supported)
 Ponder.Localization.MarkLanguageAsSupported("hr",    TranslationQuality.Supported)
