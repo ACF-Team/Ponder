@@ -6,6 +6,7 @@ DEFINE_BASECLASS("Panel")
 local padding = 64
 
 local back = Material("ponder/ui/icon128/back.png", "mips smooth")
+local min  = Material("ponder/ui/icon128/min.png",  "mips smooth")
 
 function PANEL:Init()
     self:SetSize(ScrW(), ScrH())
@@ -20,7 +21,6 @@ function PANEL:Init()
     local minimize = self:Add("DButton")
     minimize:SetSize(64, 64)
     minimize:SetPos(ScrW() - 97 - (padding * 2), padding)
-    minimize:SetText("TempMin")
 
     local nointeraction = false
     local minimizeOpener
@@ -128,6 +128,14 @@ function PANEL:Init()
     function close:Paint(w, h)
         local w2, h2 = w / 2, h / 2
         surface.SetMaterial(back)
+        surface.SetDrawColor(255, 255, 255, 255)
+        surface.DrawTexturedRectRotated(w2, h2, w, h, 0)
+    end
+
+    minimize:SetText("")
+    function minimize:Paint(w, h)
+        local w2, h2 = w / 2, h / 2
+        surface.SetMaterial(min)
         surface.SetDrawColor(255, 255, 255, 255)
         surface.DrawTexturedRectRotated(w2, h2, w, h, 0)
     end
