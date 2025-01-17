@@ -51,9 +51,9 @@ function TransformModel:Update(playback)
     end
 
     if object.PONDER_TARG_SCA then
-        mdl.Scale = LerpVector(progress, object.PONDER_LAST_SCA, object.PONDER_TARG_SCA)
+        object.Scale = LerpVector(progress, object.PONDER_LAST_SCA, object.PONDER_TARG_SCA)
         local mat = Matrix()
-        mat:Scale(mdl.Scale)
-        mdl:EnableMatrix("RenderMultiply", mat)
+        mat:Scale(object.Scale)
+        object:EnableMatrix("RenderMultiply", mat)
     end
 end

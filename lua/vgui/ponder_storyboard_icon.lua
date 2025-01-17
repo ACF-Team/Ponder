@@ -8,7 +8,7 @@ function PANEL:Init()
     self.Icon:SetMouseInputEnabled(false)
     self.Icon:SetKeyboardInputEnabled(false)
     self.Icon:SetPos(-5000, padding)
-    self:SetSize(ScrW() - 192, 76)
+    self:SetSize(ScrW() - 500, 76)
     self.Icon:SetVisible(false)
 end
 
@@ -34,6 +34,9 @@ function PANEL:Paint()
     local animGradient = math.ease.OutCirc(animTime)
     local animXGrad = (1 - math.ease.OutQuart(animTime)) * 64
 
+    COLOR_Title:SetUnpacked(170, 170, 170, animGradient * 255)
+    COLOR_Subtitle:SetUnpacked(245, 245, 245, animGradient * 255)
+
     surface.DrawTexturedRect(padding - animXGrad, padding - 12, 500 * animGradient, 48 + 32, 0)
     surface.DrawTexturedRectRotated(padding - animXGrad - (size / 2), (padding - 12) + 40, size, 80, 180)
 
@@ -41,6 +44,7 @@ function PANEL:Paint()
     draw.SimpleText(language.GetPhrase(self.Storyboard.PlaybackName or self.Storyboard.MenuName), "Ponder.Subtitle", 76 + padding - animXGrad, padding + 16 + 6, COLOR_Subtitle)
 
     self.Icon:SetPos(padding - animXGrad, padding)
+    self.Icon:SetAlpha(animGradient * 255)
     local pX, pY = self:LocalToScreen(0, 0)
     self.Icon:PaintAt(pX + (padding - animXGrad), pY + padding)
     DisableClipping(false)

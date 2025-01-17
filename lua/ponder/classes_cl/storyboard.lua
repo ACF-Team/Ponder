@@ -1,10 +1,45 @@
 Ponder.Storyboard = Ponder.SimpleClass()
 
+local TRANSLATION_QUALITY_OK = Ponder.Localization.TranslationQuality.Supported
+local TRANSLATION_QUALITY_UNSUPPORTED = Ponder.Localization.TranslationQuality.Unsupported
+
 function Ponder.Storyboard:__new()
     self.Chapters = {}
     self.Length = 0
     self.IndexOrder = -1
     self.BaseEntityModelPath = "models/hunter/blocks/cube150x150x025.mdl"
+    self.SupportedLanguages = {}
+
+    self:SetPrimaryLanguage("en")
+end
+
+
+function Ponder.Storyboard:GetContactInfo()
+    return self.ContactInfo_Name, self.ContactInfo_URL
+end
+
+function Ponder.Storyboard:SetContactInfo(name, url)
+    self.ContactInfo_Name = name
+    self.ContactInfo_URL = url
+end
+
+function Ponder.Storyboard:MarkLanguageAsSupported(langID, translationQuality)
+    self.SupportedLanguages[langID] = {
+        Quality = translationQuality == nil and TRANSLATION_QUALITY_OK or translationQuality
+    }
+end
+
+function Ponder.Storyboard:SetPrimaryLanguage(langID)
+    self.PrimaryLanguage = langID
+end
+
+function Ponder.Storyboard:GetCurrentLanguageQuality()
+    local langID  = Ponder.Localization.GetCurrentLangID()
+    if langID == self.PrimaryLanguage then return TRANSLATION_QUALITY_OK end
+
+    local langObj = self.SupportedLanguages[langID]
+
+    return langObj and (langObj.Quality or TRANSLATION_QUALITY_UNSUPPORTED) or TRANSLATION_QUALITY_UNSUPPORTED
 end
 
 function Ponder.Storyboard:SetupFirstChapter(chapter)

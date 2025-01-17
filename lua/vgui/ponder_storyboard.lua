@@ -26,12 +26,26 @@ function PANEL:Init()
 end
 
 function PANEL:LoadStoryboard(uuid)
+    local TranslationQuality = Ponder.Localization.TranslationQuality
+
     if self.Environment then
         self.Environment:Free()
     end
 
     self.Storyboard = Ponder.API.GetStoryboard(uuid)
     self.StoryboardIcon:SetStoryboard(self.Storyboard)
+
+    if self.StoryboardLangWarning then
+        self.StoryboardLangWarning:Remove()
+    end
+    local langStatus = self.Storyboard:GetCurrentLanguageQuality()
+    if langStatus ~= TranslationQuality.Supported then
+        self.StoryboardLangWarning = self:Add("Ponder.LanguageNotice")
+        self.StoryboardLangWarning:SetPos(64, 136)
+        self.StoryboardLangWarning:SetContactInfo(self.Storyboard:GetContactInfo())
+
+        self.StoryboardLangWarning:SetTranslationQuality(langStatus)
+    end
 
     if self.Environment then
         self.Environment:Free()
@@ -81,6 +95,22 @@ end
 function PANEL:OnRemove()
     -- Free all assets
     self.Environment:Free()
+end
+
+function PANEL:OnHideStarted()
+    if not self.Playback then return end
+    self.PauseState = self.Playback.Paused
+    self.Playback:Pause()
+    self.Playback.Environment:Halt()
+    Ponder.UIWindow:SetMinimizeModelIcon(self.Storyboard.ModelIcon)
+end
+
+function PANEL:OnShowComplete()
+    if not self.Playback then return end
+    self.Playback.Environment:Continue()
+    if not self.PauseState then
+        self.Playback:Play()
+    end
 end
 
 derma.DefineControl("Ponder.Storyboard", "Ponder's storyboard visualizer", PANEL, "Panel")

@@ -6,6 +6,7 @@ API.RegisteredRenderers       = {}
 API.RegisteredAddons          = {}
 API.RegisteredAddonCategories = {}
 API.RegisteredACSLookup       = {}
+API.RegisteredNamedObjects    = {}
 
 function API.NewStoryboard(addon_name, category_name, storyboard_name)
     local storyboard = Ponder.Storyboard()
@@ -93,9 +94,9 @@ local function sortByName(tab)
 
         if isstring(aMemberName) then
             if bReverse then
-                return language.GetPhrase(aMemberName:lower()) < language.GetPhrase(bMemberName:lower())
+                return aMemberName:lower() < bMemberName:lower()
             else
-                return language.GetPhrase(aMemberName:lower()) > language.GetPhrase(bMemberName:lower())
+                return aMemberName:lower() > bMemberName:lower()
             end
         end
 
@@ -107,7 +108,7 @@ local function sortByName(tab)
 
     end
 
-    table.sort(tab, function(a, b) return TableMemberSort(a, b, "Name", false) end)
+    table.sort(tab, function(a, b) return TableMemberSort(b, a, "Name", false) end)
 end
 
 -- Gets all addons
@@ -140,10 +141,24 @@ function API.GetCategoryStoryboardList(addon_name, category_name)
     if not category then return {} end
 
     local lookup = API.RegisteredACSLookup[addon_name][category_name]
+    if not lookup then return {} end
 
     local items = {}
     for _, v in pairs(lookup) do items[#items + 1] = v end
 
     table.SortByMember(items, "IndexOrder")
     return items
+end
+
+function API.NewNamedObjectType(typename)
+    local ret = {
+        Name = typename
+    }
+
+    API.RegisteredNamedObjects[typename] = ret
+    return ret
+end
+
+function API.GetNamedObjectImplementors()
+    return API.RegisteredNamedObjects
 end

@@ -3,10 +3,12 @@ storyboard:WithMenuName("ponder.tests.shower.menuname")
 storyboard:WithPlaybackName("ponder.tests.shower.playname")
 storyboard:WithModelIcon("models/props_interiors/BathTub01a.mdl")
 storyboard:WithDescription(language.GetPhrase("ponder.tests.shower.desc"))
+storyboard:SetPrimaryLanguage("en")
+
 local chapter1 = storyboard:Chapter()
 chapter1:AddInstruction("PlaceModel", {
     Name  = "Bathtub",
-    IdentifyAs = language.GetPhrase("ponder.tests.shower.identify_bathtub"),
+    IdentifyAs = "ponder.tests.shower.identify_bathtub",
     Model = "models/props_interiors/BathTub01a.mdl",
     Position = Vector(0, 0, 10),
     ComeFrom = Vector(0, 0, 32)
@@ -37,7 +39,7 @@ chapter1:AddInstruction("SetSequence", {
 
 chapter1:AddInstruction("ShowText", {
     Name = "hintBreenDied",
-    Text = language.GetPhrase("ponder.tests.shower.breen_died"),
+    Text = "ponder.tests.shower.breen_died",
     Time = 0,
     Position = Vector(-65, 0, 0)
 })
@@ -51,8 +53,9 @@ chapter2:AddInstruction("HideText", {Name = "hintBreenDied"})
 
 chapter2:AddInstruction("ShowText", {
     Name = "hintTurnOnShower",
-    Text = language.GetPhrase("ponder.tests.shower.turn_on"),
+    Text = "ponder.tests.shower.turn_on",
     Time = 0,
     Position = Vector(-35.834717, 10.808605, 36.374023)
 })
 chapter2:AddInstruction("Delay", {Time = 0, Length = 6})
+chapter2:RecommendStoryboard("ponder.tests.taking-a-shower")
