@@ -15,3 +15,14 @@ hook.Add("PopulateMenuBar", "Ponder.PopulateMenuBar.InsertMenuOption", function(
         end
     end
 end)
+
+list.Set("DesktopWindows", "Ponder", {
+    title	= "Ponder",
+    icon	= "materials/ponder/ui/icon64/magnifier.png",
+    width	= 520,
+    height	= 700,
+    init	= function(_, window)
+        window:Remove()
+        RunConsoleCommand("ponder_index")
+    end
+})

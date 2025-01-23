@@ -18,7 +18,11 @@ end, function(cmd, _, args)
 end, "Open the Ponder storyboard for the given UUID")
 
 concommand.Add("ponder_index", function(_, _, _)
-    Ponder.OpenIndex()
+    if IsValid(Ponder.UIWindow) then
+        Ponder.UIWindow:PonderShow()
+    else
+        Ponder.OpenIndex()
+    end
 end, nil, "Open the Ponder index")
 
 concommand.Add("ponder_restore", function(_, _, _)
