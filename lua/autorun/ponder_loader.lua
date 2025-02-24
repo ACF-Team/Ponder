@@ -2,7 +2,7 @@ include("includes/gloader.lua")
 gloader.Load("Ponder", "ponder")
 
 Ponder.Debug = false
-Ponder.MajorRevision = 2
+Ponder.MajorRevision = 3
 if SERVER then
     resource.AddWorkshop("3404950276")
     -- resource.AddFile("materials/ponder/ui/toolgun_cursor64.png")
