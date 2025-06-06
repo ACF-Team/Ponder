@@ -9,13 +9,13 @@
 ]]
 
 -- Create a new storyboard with a unique identifier
-local storyboard = Ponder.API.NewStoryboard("examples", "tutorials", "prop-placer")
+local storyboard = Ponder.API.NewStoryboard("ponder", "tests", "prop-placer")
 
 -- Set storyboard properties
-storyboard:WithMenuName("examples.propplacer.menu")
-storyboard:WithPlaybackName("examples.propplacer.playback")
+storyboard:WithMenuName("ponder.tests.prop_placer.menuname")
+storyboard:WithPlaybackName("ponder.tests.prop_placer.playname")
 storyboard:WithModelIcon("models/props_junk/wood_crate001a.mdl")
-storyboard:WithDescription("Learn how to use the PropPlacer tool to place and manipulate props")
+storyboard:WithDescription("ponder.tests.prop_placer.desc")
 storyboard:SetPrimaryLanguage("en")
 
 -- You can set contact information for attribution
@@ -28,10 +28,10 @@ local chapter1 = storyboard:Chapter()
 
 -- Set up the initial camera position
 chapter1:AddInstruction("MoveCameraLookAt", {
-    Target = Vector(0, 0, 20),
-    Distance = 200,
-    Angle = 45,
-    Height = 100,
+    Target = Vector(0, 0, 0),
+    Distance = 1000,
+    Angle = 65,
+    Height = 150,
     Time = 0,
     Length = 1,
     Easing = math.ease.InOutQuad
@@ -71,7 +71,7 @@ chapter1:AddInstruction("MoveToolgunTo", {
 chapter1:AddInstruction("ShowText", {
     Name = "ToolgunText",
     Text = "examples.propplacer.toolgun_intro",
-    Position = Vector(50, 0, 60),
+    Position = Vector(50, 0, 30),
     Time = 0,
     Length = 0.5
 })
@@ -87,7 +87,7 @@ local chapter2 = storyboard:Chapter()
 -- Move camera to a new position
 chapter2:AddInstruction("FadeLookAtCameraTransition", {
     Target = Vector(0, 0, 20),
-    Distance = 150,
+    Distance = 1500,
     Angle = 30,
     Height = 80,
     Time = 0,
@@ -201,7 +201,7 @@ chapter3:AddInstruction("ClickToolgun", {
 
 -- Rotate the prop
 chapter3:AddInstruction("TransformModel", {
-    Name = "Crate",
+    Target = "Crate",
     Angles = Angle(0, 90, 0),
     Time = 2,
     Length = 1
@@ -270,7 +270,7 @@ chapter4:AddInstruction("ClickToolgun", {
 
 -- Color the prop
 chapter4:AddInstruction("ColorModel", {
-    Name = "Crate",
+    Target = "Crate",
     Color = Color(255, 0, 0),
     Time = 2,
     Length = 0.5
@@ -415,7 +415,7 @@ chapter6:AddInstruction("ShowText", {
 chapter6:AddDelay(3)
 
 -- Recommend another storyboard
-chapter6:RecommendStoryboard("examples.tutorials.advanced-prop-placer")
+chapter6:RecommendStoryboard("ponder.tests.prop-placer")
 
 -- Fade out
 chapter6:AddInstruction("FadeCameraOut", {

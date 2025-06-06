@@ -51,6 +51,7 @@ Ponder.Localization.TranslationQuality = {
 
 local TranslationQuality = Ponder.Localization.TranslationQuality
 local __LangIDToLanguageName = Ponder.Localization.__LangIDToLanguageName
+local LanguageCvar = GetConVar("gmod_language")
 
 function Ponder.Localization.LangIDToLanguageName(langID)
     return __LangIDToLanguageName[langID]
@@ -77,12 +78,12 @@ function Ponder.Localization.GetLanguageTranslationQuality(lang)
 end
 
 function Ponder.Localization.GetCurrentLangID()
-    local ret = GetConVar("gmod_language"):GetString()
+    local ret = LanguageCvar:GetString()
     return ret == "" and "en" or (ret or "en") -- Is this even needed??
 end
 
 function Ponder.Localization.GetCurrentLanguageTranslationQuality()
-    local langObj = Ponder.Localization.SupportedLanguages[GetConVar("gmod_language"):GetString()]
+    local langObj = Ponder.Localization.SupportedLanguages[LanguageCvar:GetString()]
     if not langObj then return TranslationQuality.Unsupported end
 
     return langObj.TranslationQuality
