@@ -7,13 +7,13 @@
 
 -- Create a new storyboard with a unique identifier
 -- Format: addon_name, category_name, storyboard_name
-local storyboard = Ponder.API.NewStoryboard("my_addon", "my_category", "my_storyboard")
+local storyboard = Ponder.API.NewStoryboard("ponder", "tests", "true-art")
 
 -- Set storyboard properties
-storyboard:WithMenuName("my_addon.my_category.menu_name")  -- Translation key for menu name
-storyboard:WithPlaybackName("my_addon.my_category.playback_name")  -- Translation key for playback name
-storyboard:WithModelIcon("models/path_to_model.mdl")  -- Model to show in the menu
-storyboard:WithDescription("Description of this storyboard")  -- Description text
+storyboard:WithMenuName("ponder.tests.true_art.menuname")  -- Translation key for menu name
+storyboard:WithPlaybackName("ponder.tests.true_art.playname")  -- Translation key for playback name
+storyboard:WithModelIcon("models/gibs/hgibs.mdl")  -- Model to show in the menu
+storyboard:WithDescription("ponder.tests.true_art.desc")  -- Description text
 storyboard:SetPrimaryLanguage("en")  -- Primary language (default is "en")
 
 -- Optional: Set contact information
@@ -43,8 +43,8 @@ chapter1:AddInstruction("FadeCameraIn", {
 -- Place a model
 chapter1:AddInstruction("PlaceModel", {
     Name = "MyModel",          -- Identifier for this model
-    Model = "models/path_to_model.mdl",  -- Model path
-    Position = Vector(0, 0, 0),  -- Position in the environment
+    Model = "models/gibs/hgibs.mdl",  -- Model path
+    Position = Vector(5, 0, 5),  -- Position in the environment
     ComeFrom = Vector(0, 0, 50),  -- Starting position offset for animation
     Time = 0.5,                -- When to start
     Length = 0.5               -- Duration
@@ -96,7 +96,7 @@ chapter2:AddInstruction("ShowText", {
 -- Add a second model
 chapter2:AddInstruction("PlaceModel", {
     Name = "SecondModel",
-    Model = "models/path_to_second_model.mdl",
+    Model = "models/props_junk/watermelon01.mdl",
     Position = Vector(40, 0, 0),
     ComeFrom = Vector(0, 0, 50),
     Time = 1,
@@ -108,8 +108,8 @@ chapter2:AddDelay(3)
 
 -- Transform the first model
 chapter2:AddInstruction("TransformModel", {
-    Name = "MyModel",
-    Position = Vector(10, 10, 0),  -- New position
+    Target = "MyModel",
+    Position = Vector(10, 10, 5),  -- New position
     Angles = Angle(0, 45, 0),      -- New rotation
     Time = 3,
     Length = 1
