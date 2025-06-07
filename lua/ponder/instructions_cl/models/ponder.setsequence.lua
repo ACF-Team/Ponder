@@ -8,6 +8,7 @@ SetSequence.Loop       = false
 function SetSequence:First(playback)
     local env = playback.Environment
     local object = env:GetNamedModel(self.Name)
+    if not IsValid(object) then return end
 
     self.SequenceDuration = object:SequenceDuration(object:LookupSequence(self.Sequence))
     self.Length = self.Loop and 0 or self.SequenceDuration

@@ -44,6 +44,8 @@ function Ponder.Environment:__new()
     self.ClientsideModels = NamedList()
     self.NamedTextObjects = NamedList()
     self.SoundPatches     = {}
+    self.ModelHalos       = {}
+    self.HalosToRemove    = {}
 
     self.CustomNamedLists = {}
     for k in pairs(Ponder.API.GetNamedObjectImplementors()) do
@@ -267,6 +269,107 @@ function Ponder.Environment:AimEntity()
     return ret
 end
 
+local matCopy = Material("pp/copy")
+local matAdd  = Material("pp/add")
+local matSub  = Material("pp/sub")
+local rtStore = render.GetScreenEffectTexture(0)
+local rtBlur  = render.GetScreenEffectTexture(1)
+
+-- Adapted from the base game's halo library for our purposes
+function Ponder.Environment:RenderHalo(model, haloData)
+    -- Don't draw while minimizing/maximizing
+    -- This prevents a temporary flashbang if you happened to pause while a halo is in use
+    if Ponder.__MinimizeState then return end
+
+    local camera = self.Camera
+    local haloColor = haloData.Color
+    cam.Start2D()
+
+    local rtScene = render.GetRenderTarget()
+
+    -- Store a copy of the original scene
+    render.CopyRenderTargetToTexture(rtStore)
+
+    -- Clear our scene so that additive/subtractive rendering with it will work later
+    if haloData.Additive then
+        render.Clear(0, 0, 0, 255, false, true)
+    else
+        render.Clear(255, 255, 255, 255, false, true)
+    end
+
+    -- For certain materials this is necessary to not have the entire screen go pitch black
+    -- For example the glass doors in Episode 2 GMan sequence
+    render.UpdateRefractTexture()
+
+    -- Render colored props to the scene and set their pixels high
+    cam.Start(camera)
+        render.SetStencilEnable(true)
+            render.SuppressEngineLighting(true)
+            cam.IgnoreZ(haloData.IgnoreZ)
+
+                render.SetStencilWriteMask(1)
+                render.SetStencilTestMask(1)
+                render.SetStencilReferenceValue(1)
+
+                render.SetStencilCompareFunction(STENCIL_ALWAYS)
+                render.SetStencilPassOperation(STENCIL_REPLACE)
+                render.SetStencilFailOperation(STENCIL_KEEP)
+                render.SetStencilZFailOperation(STENCIL_KEEP)
+
+                model:DrawModel()
+
+                render.SetStencilCompareFunction(STENCIL_EQUAL)
+                render.SetStencilPassOperation(STENCIL_KEEP)
+
+                cam.Start2D()
+                    surface.SetDrawColor(haloColor)
+                    surface.DrawRect(0, 0, camera.w, camera.h)
+                cam.End2D()
+
+            cam.IgnoreZ(false)
+            render.SuppressEngineLighting(false)
+        render.SetStencilEnable(false)
+    cam.End3D()
+
+    -- Store a blurred version of the colored props in an RT
+    render.CopyRenderTargetToTexture(rtBlur)
+    render.BlurRenderTarget(rtBlur, haloData.BlurX, haloData.BlurY, 1)
+
+    -- Restore the original scene
+    render.SetRenderTarget(rtScene)
+    matCopy:SetTexture("$basetexture", rtStore)
+    matCopy:SetString("$color", "1 1 1")
+    matCopy:SetString("$alpha", "1")
+    render.SetMaterial(matCopy)
+    render.DrawScreenQuad()
+
+    -- Draw back our blurred colored props additively/subtractively, ignoring the high bits
+    render.SetStencilEnable(true)
+
+        render.SetStencilCompareFunction(STENCIL_NOTEQUAL)
+
+        if haloData.Additive then
+            matAdd:SetTexture("$basetexture", rtBlur)
+            render.SetMaterial(matAdd)
+        else
+            matSub:SetTexture("$basetexture", rtBlur)
+            render.SetMaterial(matSub)
+        end
+
+        for _ = 0, haloData.DrawPasses do
+            render.DrawScreenQuad()
+        end
+
+    render.SetStencilEnable(false)
+
+    -- Return original values
+    render.SetStencilTestMask(0)
+    render.SetStencilWriteMask(0)
+    render.SetStencilReferenceValue(0)
+
+    cam.End2D()
+end
+
 local magnifier = Material("ponder/ui/icon64/magnifier_no_back.png", "mips smooth")
 
 function Ponder.Environment:Render()
@@ -299,6 +402,12 @@ function Ponder.Environment:Render()
             v:DrawModel()
         end
         render.SetColorModulation(1, 1, 1)
+
+        local haloData = v.PONDER_HALO_DATA
+
+        if haloData then
+            self:RenderHalo(v, haloData)
+        end
     end
     for _, v in pairs(Ponder.API.RegisteredRenderers) do if v.Render3D then v:Render3D(self) end end
     if self.Render3D then self:Render3D() end
@@ -342,7 +451,4 @@ function Ponder.Environment:Render()
     end
 
     self.Rendering2D = false
-
-    -- surface.SetDrawColor(255,255,255,255)
-    -- surface.DrawOutlinedRect(rX, rY, w, h, 2)
 end

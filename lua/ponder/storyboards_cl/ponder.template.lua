@@ -164,15 +164,29 @@ chapter3:AddInstruction("ShowText", {
     Length = 0.5
 })
 
+chapter3:AddInstruction("AddHalo", {
+    Target = "MyModel",
+    Color = Color(255, 0, 0, 255),
+    Passes = 25,
+    Time = 0.75,
+    Length = 1
+})
+
 -- Wait for the user to read
 chapter3:AddDelay(3)
 
 -- Optional: Recommend another storyboard
 -- chapter3:RecommendStoryboard("my_addon.my_category.another_storyboard")
 
+chapter3:AddInstruction("RemoveHalo", {
+    Target = "MyModel",
+    Time = 2,
+    Length = 1
+})
+
 -- Fade out
 chapter3:AddInstruction("FadeCameraOut", {
-    Time = 3,
+    Time = 4,
     Length = 1
 })
 

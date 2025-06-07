@@ -1,12 +1,3 @@
-local function LerpColor(t, a, b)
-    return Color(
-        Lerp(t, a.r, b.r),
-        Lerp(t, a.g, b.g),
-        Lerp(t, a.b, b.b),
-        Lerp(t, a.a, b.a)
-    )
-end
-
 local ColorModel = Ponder.API.NewInstruction("ColorModel")
 
 function ColorModel:First(playback)
@@ -24,7 +15,7 @@ function ColorModel:Update(playback)
     local object = env:GetNamedModel(self.Target)
 
     if object.PONDER_TARG_COLOR then
-        local c = LerpColor(progress, object.PONDER_LAST_COLOR, object.PONDER_TARG_COLOR)
+        local c = object.PONDER_LAST_COLOR:Lerp(object.PONDER_TARG_COLOR, progress)
         object:SetColor(c)
         object:SetRenderMode(RENDERMODE_TRANSCOLOR)
     end
