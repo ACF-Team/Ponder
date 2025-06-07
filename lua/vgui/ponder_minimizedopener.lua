@@ -15,6 +15,7 @@ function MINIMIZED_OPENER:Init()
     self.Icon = self:Add("ModelImage")
     self.Icon:SetMouseInputEnabled(false)
     self.Icon:SetPaintedManually(true)
+    self.Icon:SetModel("models/maxofs2d/logo_gmod_b.mdl")
     self.Icon:Dock(FILL)
 
     local scrw, scrh = ScrW(), ScrH()
