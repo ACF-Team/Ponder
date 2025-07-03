@@ -21,3 +21,5 @@ function Ponder.Instruction:Render2D(playback)  playback = playback end
 
 function Ponder.Instruction:OnPaused(playback)  playback = playback end
 function Ponder.Instruction:OnResumed(playback) playback = playback end
+
+function Ponder.Instruction:DelayByLength() self.Chapter:AddDelay(self.Length) return self end
