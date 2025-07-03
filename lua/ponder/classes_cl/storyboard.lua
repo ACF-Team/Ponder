@@ -9,6 +9,7 @@ function Ponder.Storyboard:__new()
     self.IndexOrder = -1
     self.BaseEntityModelPath = "models/hunter/blocks/cube150x150x025.mdl"
     self.SupportedLanguages = {}
+    self.AutomaticTimeOffset = true
 
     self:SetPrimaryLanguage("en")
 end
@@ -115,6 +116,10 @@ function Ponder.Storyboard:Preload()
             end
         end
     end
+end
+
+function Ponder.Storyboard:ShouldAutomaticallyOffsetTime(state)
+    self.AutomaticTimeOffset = state
 end
 
 function Ponder.Storyboard:ToString()
