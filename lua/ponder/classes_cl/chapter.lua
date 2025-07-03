@@ -28,7 +28,7 @@ function Ponder.Chapter:AddInstruction(instruction_type, instruction_params)
     self.Instructions[#self.Instructions + 1] = instructionObj
     instructionObj.Time = instructionObj.Time + self.Time
 
-    if instructionObj.AddToTimeOffset and self.Storyboard.AutomaticTimeOffset then
+    if instructionObj.AddToTimeOffset or not self.Storyboard.Concurrency then
         self.Time = self.Time + instructionObj.Length
     end
 
