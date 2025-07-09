@@ -320,9 +320,10 @@ chapter5:AddInstruction("HideText", {
 chapter5:AddInstruction("PlacePanel", {
     Name = "ToolMenu",
     Type = "DFrame",
-    Position = Vector(-50, 0, 50),
-    Width = 200,
-    Height = 300,
+    Calls = {
+        {Method = "SetPos", Args = {50, 50}},
+        {Method = "SetSize", Args = {200, 300}}
+    },
     Time = 0.5,
     Length = 0.5
 })
