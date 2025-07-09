@@ -1,3 +1,42 @@
+do
+    local storyboard = Ponder.API.NewStoryboard("ponder", "tests", "vgui-poc")
+
+    -- Set storyboard properties
+    storyboard:WithName("Ponder - VGUI Functions")
+    storyboard:WithModelIcon("models/props_junk/wood_crate001a.mdl")
+    storyboard:WithDescription("VGUI panel examples")
+    storyboard:SetPrimaryLanguage("en")
+
+    local chapter1 = storyboard:Chapter()
+
+    -- Set up the initial camera position
+    chapter1:AddInstruction("PlacePanel", {
+        Name = "Test",
+        Type = "ACF_Panel",
+        Calls = {
+            {Method = "SetSize", Args = {300, 800}},
+            {Method = "Center", Args = {}},
+            {Method = "AddButton", Args = {}},
+        },
+        Time = 0,
+        Length = 0.25,
+    })
+    chapter1:AddInstruction("ChangePanel", {
+        Name = "Test",
+        Calls = {
+            {Method = "AddButton", Args = {}},
+        },
+        Time = 0.5,
+        Length = 0.25,
+    })
+    chapter1:AddInstruction("RemovePanel", {
+        Name = "Test",
+        Time = 1,
+        Length = 0.25,
+    })
+end
+
+
 local storyboard = Ponder.API.NewStoryboard("ponder", "tests", "taking-a-shower")
 storyboard:WithMenuName("ponder.tests.shower.menuname")
 storyboard:WithPlaybackName("ponder.tests.shower.playname")
