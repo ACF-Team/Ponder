@@ -317,7 +317,7 @@ chapter5:AddInstruction("HideText", {
 })
 
 -- Create a VGUI panel to simulate the tool menu
-chapter5:AddInstruction("VGUI.PlacePanel", {
+chapter5:AddInstruction("PlacePanel", {
     Name = "ToolMenu",
     Panel = "DFrame",
     Position = Vector(-50, 0, 50),
@@ -340,7 +340,7 @@ chapter5:AddInstruction("ShowText", {
 chapter5:AddDelay(3)
 
 -- Change the panel to highlight a button
-chapter5:AddInstruction("VGUI.ChangePanel", {
+chapter5:AddInstruction("ChangePanel", {
     Name = "ToolMenu",
     Properties = {
         HighlightButton = "SavePreset"
@@ -362,7 +362,7 @@ chapter5:AddInstruction("ShowText", {
 chapter5:AddDelay(3)
 
 -- Remove the panel
-chapter5:AddInstruction("VGUI.RemovePanel", {
+chapter5:AddInstruction("RemovePanel", {
     Name = "ToolMenu",
     Time = 6.5,
     Length = 0.5
