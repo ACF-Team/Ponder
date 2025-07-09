@@ -319,7 +319,7 @@ chapter5:AddInstruction("HideText", {
 -- Create a VGUI panel to simulate the tool menu
 chapter5:AddInstruction("PlacePanel", {
     Name = "ToolMenu",
-    Panel = "DFrame",
+    Type = "DFrame",
     Position = Vector(-50, 0, 50),
     Width = 200,
     Height = 300,
