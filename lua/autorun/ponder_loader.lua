@@ -2,7 +2,7 @@ include("includes/gloader.lua")
 gloader.Load("Ponder", "ponder")
 
 Ponder.Debug = false
-Ponder.MajorRevision = 4
+Ponder.MajorRevision = 5
 
 if SERVER then
     resource.AddWorkshop("3404950276")
