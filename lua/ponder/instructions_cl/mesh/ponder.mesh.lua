@@ -48,6 +48,16 @@ function MeshRenderer:Render3D(env)
             m.Mesh:Draw()
         cam.PopModelMatrix()
 
+        if m.Outline and m.Triangles then
+            local lineColor = Color(m.Outline.r, m.Outline.g, m.Outline.b, m.Outline.a * m.Alpha * alpha)
+            for i = 1, #m.Triangles - 2, 3 do
+                local a, b, c = matrix * m.Triangles[i].pos, matrix * m.Triangles[i + 1].pos, matrix * m.Triangles[i + 2].pos
+                render.DrawLine(a, b, lineColor, false)
+                render.DrawLine(b, c, lineColor, false)
+                render.DrawLine(c, a, lineColor, false)
+            end
+        end
+
         mat:SetVector("$color2", oldColor)
         mat:SetFloat("$alpha", oldAlpha)
     end
@@ -62,11 +72,23 @@ PlaceMesh.Position  = Vector(0, 0, 0)
 PlaceMesh.Angles    = Angle(0, 0, 0)
 PlaceMesh.Scale     = Vector(1, 1, 1)
 PlaceMesh.Color     = Color(255, 255, 255, 255)
+PlaceMesh.Outline   = nil -- A color to also draw every triangle edge in.
 PlaceMesh.Length    = .5
+
+-- Renames the old mesh to an "outgoing" name so it can fade out while the new mesh fades in.
+local function OutgoingName(name) return name .. "\0outgoing" end
 
 function PlaceMesh:First(playback)
     local env = playback.Environment
     if not self.Mesh and not self.Triangles then return Ponder.Print("PlaceMesh needs a Mesh or Triangles") end
+
+    local old = env:GetNamedObject("Mesh", self.Name)
+    if old then
+        local list = env.CustomNamedLists.Mesh
+        env:RemoveNamedObjectByName("Mesh", OutgoingName(self.Name))
+        list:RemoveByName(self.Name)
+        list:Add(old, OutgoingName(self.Name))
+    end
 
     env:NewNamedObject("Mesh", self.Name, {
         Mesh      = self.Mesh,
@@ -76,6 +98,7 @@ function PlaceMesh:First(playback)
         Angles    = self.Angles,
         Scale     = self.Scale,
         Color     = self.Color,
+        Outline   = self.Outline,
         Alpha     = 0,
     })
 end
@@ -86,11 +109,16 @@ function PlaceMesh:Update(playback)
 
     local mesh = playback.Environment:GetNamedObject("Mesh", self.Name)
     if mesh then mesh.Alpha = progress end
+
+    local outgoing = playback.Environment:GetNamedObject("Mesh", OutgoingName(self.Name))
+    if outgoing then outgoing.Alpha = 1 - progress end
 end
 
 function PlaceMesh:Last(playback)
     local mesh = playback.Environment:GetNamedObject("Mesh", self.Name)
     if mesh then mesh.Alpha = 1 end
+
+    playback.Environment:RemoveNamedObjectByName("Mesh", OutgoingName(self.Name))
 end
 
 local RemoveMesh = Ponder.API.NewInstruction("RemoveMesh")
