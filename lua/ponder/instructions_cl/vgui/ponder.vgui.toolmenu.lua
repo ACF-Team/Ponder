@@ -68,18 +68,44 @@ function PlaceToolMenu:Update(playback)
     playback.Environment:GetNamedObject("VGUIPanel", self.Name):SetAlpha(progress * 255)
 end
 
+-- The row of the menu that holds a control
+local function RowOf(menu, control)
+    while IsValid(control:GetParent()) and control:GetParent() ~= menu do control = control:GetParent() end
+    return control
+end
+
 local SetToolOption = Ponder.API.NewInstruction("SetToolOption")
 SetToolOption.Name   = ""
 SetToolOption.ConVar = "" -- The convar the control is bound to. The menu no longer changes it, so the viewer's settings stay as they are
 SetToolOption.Value  = true -- A boolean for a checkbox, a number for a slider, or an option's text for a combo box
-SetToolOption.Length = 0
+SetToolOption.Length = 1 -- The control is highlighted for this long, then changes
 
 function SetToolOption:First(playback)
     local menu = playback.Environment:GetNamedObject("VGUIPanel", self.Name)
-    local option = menu and menu.ConVarControls[self.ConVar]
-    if not option then return Ponder.Print("SetToolOption: no control bound to " .. self.ConVar) end
+    self.Control = menu and menu.ConVarControls[self.ConVar]
+    if not self.Control then return Ponder.Print("SetToolOption: no control bound to " .. self.ConVar) end
 
-    SetControl(option, self.Value)
+    local row = RowOf(menu, self.Control)
+    function row:PaintOver(w, h)
+        if not self.Highlight then return end
+
+        -- Two soft pulses that fade fully out before the value changes
+        surface.SetDrawColor(255, 210, 90, 255 * (0.5 - 0.5 * math.cos(self.Highlight * math.pi * 4)))
+        surface.DrawOutlinedRect(0, 0, w, h, 3)
+    end
+
+    self.Row = row
+end
+
+function SetToolOption:Update(playback)
+    if IsValid(self.Row) then self.Row.Highlight = playback:GetInstructionProgress(self) end
+end
+
+function SetToolOption:Last(playback)
+    if not IsValid(self.Control) then return end
+
+    self.Row.Highlight = nil
+    SetControl(self.Control, self.Value)
 end
 
 --[[ Example:
