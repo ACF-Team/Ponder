@@ -390,16 +390,21 @@ function Ponder.Environment:Render()
         local aOverride = v.PONDER_AlphaOverride or 1
         local blend = (c.a / 255) * aOverride * envOpacity
 
+        -- A model with a RenderOverride draws itself through it, like it would in the world
+        local draw = v.RenderOverride and function() v:RenderOverride() end or function() v:DrawModel() end
+
         render.SetColorModulation(c.r / 255, c.g / 255, c.b / 255)
-        if blend < 1 then
+        if blend <= 0 then
+            -- Fully faded out, nothing to draw
+        elseif blend < 1 then
             render.OverrideColorWriteEnable(true, false)
-            v:DrawModel()
+            draw()
             render.OverrideColorWriteEnable(false, false)
             render.SetBlend(blend)
-            v:DrawModel()
+            draw()
             render.SetBlend(1)
         else
-            v:DrawModel()
+            draw()
         end
         render.SetColorModulation(1, 1, 1)
 
