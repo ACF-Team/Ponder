@@ -6,7 +6,7 @@ local function BuildToolMenu(panel, toolName)
     if not tool or not tool.BuildCPanel then return Ponder.Print("PlaceToolMenu: no tool menu for " .. toolName) end
 
     panel:SetMouseInputEnabled(false)
-    panel:SetLabel(language.GetPhrase((string.gsub(tool.Name or toolName, "^#", ""))))
+    panel:SetLabel(language.GetPhrase(string.gsub(tool.Name or toolName, "^#", "")))
     tool.BuildCPanel(panel)
 
     panel.ConVarControls = {} -- Convar name -> the control that was bound to it
@@ -101,7 +101,7 @@ function SetToolOption:Update(playback)
     if IsValid(self.Row) then self.Row.Highlight = playback:GetInstructionProgress(self) end
 end
 
-function SetToolOption:Last(playback)
+function SetToolOption:Last()
     if not IsValid(self.Control) then return end
 
     self.Row.Highlight = nil

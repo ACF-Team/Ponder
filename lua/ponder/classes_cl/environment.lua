@@ -394,17 +394,15 @@ function Ponder.Environment:Render()
         local draw = v.RenderOverride and function() v:RenderOverride() end or function() v:DrawModel() end
 
         render.SetColorModulation(c.r / 255, c.g / 255, c.b / 255)
-        if blend <= 0 then
-            -- Fully faded out, nothing to draw
-        elseif blend < 1 then
+        if blend >= 1 then
+            draw()
+        elseif blend > 0 then -- Fully faded out models draw nothing
             render.OverrideColorWriteEnable(true, false)
             draw()
             render.OverrideColorWriteEnable(false, false)
             render.SetBlend(blend)
             draw()
             render.SetBlend(1)
-        else
-            draw()
         end
         render.SetColorModulation(1, 1, 1)
 
